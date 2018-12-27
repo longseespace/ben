@@ -114,3 +114,6 @@ Makefile
 .qmake.stash
 qrc_bundle.*
 lib*.a
+
+# qt test project
+/qt
