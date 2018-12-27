@@ -2,18 +2,18 @@
 extern crate qmetaobject;
 use qmetaobject::*;
 
-qrc!(my_ressource,
-    "" {
-        "main.qml",
-    },
-);
+// qrc!(resource,
+//     "" {
+//         "main.qml",
+//     },
+// );
 
 fn main() {
     // resource
-    my_ressource();
+    // resource();
 
     // then load engine
     let mut engine = QmlEngine::new();
-    engine.load_file("main.qml".into());
+    engine.load_file("qrc:///main.qml".into());
     engine.exec();
 }

@@ -18,7 +18,7 @@ if (ANALYZE) {
 module.exports = ({ root, platform }, defaults) => ({
   entry: './index.js',
   output: {
-    path: path.join(root, 'qt/dist'),
+    path: path.join(root, 'rust/resources/qml'),
     filename: `${platform}.bundle.js`,
     library: 'Bundle',
   },

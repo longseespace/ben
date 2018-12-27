@@ -1,5 +1,6 @@
 [package]
 name = "kora-patcher"
+description = "Kora Patcher"
 version = "0.0.1"
 authors = ["Long Nguyen <long@podzim.co>"]
 build = "build.rs"
@@ -8,3 +9,22 @@ build = "build.rs"
 qmetaobject = "0.0.4"
 qml = "0.0.9"
 cstr = "0.1.5"
+
+[build-dependencies]
+fs-utils = "*"
+
+[package.metadata.bundle]
+name = "KoraPatcher"
+identifier = "co.podzim.kora-patcher"
+icon = ["32x32.png", "128x128.png", "128x128@2x.png"]
+version = "0.0.1"
+# resources = ["assets", "main.qml", "qml"]
+copyright = "Copyright (c) Long Nguyen 2019. All rights reserved."
+category = "Developer Tool"
+short_description = "Kora Patcher."
+long_description = """
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut
+enim ad minim veniam, quis nostrud exercitation ullamco laboris
+nisi ut aliquip ex ea commodo consequat.
+"""

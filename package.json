@@ -7,11 +7,23 @@
     "build": "NODE_ENV=production react-qml bundle --platform=macos"
   },
   "dependencies": {
+    "connected-react-router": "^4.3.0",
+    "history": "^4.7.2",
     "react": "^16.5.0",
     "react-qml": "*",
-    "react-qml-renderer": "^0.2.3"
+    "react-qml-renderer": "^0.2.3",
+    "react-redux": "5.0.6",
+    "react-router": "^4.3.1",
+    "redux": "^3.7.2",
+    "redux-api-call": "^1.0.5",
+    "redux-observable": "^0.17.0",
+    "redux-thunk": "^2.3.0",
+    "remote-redux-devtools": "^0.5.15"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.3",
+    "eslint": "^4.13.1",
+    "eslint-plugin-react": "^7.5.1",
     "react-qml-cli": "^0.2.13",
     "webpack-bundle-analyzer": "^2.13.1"
   }

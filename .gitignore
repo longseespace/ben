@@ -37,12 +37,6 @@ Makefile*
 # QtCtreator CMake
 CMakeLists.txt.user*
 
-*/dist/*
-
-# rust
-rust/target
-*.qmlc
-
 # node
 # Logs
 logs
@@ -110,3 +104,13 @@ typings/
 package-lock.json
 
 *.app
+
+# rust
+rust/target
+*.qmlc
+rust/resources/qml
+
+Makefile
+.qmake.stash
+qrc_bundle.*
+lib*.a

@@ -7,13 +7,17 @@ import * as React from 'react';
 
 import App from './App';
 
+import makeStore, { history } from './ui/state/makeStore';
+
+const store = makeStore();
+
 export function init(root) {
-  render(<App />, root);
+  render(<App store={store} history={history} />, root);
 
   if (module.hot) {
     module.hot.accept('./App', () => {
       const NextApp = require('./App').default;
-      render(<NextApp />, root);
+      render(<NextApp store={store} history={history} />, root);
     });
   }
 }

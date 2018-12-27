@@ -13,7 +13,7 @@ ApplicationWindow {
   property string devServerHost: 'localhost'
   property int devServerPort: 8081
   property string entry: 'index.qml'
-  property bool devMode: true
+  property bool devMode: false
   // -----
 
   id: __window__
