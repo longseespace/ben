@@ -13,7 +13,6 @@ ApplicationWindow {
   property string devServerHost: 'localhost'
   property int devServerPort: 8081
   property string entry: 'index.qml'
-  property bool devMode: false
   // -----
 
   id: __window__
@@ -35,7 +34,7 @@ ApplicationWindow {
      id: __app_loader__
      asynchronous: true
 
-     source: devMode ? 'http://'+devServerHost+':'+devServerPort+'/'+entry : 'qrc:/' + entry
+     source: DEV_MODE ? 'http://'+devServerHost+':'+devServerPort+'/'+entry : 'qrc:/' + entry
 
      onStatusChanged: {
        if (__app_loader__.status === Loader.Error) {
@@ -49,7 +48,7 @@ ApplicationWindow {
    WebSocket {
      id: __hot_ws__
      url: 'ws://'+devServerHost+':'+devServerPort+'/hot'
-     active: devMode
+     active: DEV_MODE
 
      onStatusChanged: {
        if (status === WebSocket.Error) {

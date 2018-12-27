@@ -91,22 +91,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "fs-utils"
+name = "fs_extra"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-dependencies = [
- "quick-error 1.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "kora-patcher"
-version = "0.0.1"
-dependencies = [
- "cstr 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "fs-utils 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "qmetaobject 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
- "qml 0.0.9 (registry+https://github.com/rust-lang/crates.io-index)",
-]
 
 [[package]]
 name = "lazy_static"
@@ -178,16 +165,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "quick-error"
-version = "1.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-
-[[package]]
 name = "quote"
 version = "0.6.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "proc-macro2 0.4.24 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "react-qml-rust-example"
+version = "0.0.1"
+dependencies = [
+ "cstr 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fs_extra 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "qmetaobject 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "qml 0.0.9 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -260,7 +252,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum cpp_macros 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "33beb17e8e3145f61b39fbceb61c30563f9ae8caf8f05cf12dacd581d5e1420b"
 "checksum cstr 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "ee681252c9c0a6e84bbb53257faa3d88a49ce6fb32148ae1a9dc24b588302a71"
 "checksum cstr-macros 0.1.4 (registry+https://github.com/rust-lang/crates.io-index)" = "5e700cd6ede9b3f81b23ce4cba15f75cc8bf5b5a5dce2db293b1d31f4950ed78"
-"checksum fs-utils 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f8b10648d77e78e17ee4b4c4d05aafd1237e7cc7eab9e876ace0570201e9377a"
+"checksum fs_extra 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5f2a4a2034423744d2cc7ca2068453168dcdb82c438419e639a26bd87839c674"
 "checksum lazy_static 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)" = "76f033c7ad61445c5b347c7382dd1237847eb1bce590fe50365dcb33d546be73"
 "checksum lazy_static 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "a374c89b9db55895453a74c1e38861d9deec0b01b405a82516e9d5de4820dea1"
 "checksum libc 0.2.45 (registry+https://github.com/rust-lang/crates.io-index)" = "2d2857ec59fadc0773853c664d2d18e7198e83883e7060b63c924cb077bd5c74"
@@ -270,7 +262,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum qmetaobject 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)" = "3481b96a357c2fdad6eaa8a6379954afe633bf1db8bc710b04b589b72263db0f"
 "checksum qmetaobject_impl 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)" = "e486c03ac6623b7827fc540268dd0dadd002ce642e28a425f1465a5ca489a8bf"
 "checksum qml 0.0.9 (registry+https://github.com/rust-lang/crates.io-index)" = "5e5b41634e0699593958a59f2b574d09b18681aff08844afdfaebc7cdaffcbc6"
-"checksum quick-error 1.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "9274b940887ce9addde99c4eee6b5c44cc494b182b97e73dc8ffdcb3397fd3f0"
 "checksum quote 0.6.10 (registry+https://github.com/rust-lang/crates.io-index)" = "53fa22a1994bd0f9372d7a816207d8a2677ad0325b073f5c5332760f0fb62b5c"
 "checksum regex 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "37e7cbbd370869ce2e8dff25c7018702d10b21a20ef7135316f8daecd6c25b7f"
 "checksum regex-syntax 0.6.4 (registry+https://github.com/rust-lang/crates.io-index)" = "4e47a2ed29da7a9e1960e1639e7a982e6edc6d49be308a3b02daf511504a16d1"

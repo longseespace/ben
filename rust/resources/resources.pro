@@ -1,4 +1,4 @@
 TEMPLATE = lib
 TARGET = qrc
-RESOURCES = main.qrc qml/bundle.qrc
+RESOURCES = qml/bundle.qrc
 CONFIG += staticlib

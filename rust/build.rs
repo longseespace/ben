@@ -1,45 +1,52 @@
-extern crate fs_utils;
+extern crate fs_extra;
 
 use std::env;
 use std::process::Command;
 use std::path::*;
 use std::str::*;
 
-use fs_utils::*;
+use fs_extra::dir::*;
 
 fn main() {
-    let out_dir = env::var("OUT_DIR").unwrap();
-    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let path = Path::new(&manifest_dir).join("resources");
-    let path_res = copy::copy_directory(path, &out_dir);
+    let dev_mode = cfg!(debug_assertions);
+    if !dev_mode {
+        let out_dir = env::var("OUT_DIR").unwrap();
+        let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+        let res_path = Path::new(&manifest_dir).join("resources");
+        let res_out_path = Path::new(&out_dir).join("resources");
 
-    let path = match path_res {
-        Ok(path) => path,
-        Err(err) => {
-            match err {
-                copy::Error::DestinationDirectoryExists(dir) => dir,
-                _ => panic!("failed to copy resources dir: {}", err),
+        let mut copy_options = CopyOptions::new(); //Initialize default values for CopyOptions
+        copy_options.overwrite = true;
+
+        let copy_res = copy(&res_path, &out_dir, &copy_options);
+
+        match copy_res {
+            Ok(code) => code,
+            Err(err) => {
+                panic!("failed to copy resources dir: {}", err)
             }
+        };
+
+        let output = Command::new("sh")
+            .current_dir(&res_out_path)
+            .arg("build_lib.sh")
+            .output()
+            .unwrap_or_else(|e| panic!("failed to execute process: {}", e));
+
+        if !output.status.success() {
+            panic!("Cannot build qrc resource:\n{:#?}\n{:#?}",
+                   to_utf(&output.stdout),
+                   to_utf(&output.stderr));
         }
-    };
 
-    let output = Command::new("sh")
-        .current_dir(&path)
-        .arg("build_lib.sh")
-        .output()
-        .unwrap_or_else(|e| panic!("failed to execute process: {}", e));
+        let qml_path = Path::new(&manifest_dir).join("resources").join("qml");
+        let bundle_path = Path::new(&manifest_dir).join("resources").join("qml").join("bundle.qrc");
 
-    if !output.status.success() {
-        panic!("Cannot build qrc resource:\n{:#?}\n{:#?}",
-               to_utf(&output.stdout),
-               to_utf(&output.stderr));
+        println!("cargo:rerun-if-changed={}", qml_path.display());
+        println!("cargo:rerun-if-changed={}", bundle_path.display());
+        println!("cargo:rustc-link-search=native={}", res_out_path.display());
+        println!("cargo:rustc-link-lib=static=qrc");
     }
-
-    let recursive_path = Path::new(&manifest_dir).join("resources").join("*");
-
-    println!("cargo:rerun-if-changed={}", recursive_path.display());
-    println!("cargo:rustc-link-search=native={}", path.display());
-    println!("cargo:rustc-link-lib=static=qrc");
 
     println!("cargo:rustc-link-search=framework=/usr/local/opt/qt5/Frameworks");
     println!("cargo:rustc-link-lib=c++");
