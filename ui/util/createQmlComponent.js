@@ -31,11 +31,14 @@ const createQmlComponent = (source, name, defaultProp = 'data') => {
 
     render() {
       const { status } = this.state;
-      if (status === 1) {
+      if (status === Component.Ready) {
         return React.createElement(name, {
           ...this.props,
           ref: this.setRef,
         });
+      }
+      if (status === Component.Error) {
+        throw new Error(component.errorString());
       }
       return null;
     }

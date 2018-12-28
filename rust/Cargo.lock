@@ -159,15 +159,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "react-qml-rust-example"
-version = "0.0.1"
-dependencies = [
- "cstr 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "fs_extra 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "qmetaobject 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "regex"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -195,6 +186,15 @@ dependencies = [
  "proc-macro2 0.4.24 (registry+https://github.com/rust-lang/crates.io-index)",
  "quote 0.6.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "tey"
+version = "0.0.1"
+dependencies = [
+ "cstr 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fs_extra 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "qmetaobject 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

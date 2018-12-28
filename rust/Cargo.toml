@@ -1,6 +1,6 @@
 [package]
-name = "react-qml-rust-example"
-description = "React QML Rust"
+name = "tey"
+description = "Tey - Fast open source Slack desktop app, written in Rust and React-QML"
 version = "0.0.1"
 authors = ["Long Nguyen <long@podzim.co>"]
 build = "build.rs"
@@ -13,16 +13,10 @@ cstr = "0.1.5"
 fs_extra = "1.1.0"
 
 [package.metadata.bundle]
-name = "React QML Rust"
-identifier = "co.podzim.react-qml-rust-example"
+name = "Tey"
+identifier = "co.podzim.tey"
 icon = ["32x32.png", "128x128.png", "128x128@2x.png"]
 version = "0.0.1"
 copyright = "Copyright (c) Long Nguyen 2019. All rights reserved."
-category = "Developer Tool"
-short_description = "React QML Rust"
-long_description = """
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut
-enim ad minim veniam, quis nostrud exercitation ullamco laboris
-nisi ut aliquip ex ea commodo consequat.
-"""
+category = "Business"
+short_description = "Tey - Fast open source Slack desktop app, written in Rust and React-QML"

@@ -21,6 +21,8 @@ ApplicationWindow {
   width: 400
   height: 500
 
+  flags: Qt.Window
+
   Settings {
     id: __settings__
 

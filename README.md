@@ -1,4 +1,2 @@
-# react-qml-rust-boilerplate
-A simple boilerplate to build native desktop app using react-qml and rust
-
-![Screenshot](with-redux.png?raw=true "Redux DevTools Screenshot")
+# Tey
+Fast open source Slack desktop app, written in Rust and React-QML

@@ -18,6 +18,7 @@
   },
   "globals": {
     "Qt": true,
+    "Component": true,
     "RQ": true,
     "qsTr": true,
     "__window__": true,
