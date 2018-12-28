@@ -1,4 +1,7 @@
 /* @flow */
 import { combineReducers } from 'redux';
+import counter from '../components/counter.state';
 
-export default combineReducers({});
+export default combineReducers({
+  counter,
+});

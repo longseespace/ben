@@ -15,10 +15,11 @@ const history = createHistory();
 const routerMiddleware = createRouterMiddleware(history);
 
 // dev tools
+// to use custom remote-dev server, uncomment the first 2 options
 const composeEnhancers = composeWithDevTools({
+  // hostname: process.env.DEV_SERVER_HOST || 'localhost',
+  // port: 8000,
   suppressConnectErrors: false,
-  hostname: process.env.DEV_SERVER_HOST || 'localhost',
-  port: 8000,
   realtime: process.env.NODE_ENV !== 'production',
 });
 

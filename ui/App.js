@@ -1,6 +1,28 @@
-import createQmlComponent from './createQmlComponent';
-import qmlSource from './App.qml';
+import { Provider } from 'react-redux';
+import * as React from 'react';
 
-const App = createQmlComponent(qmlSource, 'App');
+import Counter from './components/Counter';
+
+class App extends React.Component {
+  componentWillMount() {
+    console.log('App', 'componentWillMount');
+  }
+
+  componentDidMount() {
+    console.log('App', 'componentDidMount');
+  }
+
+  componentWillUnmount() {
+    console.log('App', 'componentWillUnmount');
+  }
+
+  render() {
+    return (
+      <Provider store={this.props.store}>
+        <Counter />
+      </Provider>
+    );
+  }
+}
 
 export default App;

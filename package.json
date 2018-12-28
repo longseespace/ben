@@ -9,6 +9,7 @@
   "dependencies": {
     "connected-react-router": "^4.3.0",
     "history": "^4.7.2",
+    "qt-react": "^2.2.14",
     "react": "^16.5.0",
     "react-qml": "*",
     "react-qml-renderer": "^0.2.3",
