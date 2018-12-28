@@ -7,7 +7,6 @@ build = "build.rs"
 
 [dependencies]
 qmetaobject = "0.0.4"
-qml = "0.0.9"
 cstr = "0.1.5"
 
 [build-dependencies]

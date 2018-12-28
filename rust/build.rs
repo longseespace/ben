@@ -47,9 +47,6 @@ fn main() {
         println!("cargo:rustc-link-search=native={}", res_out_path.display());
         println!("cargo:rustc-link-lib=static=qrc");
     }
-
-    println!("cargo:rustc-link-search=framework=/usr/local/opt/qt5/Frameworks");
-    println!("cargo:rustc-link-lib=c++");
 }
 
 fn to_utf(buf: &[u8]) -> &str {
