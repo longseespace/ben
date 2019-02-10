@@ -16,26 +16,26 @@ const connectToRedux = connect(
   }
 );
 
-class MainWindow extends React.Component {
-  state = {
-    signinWindowVisible: false,
+class MainWindow extends React.PureComponent {
+  windowRef = React.createRef();
+
+  onAppStateChanged = state => {
+    const $window = this.windowRef.current;
+    // on app activate, show the window (if already closed)
+    if ($window && state === Qt.ApplicationActive) {
+      $window.show();
+    }
   };
 
-  showSigninWindow = () => {
-    this.setState({ signinWindowVisible: true });
-  };
+  componentDidMount() {
+    Qt.application.stateChanged.connect(this.onAppStateChanged);
+  }
 
-  hideSigninWindow = () => {
-    this.setState({ signinWindowVisible: false });
-  };
-
-  onSiginWindowClosing = ev => {
-    // ev.accepted = false;
-    this.hideSigninWindow();
-  };
+  componentWillUnmount() {
+    Qt.application.stateChanged.disconnect(this.onAppStateChanged);
+  }
 
   render() {
-    const { signinWindowVisible } = this.state;
     return (
       <Window
         visible
@@ -43,6 +43,7 @@ class MainWindow extends React.Component {
         height={600}
         title="Tey"
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
+        ref={this.windowRef}
       >
         <ErrorBoundary>
           <AppMenu />

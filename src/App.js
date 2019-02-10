@@ -4,10 +4,6 @@ import * as React from 'react';
 import MainWindow from './containers/MainWindow';
 
 class App extends React.Component {
-  componentWillMount() {
-    console.log('App', 'componentWillMount');
-  }
-
   componentDidMount() {
     console.log('App', 'componentDidMount');
   }
