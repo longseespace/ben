@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
 import * as React from 'react';
 
-import MainPage from './components/MainPage';
+import MainWindow from './containers/MainWindow';
 
 class App extends React.Component {
   componentWillMount() {
@@ -19,7 +19,7 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={this.props.store}>
-        <MainPage />
+        <MainWindow />
       </Provider>
     );
   }

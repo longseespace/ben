@@ -17,6 +17,7 @@
     "node": true
   },
   "globals": {
+    "StandardKey": true,
     "Qt": true,
     "Component": true,
     "RQ": true,

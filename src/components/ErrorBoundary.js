@@ -1,10 +1,10 @@
 import React from 'react';
 
-import RedBox from './RedBox';
+import { RedBox } from 'react-qml';
 
 // const PRODUCTION_MODE = process.env.NODE_ENV === 'production';
 
-class Layout extends React.Component {
+class ErrorBoundary extends React.Component {
   state = {
     hasError: false,
     error: {},
@@ -35,8 +35,8 @@ class Layout extends React.Component {
 
       return <RedBox error={error} errorInfo={errorInfo} />;
     }
-    return React.Children.only(children);
+    return children;
   }
 }
 
-export default Layout;
+export default ErrorBoundary;
