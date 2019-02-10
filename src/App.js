@@ -2,6 +2,7 @@ import { Provider } from 'react-redux';
 import * as React from 'react';
 
 import MainWindow from './containers/MainWindow';
+import SignInWindow from './containers/SignInWindow';
 
 class App extends React.Component {
   componentDidMount() {
@@ -15,7 +16,10 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={this.props.store}>
-        <MainWindow />
+        <React.Fragment>
+          <MainWindow />
+          <SignInWindow />
+        </React.Fragment>
       </Provider>
     );
   }

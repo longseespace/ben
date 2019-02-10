@@ -1,10 +1,10 @@
-import { Rectangle, Column, RowLayout, Window } from 'react-qml';
+import { Rectangle, RowLayout, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import AddAccountButton from '../components/AddAccountButton.qml';
-import ErrorBoundary from '../components/ErrorBoundary';
 import AppMenu from './AppMenu';
+import ErrorBoundary from '../components/ErrorBoundary';
+import WorkspaceList from './WorkspaceList';
 
 const connectToRedux = connect(
   state => ({
@@ -55,22 +55,7 @@ class MainWindow extends React.PureComponent {
               }}
               color="#191F26"
             >
-              <Column>
-                <AddAccountButton
-                  width={36}
-                  height={36}
-                  x={16}
-                  y={16}
-                  onClicked={this.showSigninWindow}
-                />
-                <AddAccountButton
-                  width={36}
-                  height={36}
-                  x={16}
-                  y={16}
-                  onClicked={this.hideSigninWindow}
-                />
-              </Column>
+              <WorkspaceList />
             </Rectangle>
             <Rectangle
               width={220}

@@ -1,134 +1,147 @@
+import { QtQuickControls2, Image, ColumnLayout } from 'react-qml';
 import React from 'react';
+import isEmail from 'validator/lib/isEmail';
 
-import { Button, Label, Pane, ProgressBar } from './QtQuickControls';
-import { Column, Image } from './QtQuick';
-import { ColumnLayout, RowLayout } from './QtQuickLayout';
+const { Button, Label, ProgressBar } = QtQuickControls2;
 import TextField from './TextField';
 import lockSvg from '../assets/lock.svg';
 
 const openForgotPasswordPage = () => {
-  Qt.openUrlExternally('https://admin.bodidata.com/forgot');
+  Qt.openUrlExternally(
+    'https://get.slack.help/hc/en-us/articles/201909068-Manage-your-password#reset-your-password'
+  );
 };
 
 class SignInForm extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    validationErrorMessage: '',
+  };
 
-    this.state = {
-      validationError: props.validationError,
-    };
+  workspaceRef = React.createRef();
+  emailRef = React.createRef();
+  passwordRef = React.createRef();
 
-    this.emailRef = inst => {
-      this.emailField = inst.qmlObject;
-    };
+  submit = () => {
+    const $workspaceInput = this.workspaceRef.current;
+    const $emailInput = this.emailRef.current;
+    const $passwordInput = this.passwordRef.current;
 
-    this.passwordRef = inst => {
-      this.passwordField = inst.qmlObject;
-    };
+    if (!$workspaceInput || !$emailInput || !$passwordInput) {
+      // weird
+      return false;
+    }
 
-    this.updateEmail = email => {
-      this.email = email;
-    };
+    const workspace = $workspaceInput.value;
+    const email = $emailInput.value;
+    const password = $passwordInput.value;
 
-    this.updatePassword = password => {
-      this.password = password;
-    };
-
-    this.submit = () => {
-      if (!this.email || !this.password) {
-        this.setState({
-          validationError: 'Email and Password are required',
-        });
-        return;
-      }
+    if (!workspace || !email || !password) {
       this.setState({
-        validationError: '',
+        validationErrorMessage: 'All fields are required',
       });
-      this.props.onSubmit && this.props.onSubmit(this.email, this.password);
-    };
-  }
+      return false;
+    }
+
+    if (!isEmail(email)) {
+      this.setState({
+        validationErrorMessage: 'Invalid email address',
+      });
+      return false;
+    }
+
+    this.setState({
+      validationErrorMessage: '',
+    });
+
+    this.props.onSubmit && this.props.onSubmit({ workspace, email, password });
+  };
 
   render() {
     const { submissionError = '', isProcessing = false } = this.props;
-    const { validationError = '' } = this.state;
+    const { validationErrorMessage = '' } = this.state;
     return (
-      <Column>
-        <Pane focus visible width={320} padding={0} Material={{ elevation: 1 }}>
-          <ColumnLayout>
-            <ProgressBar
-              Layout={{ fillWidth: true }}
-              indeterminate
-              opacity={isProcessing ? 1 : 0}
-            />
-            <ColumnLayout
-              Layout={{
-                leftMargin: 32,
-                topMargin: 32,
-                rightMargin: 32,
-                bottomMargin: 26,
-              }}
-              spacing={16}
-            >
-              <Image
-                Layout={{ fillWidth: true }}
-                source={lockSvg}
-                fillMode="PreserveAspectFit"
-                sourceSize={{
-                  width: 32,
-                  height: 32,
-                }}
-              />
-              <Label
-                visible={submissionError && submissionError.length > 0}
-                text={submissionError}
-                color="red"
-                Layout={{ fillWidth: true }}
-                font={{
-                  family: 'Roboto',
-                }}
-              />
-              <Label
-                visible={validationError && validationError.length > 0}
-                text={validationError}
-                color="red"
-                Layout={{ fillWidth: true }}
-                font={{
-                  family: 'Roboto',
-                }}
-              />
-              <TextField
-                placeholderText={qsTr('Email')}
-                Layout={{ fillWidth: true }}
-                onTextEdited={this.updateEmail}
-                font={{
-                  family: 'Roboto',
-                }}
-                onReturnPressed={this.submit}
-              />
-              <TextField
-                placeholderText={qsTr('Password')}
-                Layout={{ fillWidth: true }}
-                echoMode={2}
-                onTextEdited={this.updatePassword}
-                font={{
-                  family: 'Roboto',
-                }}
-                onReturnPressed={this.submit}
-              />
-              <Button
-                Layout={{ fillWidth: true }}
-                highlighted
-                text={qsTr('Login')}
-                onClicked={this.submit}
-                font={{
-                  family: 'Roboto',
-                }}
-              />
-            </ColumnLayout>
-          </ColumnLayout>
-        </Pane>
-
-        <RowLayout width={320}>
+      <ColumnLayout anchors={{ fill: 'parent' }}>
+        <ProgressBar
+          Layout={{ fillWidth: true }}
+          indeterminate
+          opacity={isProcessing ? 1 : 0}
+        />
+        <ColumnLayout
+          Layout={{
+            leftMargin: 32,
+            topMargin: 32,
+            rightMargin: 32,
+            bottomMargin: 26,
+          }}
+          spacing={16}
+        >
+          <Image
+            Layout={{ fillWidth: true }}
+            source={lockSvg}
+            fillMode="PreserveAspectFit"
+            sourceSize={{
+              width: 32,
+              height: 32,
+            }}
+          />
+          <Label
+            visible={submissionError && submissionError.length > 0}
+            text={submissionError}
+            color="red"
+            Layout={{ fillWidth: true }}
+            font={{
+              family: 'Roboto',
+            }}
+          />
+          <Label
+            text={validationErrorMessage}
+            color="red"
+            Layout={{ fillWidth: true }}
+            font={{
+              family: 'Roboto',
+            }}
+          />
+          <TextField
+            placeholderText={qsTr('Workspace')}
+            Layout={{ fillWidth: true }}
+            ref={this.workspaceRef}
+            verticalAlignment="AlignVCenter"
+            font={{
+              family: 'Roboto',
+            }}
+            onSubmitEditing={this.submit}
+          />
+          <TextField
+            placeholderText={qsTr('Email')}
+            ref={this.emailRef}
+            inputMethodHints={Qt.ImhEmailCharactersOnly}
+            Layout={{ fillWidth: true }}
+            verticalAlignment="AlignVCenter"
+            font={{
+              family: 'Roboto',
+            }}
+            onSubmitEditing={this.submit}
+          />
+          <TextField
+            placeholderText={qsTr('Password')}
+            ref={this.passwordRef}
+            verticalAlignment="AlignVCenter"
+            Layout={{ fillWidth: true }}
+            echoMode="Password"
+            font={{
+              family: 'Roboto',
+            }}
+            onSubmitEditing={this.submit}
+          />
+          <Button
+            Layout={{ fillWidth: true }}
+            highlighted
+            text={qsTr('Login')}
+            onClicked={this.submit}
+            font={{
+              family: 'Roboto',
+            }}
+          />
           <Button
             onClicked={openForgotPasswordPage}
             text={qsTr('Forgot your password?')}
@@ -137,10 +150,10 @@ class SignInForm extends React.Component {
               alignment: Qt.AlignCenter,
             }}
           />
-        </RowLayout>
-      </Column>
+        </ColumnLayout>
+      </ColumnLayout>
     );
   }
 }
 
-export default connectToRedux(SignInForm);
+export default SignInForm;

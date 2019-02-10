@@ -18,7 +18,8 @@
     "redux-api-call": "^1.0.5",
     "redux-observable": "^0.17.0",
     "redux-thunk": "^2.3.0",
-    "remote-redux-devtools": "^0.5.15"
+    "remote-redux-devtools": "^0.5.15",
+    "validator": "^10.11.0"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.7.1",

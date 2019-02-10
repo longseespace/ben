@@ -1,10 +1,10 @@
+import { Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { Rectangle } from './QtQuick';
-import PageLayout from './PageLayout';
-import SignInForm from './SignInForm';
-import Window from './Window';
+import AddAccountButton from '../components/AddAccountButton.qml';
+import ErrorBoundary from '../components/ErrorBoundary';
+import SignInForm from '../components/SignInForm';
 
 const connectToRedux = connect(
   state => ({
@@ -16,16 +16,39 @@ const connectToRedux = connect(
   }
 );
 
-class SignInWindow extends React.Component {
+const styles = {
+  window: {
+    width: 400,
+    height: 440,
+    color: '#f5f5f5',
+  },
+};
+
+class SignInWindow extends React.PureComponent {
+  onClosing = ev => {
+    // we don't want default behavior
+    // window visibility will be controlled by component's prop
+    ev.accepted = false;
+
+    // should dispatch close action here
+  };
+
+  handleSignIn = formData => {
+    const { workspace, email, password } = formData;
+    console.log('submit', workspace, email, password);
+  };
+
   render() {
-    const { visible, onClosing } = this.props;
+    const { visible = true } = this.props;
     return (
-      <Window visible={visible} onClosing={onClosing} width={300} height={300}>
-        <PageLayout>
-          <Rectangle color="#f5f5f6">
-            <SignInForm />
-          </Rectangle>
-        </PageLayout>
+      <Window
+        visible={visible}
+        onClosing={this.onClosing}
+        style={styles.window}
+      >
+        <ErrorBoundary>
+          <SignInForm onSubmit={this.handleSignIn} />
+        </ErrorBoundary>
       </Window>
     );
   }
