@@ -3,30 +3,32 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { addWorkspace } from '../state/workspace';
-import { hideWindow, signinWindowVisibilitySelector } from '../state/window';
+import { hideWindow, loginWindowVisibilitySelector } from '../state/window';
 import { signInWithPassword } from '../lib/slack';
 import ErrorBoundary from '../components/ErrorBoundary';
-import SignInForm from '../components/SignInForm';
+import LoginForm from '../components/LoginForm';
+
+const hideLoginWindow = () => hideWindow('login');
 
 const connectToRedux = connect(
   state => ({
-    visible: signinWindowVisibilitySelector(state),
+    visible: loginWindowVisibilitySelector(state),
   }),
   {
-    onClose: () => hideWindow('signin'),
-    onSignInSuccess: addWorkspace,
+    onClose: hideLoginWindow,
+    onLoginSuccess: addWorkspace,
   }
 );
 
 const styles = {
   window: {
-    width: 400,
-    height: 440,
+    width: 320,
+    height: 420,
     color: '#f5f5f5',
   },
 };
 
-class SignInWindow extends React.Component {
+class LoginWindow extends React.Component {
   windowRef = React.createRef();
 
   state = {
@@ -37,7 +39,7 @@ class SignInWindow extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   onClosing = ev => {
@@ -49,7 +51,7 @@ class SignInWindow extends React.Component {
     this.props.onClose();
   };
 
-  async handleSignIn(formData) {
+  async handleLogin(formData) {
     this.setState({ signinError: '', isProcessing: true });
     const { domain, email, password } = formData;
     const resp = await signInWithPassword(domain, email, password);
@@ -58,7 +60,7 @@ class SignInWindow extends React.Component {
     } else {
       // add workspace
       const { team, user, userEmail, token } = resp;
-      this.props.onSignInSuccess(team, user, userEmail, token);
+      this.props.onLoginSuccess({ team, user, userEmail, token });
 
       // reset error
       this.setState({ signinError: '', isProcessing: false });
@@ -76,12 +78,14 @@ class SignInWindow extends React.Component {
         visible={visible}
         visibility={visible ? 'Windowed' : 'Hidden'}
         onClosing={this.onClosing}
+        title="Login"
         style={styles.window}
         ref={this.windowRef}
+        flags={Qt.Dialog}
       >
         <ErrorBoundary>
-          <SignInForm
-            onSubmit={this.handleSignIn}
+          <LoginForm
+            onSubmit={this.handleLogin}
             submissionError={signinError}
             isProcessing={isProcessing}
           />
@@ -91,4 +95,4 @@ class SignInWindow extends React.Component {
   }
 }
 
-export default connectToRedux(SignInWindow);
+export default connectToRedux(LoginWindow);

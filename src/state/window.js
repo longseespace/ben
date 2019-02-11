@@ -29,15 +29,15 @@ export const windowVisibilitySelector = path('window.windowVisibility');
 export const mainWindowVisibilitySelector = path(
   'window.windowVisibility.main'
 );
-export const signinWindowVisibilitySelector = path(
-  'window.windowVisibility.signin'
+export const loginWindowVisibilitySelector = path(
+  'window.windowVisibility.login'
 );
 
 // REDUCER
 // ---------------
 const defaultVisibility = {
   main: true,
-  signin: false,
+  login: false,
 };
 const windowVisibility = (state = defaultVisibility, { type, payload }) => {
   if (type === SHOW_WINDOW) {

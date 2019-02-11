@@ -5,10 +5,12 @@ import * as React from 'react';
 import { showWindow } from '../state/window';
 import AddAccountButton from '../components/AddAccountButton.qml';
 
+const showLoginWindow = () => showWindow('login');
+
 const connectToRedux = connect(
   state => ({}),
   {
-    onAddAccount: () => showWindow('signin'),
+    onAddAccount: showLoginWindow,
   }
 );
 

@@ -12,7 +12,7 @@ const openForgotPasswordPage = () => {
   );
 };
 
-class SignInForm extends React.Component {
+class LoginForm extends React.Component {
   state = {
     validationErrorMessage: '',
   };
@@ -122,6 +122,7 @@ class SignInForm extends React.Component {
               family: 'Roboto',
             }}
             onSubmitEditing={this.submit}
+            readOnly={isProcessing}
           />
           <TextField
             placeholderText={qsTr('Email')}
@@ -137,6 +138,7 @@ class SignInForm extends React.Component {
               family: 'Roboto',
             }}
             onSubmitEditing={this.submit}
+            readOnly={isProcessing}
           />
           <TextField
             placeholderText={qsTr('Password')}
@@ -148,6 +150,7 @@ class SignInForm extends React.Component {
               family: 'Roboto',
             }}
             onSubmitEditing={this.submit}
+            readOnly={isProcessing}
           />
           <Button
             Layout={{ fillWidth: true }}
@@ -157,6 +160,7 @@ class SignInForm extends React.Component {
             font={{
               family: 'Roboto',
             }}
+            enabled={!isProcessing}
           />
           <Button
             onClicked={openForgotPasswordPage}
@@ -172,4 +176,4 @@ class SignInForm extends React.Component {
   }
 }
 
-export default SignInForm;
+export default LoginForm;

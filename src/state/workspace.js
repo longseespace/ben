@@ -11,7 +11,7 @@ import { path } from 'lodash/fp';
 // ACTIONS
 // ---------------
 const ADD_WORKSPACE = 'ADD_WORKSPACE';
-export const addWorkspace = (team, user, userEmail, token) => ({
+export const addWorkspace = ({ team, user, userEmail, token }) => ({
   type: ADD_WORKSPACE,
   payload: {
     [team]: { team, user, userEmail, token },

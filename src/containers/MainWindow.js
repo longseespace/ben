@@ -88,7 +88,7 @@ class MainWindow extends React.Component {
               color="#FFFFFF"
             />
           </RowLayout>
-          {/* <SignInWindow
+          {/* <LoginWindow
             visible={signinWindowVisible}
             onClosing={this.onSiginWindowClosing}
           /> */}

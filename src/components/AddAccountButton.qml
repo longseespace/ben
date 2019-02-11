@@ -8,8 +8,7 @@ Button {
   antialiasing: true
 
   background: Rectangle {
-    opacity: enabled ? 1 : 0.3
-    color: control.down ? "#eeeeee" : "#ffffff"
+    color: control.hovered ? '#fff' : Qt.rgba(255, 255, 255, 0.3)
     radius: 4
   }
 
@@ -23,5 +22,12 @@ Button {
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     elide: Text.ElideRight
+  }
+
+  MouseArea {
+    id: mouseArea
+    anchors.fill: parent
+    cursorShape: Qt.PointingHandCursor
+    onPressed: mouse.accepted = false
   }
 }
