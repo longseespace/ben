@@ -2,28 +2,42 @@ import { Rectangle, RowLayout, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
+import {
+  hideWindow,
+  mainWindowVisibilitySelector,
+  showWindow,
+} from '../state/window';
 import AppMenu from './AppMenu';
 import ErrorBoundary from '../components/ErrorBoundary';
 import WorkspaceList from './WorkspaceList';
 
 const connectToRedux = connect(
   state => ({
-    value: state.counter,
+    visible: mainWindowVisibilitySelector(state),
   }),
   {
-    onIncrement: () => ({ type: 'INCREMENT' }),
-    onDecrement: () => ({ type: 'DECREMENT' }),
+    onClose: () => hideWindow('main'),
+    onOpen: () => showWindow('main'),
   }
 );
 
-class MainWindow extends React.PureComponent {
+class MainWindow extends React.Component {
   windowRef = React.createRef();
 
+  onClosing = ev => {
+    // we don't want default behavior
+    // window visibility will be controlled by component's prop
+    ev.accepted = false;
+
+    // should dispatch close action here
+    this.props.onClose();
+  };
+
   onAppStateChanged = state => {
-    const $window = this.windowRef.current;
     // on app activate, show the window (if already closed)
-    if ($window && state === Qt.ApplicationActive) {
-      $window.show();
+    const { visible, onOpen } = this.props;
+    if (!visible && state === Qt.ApplicationActive) {
+      onOpen();
     }
   };
 
@@ -36,14 +50,16 @@ class MainWindow extends React.PureComponent {
   }
 
   render() {
+    const { visible } = this.props;
     return (
       <Window
-        visible
+        visible={visible}
+        visibility={visible ? 'Windowed' : 'Hidden'}
+        onClosing={this.onClosing}
         width={800}
         height={600}
         title="Tey"
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
-        ref={this.windowRef}
       >
         <ErrorBoundary>
           <AppMenu />

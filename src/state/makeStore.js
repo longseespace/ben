@@ -7,6 +7,7 @@ import {
 import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
 
+import apiMiddleware from './apiMiddleware';
 // import rootEpic from './rootEpic';
 import rootReducer from './rootReducer';
 
@@ -15,13 +16,18 @@ const history = createHistory();
 const routerMiddleware = createRouterMiddleware(history);
 
 // dev tools
-// to use custom remote-dev server, uncomment the first 2 options
 const composeEnhancers = composeWithDevTools({
-  // hostname: process.env.DEV_SERVER_HOST || 'localhost',
-  // port: 8000,
   suppressConnectErrors: false,
   realtime: process.env.NODE_ENV !== 'production',
 });
+
+// for local remote-dev server, use below config
+// const composeEnhancers = composeWithDevTools({
+//   hostname: process.env.DEV_SERVER_HOST || 'localhost',
+//   port: 8000,
+//   suppressConnectErrors: false,
+//   realtime: process.env.NODE_ENV !== 'production',
+// });
 
 // then router
 const rootReducerWithRouter = connectRouter(history)(rootReducer);
@@ -30,6 +36,7 @@ const rootReducerWithRouter = connectRouter(history)(rootReducer);
 const enhancers = composeEnhancers(
   applyMiddleware(
     reduxThunk,
+    apiMiddleware,
     // epicMiddleware,
     routerMiddleware
   )

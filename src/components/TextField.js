@@ -4,19 +4,20 @@ import TextField from './TextField.qml';
 
 class TextFieldWrapper extends React.Component {
   inputRef = React.createRef();
-  value = '';
 
-  constructor(props) {
-    super(props);
-    this.value = props.value || '';
+  get value() {
+    const $textfield = this.inputRef.current;
+    if (!$textfield) {
+      return '';
+    }
+    return $textfield.text;
   }
 
   notifyTextEdited = () => {
     const { onTextEdited } = this.props;
     const $textfield = this.inputRef.current;
     if ($textfield && onTextEdited) {
-      this.value = $textfield.text;
-      onTextEdited(this.value);
+      onTextEdited($textfield.text);
     }
   };
 
@@ -27,12 +28,6 @@ class TextFieldWrapper extends React.Component {
   };
 
   onReleased = ev => {
-    // update value first
-    const $textfield = this.inputRef.current;
-    if ($textfield) {
-      this.value = $textfield.text;
-    }
-
     if (this.props.onReleased) {
       this.props.onReleased(ev);
     }

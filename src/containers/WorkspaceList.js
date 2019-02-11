@@ -1,7 +1,16 @@
 import { Column } from 'react-qml';
+import { connect } from 'react-redux';
 import * as React from 'react';
 
+import { showWindow } from '../state/window';
 import AddAccountButton from '../components/AddAccountButton.qml';
+
+const connectToRedux = connect(
+  state => ({}),
+  {
+    onAddAccount: () => showWindow('signin'),
+  }
+);
 
 const styles = {
   container: {
@@ -10,10 +19,16 @@ const styles = {
   },
 };
 
-const WorkspaceList = () => (
+const WorkspaceList = ({ onAddAccount }) => (
   <Column style={styles.container}>
-    <AddAccountButton width={36} height={36} x={16} y={16} />
+    <AddAccountButton
+      width={36}
+      height={36}
+      x={16}
+      y={16}
+      onClicked={onAddAccount}
+    />
   </Column>
 );
 
-export default WorkspaceList;
+export default connectToRedux(WorkspaceList);

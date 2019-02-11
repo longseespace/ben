@@ -1,8 +1,8 @@
-import { QtQuickControls2, Image, ColumnLayout } from 'react-qml';
+import { QtQuickControls2, Image, ColumnLayout, Text } from 'react-qml';
 import React from 'react';
 import isEmail from 'validator/lib/isEmail';
 
-const { Button, Label, ProgressBar } = QtQuickControls2;
+const { Button, ProgressBar } = QtQuickControls2;
 import TextField from './TextField';
 import lockSvg from '../assets/lock.svg';
 
@@ -17,25 +17,25 @@ class SignInForm extends React.Component {
     validationErrorMessage: '',
   };
 
-  workspaceRef = React.createRef();
+  domainRef = React.createRef();
   emailRef = React.createRef();
   passwordRef = React.createRef();
 
   submit = () => {
-    const $workspaceInput = this.workspaceRef.current;
+    const $domainInput = this.domainRef.current;
     const $emailInput = this.emailRef.current;
     const $passwordInput = this.passwordRef.current;
 
-    if (!$workspaceInput || !$emailInput || !$passwordInput) {
+    if (!$domainInput || !$emailInput || !$passwordInput) {
       // weird
       return false;
     }
 
-    const workspace = $workspaceInput.value;
+    const domain = $domainInput.value;
     const email = $emailInput.value;
     const password = $passwordInput.value;
 
-    if (!workspace || !email || !password) {
+    if (!domain || !email || !password) {
       this.setState({
         validationErrorMessage: 'All fields are required',
       });
@@ -53,12 +53,18 @@ class SignInForm extends React.Component {
       validationErrorMessage: '',
     });
 
-    this.props.onSubmit && this.props.onSubmit({ workspace, email, password });
+    if (this.props.onSubmit) {
+      console.log('onSubmit');
+      this.props.onSubmit({ domain, email, password });
+    }
   };
 
   render() {
     const { submissionError = '', isProcessing = false } = this.props;
     const { validationErrorMessage = '' } = this.state;
+
+    const hasValidationError = validationErrorMessage.length > 0;
+    const hasSubmissionError = submissionError.length > 0;
     return (
       <ColumnLayout anchors={{ fill: 'parent' }}>
         <ProgressBar
@@ -84,8 +90,8 @@ class SignInForm extends React.Component {
               height: 32,
             }}
           />
-          <Label
-            visible={submissionError && submissionError.length > 0}
+          <Text
+            visible={!hasValidationError && hasSubmissionError}
             text={submissionError}
             color="red"
             Layout={{ fillWidth: true }}
@@ -93,7 +99,8 @@ class SignInForm extends React.Component {
               family: 'Roboto',
             }}
           />
-          <Label
+          <Text
+            visible={!hasSubmissionError}
             text={validationErrorMessage}
             color="red"
             Layout={{ fillWidth: true }}
@@ -104,7 +111,12 @@ class SignInForm extends React.Component {
           <TextField
             placeholderText={qsTr('Workspace')}
             Layout={{ fillWidth: true }}
-            ref={this.workspaceRef}
+            ref={this.domainRef}
+            inputMethodHints={
+              Qt.ImhNoAutoUppercase |
+              Qt.ImhPreferLowercase |
+              Qt.ImhNoPredictiveText
+            }
             verticalAlignment="AlignVCenter"
             font={{
               family: 'Roboto',
@@ -114,7 +126,11 @@ class SignInForm extends React.Component {
           <TextField
             placeholderText={qsTr('Email')}
             ref={this.emailRef}
-            inputMethodHints={Qt.ImhEmailCharactersOnly}
+            inputMethodHints={
+              Qt.ImhNoAutoUppercase |
+              Qt.ImhNoPredictiveText |
+              Qt.ImhEmailCharactersOnly
+            }
             Layout={{ fillWidth: true }}
             verticalAlignment="AlignVCenter"
             font={{

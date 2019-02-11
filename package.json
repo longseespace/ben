@@ -4,18 +4,20 @@
   "private": true,
   "scripts": {
     "start": "DEV_SERVER_HOST=localhost rq start --dev --platform=macos",
+    "start_ios": "DEV_SERVER_HOST=localhost rq start --dev --platform=ios",
     "build": "NODE_ENV=production rq bundle --platform=macos"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "connected-react-router": "^4.3.0",
     "history": "^4.7.2",
+    "lodash": "^4.17.11",
+    "qs": "^6.6.0",
     "react": "^16.5.0",
     "react-qml": "*",
     "react-redux": "5.0.6",
     "react-router": "^4.3.1",
     "redux": "^3.7.2",
-    "redux-api-call": "^1.0.5",
+    "redux-api-call": "^1.0.9",
     "redux-observable": "^0.17.0",
     "redux-thunk": "^2.3.0",
     "remote-redux-devtools": "^0.5.15",
@@ -25,6 +27,7 @@
     "@fortawesome/fontawesome-free": "^5.7.1",
     "@react-qml/cli": "^0.1.0",
     "babel-eslint": "^8.0.3",
+    "babel-plugin-lodash": "^3.3.4",
     "eslint": "^4.13.1",
     "eslint-plugin-react": "^7.5.1",
     "webpack-bundle-analyzer": "^2.13.1"
