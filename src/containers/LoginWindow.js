@@ -2,7 +2,8 @@ import { Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { addWorkspace } from '../state/workspace';
+import { addWorkspace, getTeamInfo } from '../state/workspace';
+import { getChannelList } from '../state/conversation';
 import { hideWindow, loginWindowVisibilitySelector } from '../state/window';
 import { signInWithPassword } from '../lib/slack';
 import ErrorBoundary from '../components/ErrorBoundary';
@@ -16,7 +17,9 @@ const connectToRedux = connect(
   }),
   {
     onClose: hideLoginWindow,
-    onLoginSuccess: addWorkspace,
+    addWorkspace,
+    getTeamInfo,
+    getChannelList,
   }
 );
 
@@ -60,7 +63,13 @@ class LoginWindow extends React.Component {
     } else {
       // add workspace
       const { team, user, userEmail, token } = resp;
-      this.props.onLoginSuccess({ team, user, userEmail, token });
+      this.props.addWorkspace({ team, user, userEmail, token });
+
+      // fetch team info
+      this.props.getTeamInfo({ token });
+
+      // fetch channel list
+      this.props.getChannelList({ token });
 
       // reset error
       this.setState({ signinError: '', isProcessing: false });

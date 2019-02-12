@@ -155,7 +155,7 @@ class LoginForm extends React.Component {
           <Button
             Layout={{ fillWidth: true }}
             highlighted
-            text={qsTr('Login')}
+            text={isProcessing ? qsTr('Logging in...') : qsTr('Login')}
             onClicked={this.submit}
             font={{
               family: 'Roboto',

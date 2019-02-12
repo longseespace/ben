@@ -4,8 +4,9 @@ import fetch from 'redux-api-call-adapter-fetch';
 import json from 'redux-api-call-adapter-json';
 
 import querify from './querify';
-import stringify from './json-stringify';
+import jsonStringify from './json-stringify';
+import formStringify from './form-stringify';
 
 export default createAPIMiddleware(
-  composeAdapters(stringify, json, querify, fetch)
+  composeAdapters(jsonStringify, formStringify, json, querify, fetch)
 );

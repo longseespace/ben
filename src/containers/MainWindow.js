@@ -58,16 +58,16 @@ class MainWindow extends React.Component {
         onClosing={this.onClosing}
         width={800}
         height={600}
-        title="Tey"
+        title="msg"
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
       >
         <ErrorBoundary>
           <AppMenu />
           <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
             <Rectangle
-              width={68}
               Layout={{
                 fillHeight: true,
+                preferredWidth: 68,
               }}
               color="#191F26"
             >
@@ -88,10 +88,6 @@ class MainWindow extends React.Component {
               color="#FFFFFF"
             />
           </RowLayout>
-          {/* <LoginWindow
-            visible={signinWindowVisible}
-            onClosing={this.onSiginWindowClosing}
-          /> */}
         </ErrorBoundary>
       </Window>
     );
