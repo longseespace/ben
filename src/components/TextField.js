@@ -44,6 +44,7 @@ class TextFieldWrapper extends React.Component {
       onTextEdited, // eslint-disable-line no-unused-vars
       onPressed, // eslint-disable-line no-unused-vars
       onReleased, // eslint-disable-line no-unused-vars
+      onSubmitEditing, // eslint-disable-line no-unused-vars
       ...otherProps
     } = this.props;
     return (

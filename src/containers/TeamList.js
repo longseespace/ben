@@ -6,9 +6,9 @@ import { Column, ColumnLayout } from 'react-qml';
 
 import { showWindow } from '../state/window';
 import {
-  workspaceInfoSelector,
-  workspaceListSelector,
-} from '../state/workspace';
+  teamInfoSelector,
+  teamListSelector,
+} from '../state/team';
 
 // import ListView from '../components/ListView.qml';
 import TeamButton from '../components/TeamButton.qml';
@@ -18,8 +18,8 @@ const showLoginWindow = () => showWindow('login');
 
 const connectToRedux = connect(
   state => ({
-    workspaceList: workspaceListSelector(state),
-    workspaceInfo: workspaceInfoSelector(state),
+    teamList: teamListSelector(state),
+    teamInfo: teamInfoSelector(state),
   }),
   {
     onAddAccount: showLoginWindow,
@@ -40,10 +40,10 @@ const styles = {
 const getIcon = path('icon.image_88');
 
 // TODO: fix the ordering
-class WorkspaceList extends React.Component {
+class TeamList extends React.Component {
   render() {
-    const { onAddAccount, workspaceList = {}, workspaceInfo = {} } = this.props;
-    const teamIds = Object.keys(workspaceList);
+    const { onAddAccount, teamList = {}, teamInfo = {} } = this.props;
+    const teamIds = Object.keys(teamList);
     return (
       <ColumnLayout style={styles.container}>
         <Column
@@ -55,7 +55,7 @@ class WorkspaceList extends React.Component {
               key={id}
               onClicked={onAddAccount}
               style={styles.item}
-              backgroundIcon={getIcon(workspaceInfo[id]) || ''}
+              backgroundIcon={getIcon(teamInfo[id]) || ''}
               anchors={{ horizontalCenter: 'parent.horizontalCenter' }}
             />
           ))}
@@ -76,4 +76,4 @@ class WorkspaceList extends React.Component {
   }
 }
 
-export default connectToRedux(WorkspaceList);
+export default connectToRedux(TeamList);

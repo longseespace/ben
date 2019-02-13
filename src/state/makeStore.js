@@ -16,18 +16,18 @@ const history = createHistory();
 const routerMiddleware = createRouterMiddleware(history);
 
 // dev tools
-const composeEnhancers = composeWithDevTools({
-  suppressConnectErrors: false,
-  realtime: process.env.NODE_ENV !== 'production',
-});
-
-// for local remote-dev server, use below config
 // const composeEnhancers = composeWithDevTools({
-//   hostname: process.env.DEV_SERVER_HOST || 'localhost',
-//   port: 8000,
 //   suppressConnectErrors: false,
 //   realtime: process.env.NODE_ENV !== 'production',
 // });
+
+// for local remote-dev server, use below config
+const composeEnhancers = composeWithDevTools({
+  hostname: process.env.DEV_SERVER_HOST || 'localhost',
+  port: 8000,
+  suppressConnectErrors: false,
+  realtime: process.env.NODE_ENV !== 'production',
+});
 
 // then router
 const rootReducerWithRouter = connectRouter(history)(rootReducer);

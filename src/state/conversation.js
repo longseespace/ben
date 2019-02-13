@@ -22,8 +22,8 @@ export const getChannelList = GetChannelListAPI.actionCreator;
 
 // SELECTORS
 // ---------------
-export const channelListSelector = path('channel.list');
-export const channelInfoSelector = path('channel.info');
+export const channelListSelector = path('conversation.list');
+export const channelInfoSelector = path('conversation.info');
 
 // REDUCER
 // ---------------

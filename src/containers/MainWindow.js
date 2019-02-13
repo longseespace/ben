@@ -8,8 +8,9 @@ import {
   showWindow,
 } from '../state/window';
 import AppMenu from './AppMenu';
+import ChannelList from './ChannelList';
 import ErrorBoundary from '../components/ErrorBoundary';
-import WorkspaceList from './WorkspaceList';
+import TeamList from './TeamList';
 
 const connectToRedux = connect(
   state => ({
@@ -71,7 +72,7 @@ class MainWindow extends React.Component {
               }}
               color="#191F26"
             >
-              <WorkspaceList />
+              <TeamList />
             </Rectangle>
             <Rectangle
               width={220}
@@ -79,7 +80,9 @@ class MainWindow extends React.Component {
                 fillHeight: true,
               }}
               color="#323E4C"
-            />
+            >
+              <ChannelList />
+            </Rectangle>
             <Rectangle
               Layout={{
                 fillWidth: true,

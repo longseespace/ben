@@ -109,7 +109,7 @@ class LoginForm extends React.Component {
             }}
           />
           <TextField
-            placeholderText={qsTr('Workspace')}
+            placeholderText={qsTr('Team')}
             Layout={{ fillWidth: true }}
             ref={this.domainRef}
             inputMethodHints={

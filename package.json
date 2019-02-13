@@ -5,14 +5,15 @@
   "scripts": {
     "start": "DEV_SERVER_HOST=localhost rq start --dev --platform=macos",
     "start_ios": "DEV_SERVER_HOST=localhost rq start --dev --platform=ios",
-    "build": "NODE_ENV=production rq bundle --platform=macos"
+    "build": "NODE_ENV=production rq bundle --platform=macos",
+    "remotedev": "remotedev --host=0.0.0.0 --port=8000"
   },
   "dependencies": {
     "connected-react-router": "^4.3.0",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
     "qs": "^6.6.0",
-    "react": "^16.5.0",
+    "react": "^16.8.1",
     "react-qml": "*",
     "react-redux": "5.0.6",
     "react-router": "^4.3.1",
@@ -30,6 +31,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "eslint": "^4.13.1",
     "eslint-plugin-react": "^7.5.1",
+    "remotedev-server": "^0.2.4",
     "webpack-bundle-analyzer": "^2.13.1"
   }
 }
