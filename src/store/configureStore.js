@@ -6,6 +6,8 @@ import {
 } from 'connected-react-router';
 import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import apiMiddleware from './apiMiddleware';
 // import rootEpic from './rootEpic';
@@ -32,6 +34,14 @@ const composeEnhancers = composeWithDevTools({
 // then router
 const rootReducerWithRouter = connectRouter(history)(rootReducer);
 
+// then persist storage
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['team'],
+};
+const persistedReducer = persistReducer(persistConfig, rootReducerWithRouter);
+
 // finally composeEnhancers
 const enhancers = composeEnhancers(
   applyMiddleware(
@@ -44,7 +54,8 @@ const enhancers = composeEnhancers(
 
 export { history };
 export default initialState => {
-  const store = createStore(rootReducerWithRouter, initialState, enhancers);
+  const store = createStore(persistedReducer, initialState, enhancers);
+  const persistor = persistStore(store);
 
   if (module.hot) {
     module.hot.accept('./rootReducer', () => {
@@ -57,5 +68,5 @@ export default initialState => {
     // });
   }
 
-  return store;
+  return { store, persistor };
 };

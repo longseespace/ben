@@ -20,6 +20,7 @@
     "redux": "^3.7.2",
     "redux-api-call": "^1.0.9",
     "redux-observable": "^0.17.0",
+    "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "remote-redux-devtools": "^0.5.15",
     "validator": "^10.11.0"

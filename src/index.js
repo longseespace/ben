@@ -4,17 +4,17 @@ import { render } from 'react-qml';
 import React from 'react';
 
 import App from './App';
-import createStore from './store/createStore';
+import configureStore from './store/configureStore';
 
-const store = createStore();
+const { store, persistor } = configureStore();
 
 export default root => {
-  render(<App store={store} />, root);
+  render(<App store={store} persistor={persistor} />, root);
 
   if (module.hot) {
     module.hot.accept('./App', () => {
       const NextApp = require('./App').default;
-      render(<NextApp store={store} />, root);
+      render(<NextApp store={store} persistor={persistor} />, root);
     });
   }
 };
