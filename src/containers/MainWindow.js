@@ -2,43 +2,43 @@ import { Rectangle, RowLayout, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import {
-  hideWindow,
-  mainWindowVisibilitySelector,
-  showWindow,
-} from '../state/window';
 import AppMenu from './AppMenu';
 import ChannelList from './ChannelList';
 import ErrorBoundary from '../components/ErrorBoundary';
+import LoginWindow from './LoginWindow';
 import TeamList from './TeamList';
 
 const connectToRedux = connect(
-  state => ({
-    visible: mainWindowVisibilitySelector(state),
-  }),
-  {
-    onClose: () => hideWindow('main'),
-    onOpen: () => showWindow('main'),
-  }
+  state => ({}),
+  {}
 );
 
-class MainWindow extends React.Component {
+const windowX = localStorage.getItem('windowX') || 100;
+const windowY = localStorage.getItem('windowY') || 100;
+const windowWidth = localStorage.getItem('windowWidth') || 800;
+const windowHeight = localStorage.getItem('windowHeight') || 600;
+
+class MainWindow extends React.PureComponent {
   windowRef = React.createRef();
 
   onClosing = ev => {
-    // we don't want default behavior
-    // window visibility will be controlled by component's prop
-    ev.accepted = false;
+    // persist window's geometry
+    const $window = this.windowRef.current;
+    if ($window) {
+      localStorage.setItem('windowX', $window.x);
+      localStorage.setItem('windowY', $window.y);
+      localStorage.setItem('windowWidth', $window.width);
+      localStorage.setItem('windowHeight', $window.height);
+    }
 
-    // should dispatch close action here
-    this.props.onClose();
+    ev.accepted = true;
   };
 
   onAppStateChanged = state => {
     // on app activate, show the window (if already closed)
-    const { visible, onOpen } = this.props;
-    if (!visible && state === Qt.ApplicationActive) {
-      onOpen();
+    const $window = this.windowRef.current;
+    if (!$window.visible && state === Qt.ApplicationActive) {
+      $window.open();
     }
   };
 
@@ -51,19 +51,21 @@ class MainWindow extends React.Component {
   }
 
   render() {
-    const { visible } = this.props;
     return (
       <Window
-        visible={visible}
-        visibility={visible ? 'Windowed' : 'Hidden'}
+        visible
         onClosing={this.onClosing}
-        width={800}
-        height={600}
-        title="msg"
+        x={windowX}
+        y={windowY}
+        width={windowWidth}
+        height={windowHeight}
+        title="Tey"
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
+        ref={this.windowRef}
       >
         <ErrorBoundary>
           <AppMenu />
+          <LoginWindow />
           <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
             <Rectangle
               Layout={{

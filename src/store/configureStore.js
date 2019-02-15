@@ -1,3 +1,6 @@
+// TODO: redux-persist seems overkill, revive this later
+// also: react-router / react-observable (needed?)
+
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'remote-redux-devtools';
 import {
@@ -38,7 +41,7 @@ const rootReducerWithRouter = connectRouter(history)(rootReducer);
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['team'],
+  whitelist: ['account'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducerWithRouter);
 
@@ -60,7 +63,12 @@ export default initialState => {
   if (module.hot) {
     module.hot.accept('./rootReducer', () => {
       const nextReducer = require('./rootReducer').default;
-      store.replaceReducer(connectRouter(history)(nextReducer));
+      const rootReducerWithRouter = connectRouter(history)(nextReducer);
+      const persistedReducer = persistReducer(
+        persistConfig,
+        rootReducerWithRouter
+      );
+      store.replaceReducer(connectRouter(history)(persistedReducer));
     });
     // module.hot.accept('./rootEpic', () => {
     //   const rootEpic = require('./rootEpic').default;

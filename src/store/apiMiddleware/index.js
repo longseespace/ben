@@ -6,7 +6,8 @@ import json from 'redux-api-call-adapter-json';
 import querify from './querify';
 import jsonStringify from './json-stringify';
 import formStringify from './form-stringify';
+import slackOK from './slack-ok';
 
 export default createAPIMiddleware(
-  composeAdapters(jsonStringify, formStringify, json, querify, fetch)
+  composeAdapters(jsonStringify, formStringify, slackOK, json, querify, fetch)
 );

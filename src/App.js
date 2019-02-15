@@ -3,7 +3,6 @@ import * as React from 'react';
 import { PersistGate } from 'redux-persist/integration/react';
 
 import MainWindow from './containers/MainWindow';
-import LoginWindow from './containers/LoginWindow';
 
 class App extends React.Component {
   componentDidMount() {
@@ -19,10 +18,7 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <React.Fragment>
-            <MainWindow />
-            <LoginWindow />
-          </React.Fragment>
+          <MainWindow />
         </PersistGate>
       </Provider>
     );

@@ -1,28 +1,20 @@
+import { Column, ColumnLayout } from 'react-qml';
 import { connect } from 'react-redux';
 import { path } from 'lodash/fp';
 import * as React from 'react';
 
-import { Column, ColumnLayout } from 'react-qml';
-
-import { showWindow } from '../state/window';
-import {
-  teamInfoSelector,
-  teamListSelector,
-} from '../state/team';
-
-// import ListView from '../components/ListView.qml';
-import TeamButton from '../components/TeamButton.qml';
+import { selectTeam, teamInfoSelector } from '../state/team';
+import { showLoginWindow } from '../state/loginWindow';
 import AddAccountButton from '../components/AddAccountButton.qml';
-
-const showLoginWindow = () => showWindow('login');
+import TeamButton from '../components/TeamButton.qml';
 
 const connectToRedux = connect(
   state => ({
-    teamList: teamListSelector(state),
     teamInfo: teamInfoSelector(state),
   }),
   {
     onAddAccount: showLoginWindow,
+    onTeamSelected: selectTeam,
   }
 );
 
@@ -42,8 +34,8 @@ const getIcon = path('icon.image_88');
 // TODO: fix the ordering
 class TeamList extends React.Component {
   render() {
-    const { onAddAccount, teamList = {}, teamInfo = {} } = this.props;
-    const teamIds = Object.keys(teamList);
+    const { onAddAccount, onTeamSelected, teamInfo = {} } = this.props;
+    const teamIds = Object.keys(teamInfo);
     return (
       <ColumnLayout style={styles.container}>
         <Column
@@ -53,7 +45,7 @@ class TeamList extends React.Component {
           {teamIds.map(id => (
             <TeamButton
               key={id}
-              onClicked={onAddAccount}
+              onClicked={() => onTeamSelected(id)}
               style={styles.item}
               backgroundIcon={getIcon(teamInfo[id]) || ''}
               anchors={{ horizontalCenter: 'parent.horizontalCenter' }}

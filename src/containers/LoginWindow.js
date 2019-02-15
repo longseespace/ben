@@ -2,23 +2,23 @@ import { Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { addTeam, clientBoot, selectTeam } from '../state/team';
-import { hideWindow, loginWindowVisibilitySelector } from '../state/window';
+import { addAccount, initAccount } from '../state/account';
+import {
+  hideLoginWindow,
+  loginWindowConfigSelector,
+} from '../state/loginWindow';
 import { signInWithPassword } from '../lib/slack';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoginForm from '../components/LoginForm';
 
-const hideLoginWindow = () => hideWindow('login');
-
 const connectToRedux = connect(
   state => ({
-    visible: loginWindowVisibilitySelector(state),
+    config: loginWindowConfigSelector(state),
   }),
   {
     onClose: hideLoginWindow,
-    addTeam,
-    selectTeam,
-    clientBoot,
+    addAccount,
+    initAccount,
   }
 );
 
@@ -31,18 +31,18 @@ const styles = {
 };
 
 class LoginWindow extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleLogin = this.handleLogin.bind(this);
+  }
+
   windowRef = React.createRef();
 
   state = {
     signinError: '',
     isProcessing: false,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.handleLogin = this.handleLogin.bind(this);
-  }
 
   onClosing = ev => {
     // we don't want default behavior
@@ -54,21 +54,20 @@ class LoginWindow extends React.Component {
   };
 
   async handleLogin(formData) {
+    // reset error
     this.setState({ signinError: '', isProcessing: true });
+
     const { domain, email, password } = formData;
     const resp = await signInWithPassword(domain, email, password);
     if (!resp.ok) {
       this.setState({ signinError: resp.error, isProcessing: false });
     } else {
-      // add team
+      // add account
       const { team, user, userEmail, token } = resp;
-      this.props.addTeam({ team, user, userEmail, token });
+      this.props.addAccount({ team, user, userEmail, token });
 
-      // select newly added team
-      this.props.selectTeam(team);
-
-      // boot up. NOTE: private api!
-      this.props.clientBoot({ token });
+      // init account
+      this.props.initAccount({ token });
 
       // reset error
       this.setState({ signinError: '', isProcessing: false });
@@ -80,7 +79,7 @@ class LoginWindow extends React.Component {
 
   render() {
     const { signinError, isProcessing } = this.state;
-    const { visible = true } = this.props;
+    const { visible = false } = this.props.config;
     return (
       <Window
         visible={visible}
