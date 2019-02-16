@@ -1,8 +1,14 @@
-import { QtQuickControls2, Image, ColumnLayout, Text } from 'react-qml';
+import {
+  ColumnLayout,
+  GridLayout,
+  Image,
+  QtQuickControls2,
+  Text,
+} from 'react-qml';
 import React from 'react';
 import isEmail from 'validator/lib/isEmail';
 
-const { Button, ProgressBar } = QtQuickControls2;
+const { Button } = QtQuickControls2;
 import TextField from './TextField';
 import lockSvg from '../assets/lock.svg';
 
@@ -67,11 +73,6 @@ class LoginForm extends React.Component {
     const hasSubmissionError = submissionError.length > 0;
     return (
       <ColumnLayout anchors={{ fill: 'parent' }}>
-        <ProgressBar
-          Layout={{ fillWidth: true }}
-          indeterminate
-          opacity={isProcessing ? 1 : 0}
-        />
         <ColumnLayout
           Layout={{
             leftMargin: 32,
@@ -79,10 +80,11 @@ class LoginForm extends React.Component {
             rightMargin: 32,
             bottomMargin: 26,
           }}
+          columns={1}
           spacing={16}
         >
           <Image
-            Layout={{ fillWidth: true }}
+            Layout={{ fillWidth: true, row: 1 }}
             source={lockSvg}
             fillMode="PreserveAspectFit"
             sourceSize={{
@@ -94,17 +96,17 @@ class LoginForm extends React.Component {
             visible={!hasValidationError && hasSubmissionError}
             text={submissionError}
             color="red"
-            Layout={{ fillWidth: true }}
+            Layout={{ fillWidth: true, row: 2 }}
           />
           <Text
             visible={!hasSubmissionError}
             text={validationErrorMessage}
             color="red"
-            Layout={{ fillWidth: true }}
+            Layout={{ fillWidth: true, row: 3 }}
           />
           <TextField
             placeholderText={qsTr('Team')}
-            Layout={{ fillWidth: true }}
+            Layout={{ fillWidth: true, row: 4 }}
             ref={this.domainRef}
             inputMethodHints={
               Qt.ImhNoAutoUppercase |
@@ -123,7 +125,7 @@ class LoginForm extends React.Component {
               Qt.ImhNoPredictiveText |
               Qt.ImhEmailCharactersOnly
             }
-            Layout={{ fillWidth: true }}
+            Layout={{ fillWidth: true, row: 5 }}
             verticalAlignment="AlignVCenter"
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
@@ -132,13 +134,13 @@ class LoginForm extends React.Component {
             placeholderText={qsTr('Password')}
             ref={this.passwordRef}
             verticalAlignment="AlignVCenter"
-            Layout={{ fillWidth: true }}
+            Layout={{ fillWidth: true, row: 6 }}
             echoMode="Password"
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
           />
           <Button
-            Layout={{ fillWidth: true }}
+            Layout={{ fillWidth: true, row: 7 }}
             highlighted
             text={isProcessing ? qsTr('Logging in...') : qsTr('Login')}
             onClicked={this.submit}
@@ -150,6 +152,7 @@ class LoginForm extends React.Component {
             flat
             Layout={{
               alignment: Qt.AlignCenter,
+              row: 8,
             }}
           />
         </ColumnLayout>
