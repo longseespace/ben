@@ -7,13 +7,13 @@ import {
   connectRouter,
   routerMiddleware as createRouterMiddleware,
 } from 'connected-react-router';
+import { createLogger } from 'redux-logger';
+import { persistStore, persistReducer } from 'redux-persist';
 import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
-import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import apiMiddleware from './apiMiddleware';
-// import rootEpic from './rootEpic';
 import rootReducer from './rootReducer';
 
 const history = createHistory();
@@ -41,9 +41,28 @@ const rootReducerWithRouter = connectRouter(history)(rootReducer);
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['account'],
+  whitelist: ['account', 'team', 'conversation'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducerWithRouter);
+
+// then logger
+const logger = createLogger({
+  colors: false,
+  logger: {
+    log: (...args) => {
+      console.log(require('util').inspect(args, { depth: 2 }));
+    },
+    info: (...args) => {
+      console.log(require('util').inspect(args, { depth: 2 }));
+    },
+    error: (...args) => {
+      console.log(require('util').inspect(args, { depth: 2 }));
+    },
+    warn: (...args) => {
+      console.log(require('util').inspect(args, { depth: 2 }));
+    },
+  },
+});
 
 // finally composeEnhancers
 const enhancers = composeEnhancers(
@@ -52,6 +71,7 @@ const enhancers = composeEnhancers(
     apiMiddleware,
     // epicMiddleware,
     routerMiddleware
+    // logger
   )
 );
 

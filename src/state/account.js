@@ -6,6 +6,7 @@ import {
   ACCOUNT_NAMESPACE,
   ADD_ACCOUNT,
   INIT_ACCOUNT,
+  INIT_USER,
   REMOVE_ACCOUNT,
 } from './constants';
 
@@ -17,6 +18,13 @@ export const InitAccountAPI = makeFetchAction(INIT_ACCOUNT, ({ token }) => ({
   endpoint: `${API_ROOT}/client.boot`,
   method: 'POST',
   form: { token },
+}));
+
+export const InitUserAPI = makeFetchAction(INIT_USER, ({ token, teamId }) => ({
+  endpoint: `${API_ROOT}/users.counts`,
+  method: 'POST',
+  form: { token },
+  teamId: teamId, // for reference only
 }));
 
 // ACTIONS
@@ -34,6 +42,7 @@ export const removeAccount = team => ({
 });
 
 export const initAccount = InitAccountAPI.actionCreator;
+export const initUser = InitUserAPI.actionCreator;
 
 // SELECTORS
 // ---------------

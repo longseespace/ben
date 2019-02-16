@@ -1,7 +1,7 @@
 // stringify a body object and add request headers
 import qs from 'qs';
 
-const stringify = next => req => {
+const formStringify = next => req => {
   // only stringify POST, PUT, PATCH requests with body is an object
   if (
     req.method &&
@@ -19,4 +19,4 @@ const stringify = next => req => {
   return next(req);
 };
 
-export default stringify;
+export default formStringify;

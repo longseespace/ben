@@ -2,7 +2,7 @@ import qs from 'qs';
 import url from 'url';
 
 // transform query string
-const querify = next => async req => {
+const querify = next => req => {
   if (typeof req.query === 'object') {
     const { query, ...others } = url.parse(req.endpoint);
     const existingQuery = qs.parse(query);

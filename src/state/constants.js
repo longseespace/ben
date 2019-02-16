@@ -2,6 +2,7 @@
 // ---------------
 export const ACCOUNT_NAMESPACE = 'account';
 export const INIT_ACCOUNT = 'INIT_ACCOUNT';
+export const INIT_USER = 'INIT_USER';
 export const ADD_ACCOUNT = 'ADD_ACCOUNT';
 export const REMOVE_ACCOUNT = 'REMOVE_ACCOUNT';
 
@@ -9,6 +10,11 @@ export const REMOVE_ACCOUNT = 'REMOVE_ACCOUNT';
 // ---------------
 export const TEAM_NAMESPACE = 'team';
 export const SELECT_TEAM = 'SELECT_TEAM';
+
+// CONVERSATIONS
+// ---------------
+export const CONVERSATION_NAMESPACE = 'conversation';
+export const SELECT_CONVERSATION = 'SELECT_CONVERSATION';
 
 // LOGIN WINDOW
 // ---------------

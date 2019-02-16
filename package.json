@@ -19,6 +19,7 @@
     "react-router": "^4.3.1",
     "redux": "^3.7.2",
     "redux-api-call": "^1.0.9",
+    "redux-logger": "^3.0.6",
     "redux-observable": "^0.17.0",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",

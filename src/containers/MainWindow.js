@@ -2,6 +2,7 @@ import { Rectangle, RowLayout, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
+import { accountListSelector, initAccount, initUser } from '../state/account';
 import AppMenu from './AppMenu';
 import ChannelList from './ChannelList';
 import ErrorBoundary from '../components/ErrorBoundary';
@@ -9,8 +10,13 @@ import LoginWindow from './LoginWindow';
 import TeamList from './TeamList';
 
 const connectToRedux = connect(
-  state => ({}),
-  {}
+  state => ({
+    accountList: accountListSelector(state),
+  }),
+  {
+    initAccount,
+    initUser,
+  }
 );
 
 const windowX = localStorage.getItem('windowX') || 100;
@@ -43,6 +49,11 @@ class MainWindow extends React.PureComponent {
   };
 
   componentDidMount() {
+    Object.keys(this.props.accountList).forEach(id => {
+      const account = this.props.accountList[id];
+      this.props.initAccount({ token: account.token });
+      this.props.initUser({ token: account.token, teamId: account.team });
+    });
     Qt.application.stateChanged.connect(this.onAppStateChanged);
   }
 

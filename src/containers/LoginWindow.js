@@ -67,6 +67,7 @@ class LoginWindow extends React.Component {
       this.props.addAccount({ team, user, userEmail, token });
 
       // init account
+      // TODO: fix this
       this.props.initAccount({ token });
 
       // reset error

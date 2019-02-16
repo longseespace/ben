@@ -20,7 +20,7 @@ Component {
       Text {
         color: container.ListView.view.currentIndex === index ? '#fff' : '#eee'
         text: '# ' + model.name
-        font.pointSize: 16
+        font.pointSize: 14
       }
     }
 

@@ -7,6 +7,7 @@ class RQListView extends React.PureComponent {
   delegateRef = React.createRef();
   headerRef = React.createRef();
   highlightRef = React.createRef();
+  sectionDelegateRef = React.createRef();
 
   updateModel = () => {
     const $model = this.modelRef.current;
@@ -26,12 +27,18 @@ class RQListView extends React.PureComponent {
     const $delegate = this.delegateRef.current;
     const $header = this.headerRef.current;
     const $highlight = this.highlightRef.current;
+    const $sectionDelegate = this.sectionDelegateRef.current;
 
     if ($listView) {
       $listView.model = $model;
       $listView.delegate = $delegate;
       $listView.header = $header;
       $listView.highlight = $highlight;
+      $listView.section.delegate = $sectionDelegate;
+
+      if (this.props.sectionProperty) {
+        $listView.section.property = this.props.sectionProperty;
+      }
 
       this.updateModel();
     }
@@ -42,6 +49,7 @@ class RQListView extends React.PureComponent {
     const $delegate = this.delegateRef.current;
     const $header = this.headerRef.current;
     const $highlight = this.highlightRef.current;
+    const $sectionDelegate = this.sectionDelegateRef.current;
 
     if ($listView) {
       if (prevProps.HeaderComponent !== this.props.HeaderComponent) {
@@ -52,6 +60,12 @@ class RQListView extends React.PureComponent {
       }
       if (prevProps.HighlightComponent !== this.props.HighlightComponent) {
         $listView.highlight = $highlight;
+      }
+      if (
+        prevProps.SectionDelegateComponent !==
+        this.props.SectionDelegateComponent
+      ) {
+        $listView.section.delegate = $sectionDelegate;
       }
     }
 
@@ -65,7 +79,9 @@ class RQListView extends React.PureComponent {
       HeaderComponent,
       HighlightComponent,
       DelegateComponent,
+      SectionDelegateComponent,
       data, // eslint-disable-line
+      sectionProperty, // eslint-disable-line
       ...otherProps
     } = this.props;
 
@@ -73,6 +89,9 @@ class RQListView extends React.PureComponent {
       <ListView ref={this.listViewRef} {...otherProps}>
         {HeaderComponent && <HeaderComponent ref={this.headerRef} />}
         {HighlightComponent && <HighlightComponent ref={this.highlightRef} />}
+        {SectionDelegateComponent && (
+          <SectionDelegateComponent ref={this.sectionDelegateRef} />
+        )}
         <ListModel ref={this.modelRef} />
         <DelegateComponent ref={this.delegateRef} />
       </ListView>
