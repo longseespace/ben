@@ -14,16 +14,36 @@ const API_ROOT = 'https://slack.com/api';
 
 // API
 // ---------------
-export const InitAccountAPI = makeFetchAction(INIT_ACCOUNT, ({ token }) => ({
-  endpoint: `${API_ROOT}/client.boot`,
-  method: 'POST',
-  form: { token },
-}));
+// NOTE: private API
+export const InitAccountAPI = makeFetchAction(
+  INIT_ACCOUNT,
+  ({ token, teamId }) => ({
+    endpoint: `${API_ROOT}/client.boot`,
+    method: 'POST',
+    form: {
+      token,
+      flannel_api_ver: 4,
+      _x_reason: 'fetch-legacy-start-data',
+      _x_mode: 'online',
+    },
+    teamId: teamId,
+  })
+);
 
+// NOTE: private API
 export const InitUserAPI = makeFetchAction(INIT_USER, ({ token, teamId }) => ({
   endpoint: `${API_ROOT}/users.counts`,
   method: 'POST',
-  form: { token },
+  form: {
+    token,
+    mpim_aware: true,
+    only_relevant_ims: true,
+    simple_unreads: true,
+    include_threads: true,
+    mpdm_dm_users: false,
+    _x_reason: 'users-counts-api/fetchUsersCounts',
+    _x_mode: 'online',
+  },
   teamId: teamId, // for reference only
 }));
 

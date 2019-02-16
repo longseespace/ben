@@ -95,18 +95,12 @@ class LoginForm extends React.Component {
             text={submissionError}
             color="red"
             Layout={{ fillWidth: true }}
-            font={{
-              family: 'Roboto',
-            }}
           />
           <Text
             visible={!hasSubmissionError}
             text={validationErrorMessage}
             color="red"
             Layout={{ fillWidth: true }}
-            font={{
-              family: 'Roboto',
-            }}
           />
           <TextField
             placeholderText={qsTr('Team')}
@@ -118,9 +112,6 @@ class LoginForm extends React.Component {
               Qt.ImhNoPredictiveText
             }
             verticalAlignment="AlignVCenter"
-            font={{
-              family: 'Roboto',
-            }}
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
           />
@@ -134,9 +125,6 @@ class LoginForm extends React.Component {
             }
             Layout={{ fillWidth: true }}
             verticalAlignment="AlignVCenter"
-            font={{
-              family: 'Roboto',
-            }}
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
           />
@@ -146,9 +134,6 @@ class LoginForm extends React.Component {
             verticalAlignment="AlignVCenter"
             Layout={{ fillWidth: true }}
             echoMode="Password"
-            font={{
-              family: 'Roboto',
-            }}
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
           />
@@ -157,9 +142,6 @@ class LoginForm extends React.Component {
             highlighted
             text={isProcessing ? qsTr('Logging in...') : qsTr('Login')}
             onClicked={this.submit}
-            font={{
-              family: 'Roboto',
-            }}
             enabled={!isProcessing}
           />
           <Button

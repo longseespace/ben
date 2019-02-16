@@ -7,6 +7,7 @@ import AppMenu from './AppMenu';
 import ChannelList from './ChannelList';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoginWindow from './LoginWindow';
+import ResourceLoader from '../components/ResourceLoader';
 import TeamList from './TeamList';
 
 const connectToRedux = connect(
@@ -51,7 +52,7 @@ class MainWindow extends React.PureComponent {
   componentDidMount() {
     Object.keys(this.props.accountList).forEach(id => {
       const account = this.props.accountList[id];
-      this.props.initAccount({ token: account.token });
+      this.props.initAccount({ token: account.token, teamId: account.team });
       this.props.initUser({ token: account.token, teamId: account.team });
     });
     Qt.application.stateChanged.connect(this.onAppStateChanged);
@@ -63,49 +64,51 @@ class MainWindow extends React.PureComponent {
 
   render() {
     return (
-      <Window
-        visible
-        onClosing={this.onClosing}
-        x={windowX}
-        y={windowY}
-        width={windowWidth}
-        height={windowHeight}
-        title="Tey"
-        flags={Qt.Window | Qt.WindowFullscreenButtonHint}
-        ref={this.windowRef}
-      >
-        <ErrorBoundary>
-          <AppMenu />
-          <LoginWindow />
-          <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
-            <Rectangle
-              Layout={{
-                fillHeight: true,
-                preferredWidth: 68,
-              }}
-              color="#191F26"
-            >
-              <TeamList />
-            </Rectangle>
-            <Rectangle
-              width={220}
-              Layout={{
-                fillHeight: true,
-              }}
-              color="#323E4C"
-            >
-              <ChannelList />
-            </Rectangle>
-            <Rectangle
-              Layout={{
-                fillWidth: true,
-                fillHeight: true,
-              }}
-              color="#FFFFFF"
-            />
-          </RowLayout>
-        </ErrorBoundary>
-      </Window>
+      <ResourceLoader>
+        <Window
+          visible
+          onClosing={this.onClosing}
+          x={windowX}
+          y={windowY}
+          width={windowWidth}
+          height={windowHeight}
+          title="Tey"
+          flags={Qt.Window | Qt.WindowFullscreenButtonHint}
+          ref={this.windowRef}
+        >
+          <ErrorBoundary>
+            <AppMenu />
+            <LoginWindow />
+            <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
+              <Rectangle
+                Layout={{
+                  fillHeight: true,
+                  preferredWidth: 68,
+                }}
+                color="#191F26"
+              >
+                <TeamList />
+              </Rectangle>
+              <Rectangle
+                width={220}
+                Layout={{
+                  fillHeight: true,
+                }}
+                color="#323E4C"
+              >
+                <ChannelList />
+              </Rectangle>
+              <Rectangle
+                Layout={{
+                  fillWidth: true,
+                  fillHeight: true,
+                }}
+                color="#FFFFFF"
+              />
+            </RowLayout>
+          </ErrorBoundary>
+        </Window>
+      </ResourceLoader>
     );
   }
 }

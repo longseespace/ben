@@ -9,12 +9,12 @@ Button {
 
   background: Rectangle {
     color: control.hovered ? '#fff' : Qt.rgba(255, 255, 255, 0.3)
-    radius: 4
+    radius: 6
   }
 
   contentItem: Text {
     id: plus
-    text: "+"
+    text: "＋"
     color: "#191F26"
     font.pointSize: 26
 

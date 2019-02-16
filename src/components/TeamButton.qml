@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 Button {
   id: control
@@ -18,6 +19,18 @@ Button {
     sourceSize.height: 88
     anchors.fill: parent
     fillMode: Image.PreserveAspectFit
+
+    layer.enabled: true
+    layer.effect: OpacityMask {
+      maskSource: mask
+    }
+  }
+
+  Rectangle {
+    id: mask
+    anchors.fill: parent
+    radius: 6
+    visible: false
   }
 
   MouseArea {
