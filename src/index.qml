@@ -9,12 +9,19 @@ import "macos.bundle.js" as JS;
 Item {
   id: root
 
-  Component.onCompleted: {
-    try {
-      JS.Bundle.default(root);
-    } catch (ex) {
-      console.log(ex);
-      Qt.quit();
+  FontLoader {
+    id: loader
+    source: "/assets/fa-solid-900.ttf"
+
+    onStatusChanged: {
+      if (loader.status == FontLoader.Ready) {
+        try {
+          JS.Bundle.default(root);
+        } catch (ex) {
+          console.log(ex);
+          Qt.quit();
+        }
+      }
     }
   }
 }

@@ -64,51 +64,49 @@ class MainWindow extends React.PureComponent {
 
   render() {
     return (
-      <ResourceLoader>
-        <Window
-          visible
-          onClosing={this.onClosing}
-          x={windowX}
-          y={windowY}
-          width={windowWidth}
-          height={windowHeight}
-          title="Tey"
-          flags={Qt.Window | Qt.WindowFullscreenButtonHint}
-          ref={this.windowRef}
-        >
-          <ErrorBoundary>
-            <AppMenu />
-            <LoginWindow />
-            <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
-              <Rectangle
-                Layout={{
-                  fillHeight: true,
-                  preferredWidth: 68,
-                }}
-                color="#191F26"
-              >
-                <TeamList />
-              </Rectangle>
-              <Rectangle
-                width={220}
-                Layout={{
-                  fillHeight: true,
-                }}
-                color="#323E4C"
-              >
-                <ChannelList />
-              </Rectangle>
-              <Rectangle
-                Layout={{
-                  fillWidth: true,
-                  fillHeight: true,
-                }}
-                color="#FFFFFF"
-              />
-            </RowLayout>
-          </ErrorBoundary>
-        </Window>
-      </ResourceLoader>
+      <Window
+        visible
+        onClosing={this.onClosing}
+        x={windowX}
+        y={windowY}
+        width={windowWidth}
+        height={windowHeight}
+        title="Tey"
+        flags={Qt.Window | Qt.WindowFullscreenButtonHint}
+        ref={this.windowRef}
+      >
+        <ErrorBoundary>
+          <AppMenu />
+          <LoginWindow />
+          <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
+            <Rectangle
+              Layout={{
+                fillHeight: true,
+                preferredWidth: 68,
+              }}
+              color="#191F26"
+            >
+              <TeamList />
+            </Rectangle>
+            <Rectangle
+              width={220}
+              Layout={{
+                fillHeight: true,
+              }}
+              color="#323E4C"
+            >
+              <ChannelList />
+            </Rectangle>
+            <Rectangle
+              Layout={{
+                fillWidth: true,
+                fillHeight: true,
+              }}
+              color="#FFFFFF"
+            />
+          </RowLayout>
+        </ErrorBoundary>
+      </Window>
     );
   }
 }
