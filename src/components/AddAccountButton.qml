@@ -14,9 +14,11 @@ Button {
 
   contentItem: Text {
     id: plus
-    text: "＋"
-    color: "#191F26"
-    font.pointSize: 26
+    text: '\uf067'
+    color: '#191F26'
+    font.pointSize: 20
+    font.family: 'Font Awesome 5 Free'
+    font.weight: Font.Bold
 
     anchors.centerIn: parent
     horizontalAlignment: Text.AlignHCenter

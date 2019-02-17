@@ -1,4 +1,4 @@
-import { Rectangle, Text, ColumnLayout } from 'react-qml';
+import { ColumnLayout, Rectangle, RowLayout, Text } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
@@ -27,8 +27,9 @@ const styles = {
   },
   headerText: {
     color: 'white',
-    x: 16,
-    y: 16,
+  },
+  notificationStatus: {
+    color: '#ccc',
   },
 };
 
@@ -45,11 +46,23 @@ class ChannelList extends React.PureComponent {
             alignment: Qt.AlignTop,
           }}
         >
-          <Text
-            text={selectedTeam.name}
-            font={{ pointSize: 20, weight: 'Bold', family: 'Lato' }}
-            style={styles.headerText}
-          />
+          <RowLayout anchors={{ fill: 'parent' }}>
+            <Text
+              text={selectedTeam.name}
+              font={{ pointSize: 20, weight: 'Bold', family: 'Lato' }}
+              style={styles.headerText}
+              Layout={{ leftMargin: 16, fillWidth: true }}
+            />
+            <Text
+              text={`\uf0f3`}
+              font={{
+                pointSize: 20,
+                family: 'Font Awesome 5 Free',
+              }}
+              style={styles.notificationStatus}
+              Layout={{ rightMargin: 16, preferredWidth: 20 }}
+            />
+          </RowLayout>
         </Rectangle>
         <ListView
           data={conversationList}
