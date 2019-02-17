@@ -28,6 +28,7 @@ const TeamListItem = ({
       color="#ccc"
       font={{
         pointSize: 13,
+        family: 'Lato',
       }}
       horizontalAlignment="AlignHCenter"
       Layout={{

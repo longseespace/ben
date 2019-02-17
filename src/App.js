@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux';
 import * as React from 'react';
 import { PersistGate } from 'redux-persist/integration/react';
+import { ThemeProvider } from './theming';
 
 import MainWindow from './containers/MainWindow';
 
@@ -18,7 +19,9 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <MainWindow />
+          <ThemeProvider>
+            <MainWindow />
+          </ThemeProvider>
         </PersistGate>
       </Provider>
     );
