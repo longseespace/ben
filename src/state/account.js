@@ -9,6 +9,7 @@ import {
   INIT_USER,
   REMOVE_ACCOUNT,
 } from './constants';
+import { rtmConnect } from '../lib/slack';
 
 const API_ROOT = 'https://slack.com/api';
 
@@ -17,7 +18,7 @@ const API_ROOT = 'https://slack.com/api';
 // NOTE: private API
 export const InitAccountAPI = makeFetchAction(
   INIT_ACCOUNT,
-  ({ token, teamId }) => ({
+  ({ token, team }) => ({
     endpoint: `${API_ROOT}/client.boot`,
     method: 'POST',
     form: {
@@ -26,12 +27,12 @@ export const InitAccountAPI = makeFetchAction(
       _x_reason: 'fetch-legacy-start-data',
       _x_mode: 'online',
     },
-    teamId: teamId,
+    team: team,
   })
 );
 
 // NOTE: private API
-export const InitUserAPI = makeFetchAction(INIT_USER, ({ token, teamId }) => ({
+export const InitUserAPI = makeFetchAction(INIT_USER, ({ token, team }) => ({
   endpoint: `${API_ROOT}/users.counts`,
   method: 'POST',
   form: {
@@ -44,7 +45,7 @@ export const InitUserAPI = makeFetchAction(INIT_USER, ({ token, teamId }) => ({
     _x_reason: 'users-counts-api/fetchUsersCounts',
     _x_mode: 'online',
   },
-  teamId: teamId, // for reference only
+  team: team, // for reference only
 }));
 
 // ACTIONS
@@ -63,6 +64,18 @@ export const removeAccount = team => ({
 
 export const initAccount = InitAccountAPI.actionCreator;
 export const initUser = InitUserAPI.actionCreator;
+
+// thunk
+export const initWorkspace = ({
+  team,
+  user,
+  userEmail,
+  token,
+}) => async dispatch => {
+  dispatch(addAccount({ team, user, userEmail, token }));
+  dispatch(initAccount({ token, team }));
+  dispatch(initUser({ token, team }));
+};
 
 // SELECTORS
 // ---------------

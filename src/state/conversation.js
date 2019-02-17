@@ -88,11 +88,11 @@ const selectedConversation = (state = {}, { type, payload }) => {
 
 const channelList = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
-    const teamId = payload.teamId;
-    if (!teamId) {
+    const team = payload.team;
+    if (!team) {
       return state;
     }
-    const entry = { [teamId]: payload.json.channels };
+    const entry = { [team]: payload.json.channels };
     return { ...state, ...entry };
   }
   return state;
@@ -100,11 +100,11 @@ const channelList = (state = {}, { type, payload }) => {
 
 const groupList = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
-    const teamId = payload.teamId;
-    if (!teamId) {
+    const team = payload.team;
+    if (!team) {
       return state;
     }
-    const entry = { [teamId]: payload.json.groups };
+    const entry = { [team]: payload.json.groups };
     return { ...state, ...entry };
   }
   return state;
@@ -112,11 +112,11 @@ const groupList = (state = {}, { type, payload }) => {
 
 const imList = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
-    const teamId = payload.teamId;
-    if (!teamId) {
+    const team = payload.team;
+    if (!team) {
       return state;
     }
-    const entry = { [teamId]: payload.json.ims };
+    const entry = { [team]: payload.json.ims };
     return { ...state, ...entry };
   }
   return state;
@@ -124,11 +124,11 @@ const imList = (state = {}, { type, payload }) => {
 
 const mpimList = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
-    const teamId = payload.teamId;
-    if (!teamId) {
+    const team = payload.team;
+    if (!team) {
       return state;
     }
-    const entry = { [teamId]: payload.json.mpims };
+    const entry = { [team]: payload.json.mpims };
     return { ...state, ...entry };
   }
   return state;

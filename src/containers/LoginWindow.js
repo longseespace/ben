@@ -2,7 +2,7 @@ import { Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { addAccount, initAccount } from '../state/account';
+import { initWorkspace } from '../state/account';
 import {
   hideLoginWindow,
   loginWindowConfigSelector,
@@ -17,8 +17,7 @@ const connectToRedux = connect(
   }),
   {
     onClose: hideLoginWindow,
-    addAccount,
-    initAccount,
+    initWorkspace,
   }
 );
 
@@ -62,13 +61,9 @@ class LoginWindow extends React.Component {
     if (!resp.ok) {
       this.setState({ signinError: resp.error, isProcessing: false });
     } else {
-      // add account
+      // initWorkspace
       const { team, user, userEmail, token } = resp;
-      this.props.addAccount({ team, user, userEmail, token });
-
-      // init account
-      // TODO: fix this
-      this.props.initAccount({ token });
+      this.props.initWorkspace({ team, user, userEmail, token });
 
       // reset error
       this.setState({ signinError: '', isProcessing: false });
