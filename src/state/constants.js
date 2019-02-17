@@ -21,3 +21,7 @@ export const SELECT_CONVERSATION = 'SELECT_CONVERSATION';
 export const LOGIN_WINDOW_NAMESPACE = 'loginWindow';
 export const SHOW_LOGIN_WINDOW = 'SHOW_LOGIN_WINDOW';
 export const HIDE_LOGIN_WINDOW = 'HIDE_LOGIN_WINDOW';
+
+// USERS
+// ---------------
+export const USERS_NAMESPACE = 'user';

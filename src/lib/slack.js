@@ -26,4 +26,18 @@ export async function signInWithPassword(domain, email, password) {
   return json;
 }
 
+export async function rtmConnect(token) {
+  const connectResp = await apiCall('rtm.connect', {
+    token,
+    batch_presence_aware: 1,
+  });
+  const connectJson = await connectResp.json();
+
+  if (connectJson.ok) {
+    const ws = new WebSocket(connectJson.url);
+    return ws;
+  }
+  return false;
+}
+
 export default {};

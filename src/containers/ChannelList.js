@@ -1,9 +1,17 @@
-import { ColumnLayout, Rectangle, RowLayout, Text } from 'react-qml';
+import {
+  Column,
+  ColumnLayout,
+  Rectangle,
+  Row,
+  RowLayout,
+  Text,
+} from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { conversationListSelector } from '../state/conversation';
 import { selectedTeamSelector } from '../state/team';
+import { selfSelector } from '../state/user';
 import ChannelDelegate from '../components/ChannelDelegate.qml';
 import ChannelHighlight from '../components/ChannelHighlight.qml';
 import ListView from '../components/ListView';
@@ -13,6 +21,7 @@ const connectToRedux = connect(
   state => ({
     selectedTeam: selectedTeamSelector(state),
     conversationList: conversationListSelector(state),
+    me: selfSelector(state),
   }),
   {}
 );
@@ -31,28 +40,52 @@ const styles = {
   notificationStatus: {
     color: '#ccc',
   },
+  userPresenceText: {
+    color: '#ccc',
+  },
 };
 
-class ChannelList extends React.PureComponent {
+class ChannelList extends React.Component {
   render() {
-    const { conversationList = [], selectedTeam = {} } = this.props;
+    const { conversationList = [], selectedTeam = {}, me = {} } = this.props;
+    const user_active = me.manual_presence === 'active';
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
         <Rectangle
           style={styles.header}
           Layout={{
-            preferredHeight: 50,
+            preferredHeight: 70,
             fillWidth: true,
             alignment: Qt.AlignTop,
           }}
         >
-          <RowLayout anchors={{ fill: 'parent' }}>
-            <Text
-              text={selectedTeam.name}
-              font={{ pointSize: 20, weight: 'Bold', family: 'Lato' }}
-              style={styles.headerText}
-              Layout={{ leftMargin: 16, fillWidth: true }}
-            />
+          <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
+            <Column Layout={{ leftMargin: 16, fillWidth: true }} spacing={0}>
+              <Text
+                text={selectedTeam.name}
+                font={{ pointSize: 20, weight: 'Bold', family: 'Lato' }}
+                style={styles.headerText}
+              />
+              <RowLayout>
+                <Text
+                  text={`\uf111`}
+                  color={user_active ? '#a6e576' : '#ccc'}
+                  font={{
+                    pointSize: 9,
+                    family: 'Font Awesome 5 Free',
+                    weight: user_active ? 'Bold' : 'Normal',
+                  }}
+                  Layout={{
+                    topMargin: 1,
+                  }}
+                />
+                <Text
+                  text={me.name}
+                  font={{ pointSize: 14, family: 'Lato' }}
+                  style={styles.userPresenceText}
+                />
+              </RowLayout>
+            </Column>
             <Text
               text={`\uf0f3`}
               font={{
