@@ -9,18 +9,44 @@ import "macos.bundle.js" as JS;
 Item {
   id: root
 
+  // TODO: refactor this, put font loader to user-space
   FontLoader {
-    id: loader
-    source: "/assets/fa-solid-900.ttf"
+    id: faSolidLoader
+    source: "/assets/fa-solid.ttf"
+  }
 
-    onStatusChanged: {
-      if (loader.status == FontLoader.Ready) {
-        try {
-          JS.Bundle.default(root);
-        } catch (ex) {
-          console.log(ex);
-          Qt.quit();
-        }
+  FontLoader {
+    id: faRegularLoader
+    source: "/assets/fa-regular.ttf"
+  }
+
+  FontLoader {
+    id: latoRegularLoader
+    source: "/assets/Lato-Regular.ttf"
+  }
+
+  FontLoader {
+    id: latoBoldLoader
+    source: "/assets/Lato-Bold.ttf"
+  }
+
+  states: [
+    State {
+      name: 'loaded'
+      when: faSolidLoader.status == FontLoader.Ready &&
+        faRegularLoader.status == FontLoader.Ready &&
+        latoRegularLoader.status == FontLoader.Ready &&
+        latoBoldLoader.status == FontLoader.Ready
+    }
+  ]
+
+  onStateChanged: {
+    if (state === 'loaded') {
+      try {
+        JS.Bundle.default(root);
+      } catch (ex) {
+        console.log(ex);
+        Qt.quit();
       }
     }
   }

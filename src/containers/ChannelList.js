@@ -47,7 +47,7 @@ class ChannelList extends React.PureComponent {
         >
           <Text
             text={selectedTeam.name}
-            font={{ pointSize: 18, weight: 'Bold' }}
+            font={{ pointSize: 20, weight: 'Bold', family: 'Lato' }}
             style={styles.headerText}
           />
         </Rectangle>

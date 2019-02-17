@@ -1,10 +1,4 @@
-import {
-  ColumnLayout,
-  GridLayout,
-  Image,
-  QtQuickControls2,
-  Text,
-} from 'react-qml';
+import { ColumnLayout, Image, QtQuickControls2, Text } from 'react-qml';
 import React from 'react';
 import isEmail from 'validator/lib/isEmail';
 
