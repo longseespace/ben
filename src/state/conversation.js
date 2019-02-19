@@ -1,6 +1,7 @@
 import { ACTIONS } from 'redux-api-call';
 import { combineReducers } from 'redux';
-import { filter, flow, isEmpty, map, path, sortBy } from 'lodash/fp';
+import { createSelector } from 'reselect';
+import { filter, flow, isEmpty, map, path, pathOr, sortBy } from 'lodash/fp';
 
 import {
   CONVERSATION_NAMESPACE,
@@ -14,20 +15,40 @@ import { selectedTeamIdSelector } from './team';
 
 // ACTIONS
 // ---------------
-export const selectConversation = ({ type, id }) => ({
-  type: SELECT_CONVERSATION,
-  payload: { type, id },
-});
+export const selectConversation = conversationId => (dispatch, getState) => {
+  const state = getState();
+  const selectedTeamId = selectedTeamIdSelector(state);
+  if (isEmpty(selectedTeamId)) {
+    // select conversation without any team context
+    // should not happen
+    console.warn('Cannot select conversation without a team context');
+    return;
+  }
+  const action = {
+    type: SELECT_CONVERSATION,
+    payload: { conversationId, team: selectedTeamId },
+  };
+  dispatch(action);
+};
 
 // SELECTORS
 // ---------------
-export const selectedConversationSelector = path(
-  `${CONVERSATION_NAMESPACE}.selectedConversation`
+const allSelectedConversationIdsSelector = path(
+  `${CONVERSATION_NAMESPACE}.allSelectedConversationIds`
 );
-const channelListSelector = path(`${CONVERSATION_NAMESPACE}.channelList`);
-const groupListSelector = path(`${CONVERSATION_NAMESPACE}.groupList`);
-const imListSelector = path(`${CONVERSATION_NAMESPACE}.imList`);
-const mpimListSelector = path(`${CONVERSATION_NAMESPACE}.mpimList`);
+const allChannelsSelector = path(`${CONVERSATION_NAMESPACE}.allChannels`);
+const allGroupsSelector = path(`${CONVERSATION_NAMESPACE}.allGroups`);
+const allImsSelector = path(`${CONVERSATION_NAMESPACE}.allIms`);
+const allMpimsSelector = path(`${CONVERSATION_NAMESPACE}.allMpims`);
+
+export const selectedConversationId = createSelector(
+  selectedTeamIdSelector,
+  allSelectedConversationIdsSelector,
+  (selectedTeamId, allSelectedConversationIds) =>
+    isEmpty(selectedTeamId)
+      ? ''
+      : pathOr('', selectedTeamId, allSelectedConversationIds)
+);
 
 const addSection = section => map(item => ({ ...item, section }));
 const filterOpen = filter(item => item.is_open || item.is_member);
@@ -55,38 +76,68 @@ const transformSectionDirectMessage = flow(
   transformName
 );
 
-export const conversationListSelector = state => {
-  const selectedTeamId = selectedTeamIdSelector(state);
-  if (isEmpty(selectedTeamId)) {
-    return [];
+const channelListSelector = createSelector(
+  selectedTeamIdSelector,
+  allChannelsSelector,
+  (selectedTeamId, allChannels) =>
+    isEmpty(selectedTeamId) ? [] : pathOr([], selectedTeamId, allChannels)
+);
+
+const groupListSelector = createSelector(
+  selectedTeamIdSelector,
+  allGroupsSelector,
+  (selectedTeamId, allGroups) =>
+    isEmpty(selectedTeamId) ? [] : pathOr([], selectedTeamId, allGroups)
+);
+
+const imListSelector = createSelector(
+  selectedTeamIdSelector,
+  allImsSelector,
+  (selectedTeamId, allIms) =>
+    isEmpty(selectedTeamId) ? [] : pathOr([], selectedTeamId, allIms)
+);
+
+const mpimListSelector = createSelector(
+  selectedTeamIdSelector,
+  allMpimsSelector,
+  (selectedTeamId, allMpims) =>
+    isEmpty(selectedTeamId) ? [] : pathOr([], selectedTeamId, allMpims)
+);
+
+export const conversationListSelector = createSelector(
+  channelListSelector,
+  groupListSelector,
+  imListSelector,
+  mpimListSelector,
+  (channelList, groupList, imList, mpimList) => {
+    const sectionChannels = transformSectionChannel([
+      ...channelList,
+      ...groupList,
+    ]);
+
+    const sectionDirectMessages = transformSectionDirectMessage([
+      ...imList,
+      ...mpimList,
+    ]);
+    return [...sectionChannels, ...sectionDirectMessages];
   }
-  const allChannels = channelListSelector(state)[selectedTeamId] || [];
-  const allGroups = groupListSelector(state)[selectedTeamId] || [];
-  const allIms = imListSelector(state)[selectedTeamId] || [];
-  const allMpims = mpimListSelector(state)[selectedTeamId] || [];
-
-  const sectionChannels = transformSectionChannel([
-    ...allChannels,
-    ...allGroups,
-  ]);
-
-  const sectionDirectMessages = transformSectionDirectMessage([
-    ...allIms,
-    ...allMpims,
-  ]);
-  return [...sectionChannels, ...sectionDirectMessages];
-};
+);
 
 // REDUCER
 // ---------------
-const selectedConversation = (state = {}, { type, payload }) => {
+const allSelectedConversationIds = (state = {}, { type, payload }) => {
   if (type === SELECT_CONVERSATION) {
-    return payload;
+    const team = payload.team;
+    if (!team) {
+      return state;
+    }
+    const entry = { [team]: payload.conversationId };
+    return { ...state, ...entry };
   }
   return state;
 };
 
-const channelList = (state = {}, { type, payload }) => {
+const allChannels = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
     const team = payload.team;
     if (!team) {
@@ -98,7 +149,7 @@ const channelList = (state = {}, { type, payload }) => {
   return state;
 };
 
-const groupList = (state = {}, { type, payload }) => {
+const allGroups = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
     const team = payload.team;
     if (!team) {
@@ -110,7 +161,7 @@ const groupList = (state = {}, { type, payload }) => {
   return state;
 };
 
-const imList = (state = {}, { type, payload }) => {
+const allIms = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
     const team = payload.team;
     if (!team) {
@@ -122,7 +173,7 @@ const imList = (state = {}, { type, payload }) => {
   return state;
 };
 
-const mpimList = (state = {}, { type, payload }) => {
+const allMpims = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_USER) {
     const team = payload.team;
     if (!team) {
@@ -136,10 +187,10 @@ const mpimList = (state = {}, { type, payload }) => {
 
 export default {
   [CONVERSATION_NAMESPACE]: combineReducers({
-    selectedConversation,
-    channelList,
-    groupList,
-    imList,
-    mpimList,
+    allSelectedConversationIds,
+    allChannels,
+    allGroups,
+    allIms,
+    allMpims,
   }),
 };

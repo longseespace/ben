@@ -1,15 +1,12 @@
-import {
-  Column,
-  ColumnLayout,
-  Rectangle,
-  Row,
-  RowLayout,
-  Text,
-} from 'react-qml';
+import { Column, ColumnLayout, Rectangle, RowLayout, Text } from 'react-qml';
 import { connect } from 'react-redux';
+import { isEmpty } from 'lodash/fp';
 import * as React from 'react';
 
-import { conversationListSelector } from '../state/conversation';
+import {
+  conversationListSelector,
+  selectConversation,
+} from '../state/conversation';
 import { selectedTeamSelector } from '../state/team';
 import { selfSelector } from '../state/user';
 import ChannelDelegate from '../components/ChannelDelegate.qml';
@@ -23,7 +20,9 @@ const connectToRedux = connect(
     conversationList: conversationListSelector(state),
     me: selfSelector(state),
   }),
-  {}
+  {
+    selectConversation,
+  }
 );
 
 const styles = {
@@ -40,15 +39,31 @@ const styles = {
   notificationStatus: {
     color: '#ccc',
   },
+  userPresenceContainer: {
+    width: 200,
+    height: 17,
+  },
   userPresenceText: {
     color: '#ccc',
   },
+  listLayout: {
+    fillHeight: true,
+    fillWidth: true,
+    alignment: Qt.AlignTop,
+  },
 };
 
-class ChannelList extends React.Component {
+class ChannelList extends React.PureComponent {
+  onItemClicked = item => {
+    console.log('onItemClicked', item.name);
+    this.props.selectConversation(item.id);
+  };
+
   render() {
     const { conversationList = [], selectedTeam = {}, me = {} } = this.props;
     const user_active = me.manual_presence === 'active';
+    const user_available = !isEmpty(me);
+
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
         <Rectangle
@@ -66,8 +81,9 @@ class ChannelList extends React.Component {
                 font={{ pointSize: 20, weight: 'Bold', family: 'Lato' }}
                 style={styles.headerText}
               />
-              <RowLayout>
+              <RowLayout style={styles.userPresenceContainer}>
                 <Text
+                  visible={user_available}
                   text={`\uf111`}
                   color={user_active ? '#a6e576' : '#ccc'}
                   font={{
@@ -77,12 +93,17 @@ class ChannelList extends React.Component {
                   }}
                   Layout={{
                     topMargin: 1,
+                    preferredWidth: 9,
                   }}
                 />
                 <Text
+                  visible={user_available}
                   text={me.name}
                   font={{ pointSize: 14, family: 'Lato' }}
                   style={styles.userPresenceText}
+                  Layout={{
+                    fillWidth: true,
+                  }}
                 />
               </RowLayout>
             </Column>
@@ -99,17 +120,13 @@ class ChannelList extends React.Component {
         </Rectangle>
         <ListView
           data={conversationList}
+          onItemClicked={this.onItemClicked}
           sectionProperty="section"
           DelegateComponent={ChannelDelegate}
           HighlightComponent={ChannelHighlight}
           SectionDelegateComponent={SectionDelegate}
-          Layout={{
-            fillHeight: true,
-            fillWidth: true,
-            alignment: Qt.AlignTop,
-          }}
+          Layout={styles.listLayout}
           focus
-          highlightMoveVelocity={-1}
         />
       </ColumnLayout>
     );

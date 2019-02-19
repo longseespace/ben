@@ -1,5 +1,6 @@
 import { ACTIONS, makeFetchAction } from 'redux-api-call';
 import { combineReducers } from 'redux';
+import { createSelector } from 'reselect';
 import { isEmpty, path } from 'lodash/fp';
 
 import { INIT_ACCOUNT, USERS_NAMESPACE } from './constants';
@@ -17,14 +18,12 @@ const API_ROOT = 'https://slack.com/api';
 // ---------------
 const allProfilesSelector = path(`${USERS_NAMESPACE}.self`);
 
-export const selfSelector = state => {
-  const selectedTeamId = selectedTeamIdSelector(state);
-  if (isEmpty(selectedTeamId)) {
-    return {};
-  }
-
-  return allProfilesSelector(state)[selectedTeamId] || {};
-};
+export const selfSelector = createSelector(
+  selectedTeamIdSelector,
+  allProfilesSelector,
+  (selectedTeamId, allProfiles) =>
+    isEmpty(selectedTeamId) ? {} : allProfiles[selectedTeamId]
+);
 
 // REDUCER
 // ---------------

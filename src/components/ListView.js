@@ -69,10 +69,16 @@ class RQListView extends React.PureComponent {
       }
     }
 
-    if (prevProps.data !== this.props.data) {
-      this.updateModel();
-    }
+    // TODO: revise this
+    this.updateModel();
   }
+
+  onCurrentIndexChanged = () => {
+    const $listView = this.listViewRef.current;
+    const index = $listView.currentIndex;
+    const item = this.props.data[index];
+    this.props.onItemClicked(item);
+  };
 
   render() {
     const {
@@ -80,13 +86,21 @@ class RQListView extends React.PureComponent {
       HighlightComponent,
       DelegateComponent,
       SectionDelegateComponent,
+      onCurrentIndexChanged, // eslint-disable-line
+      onItemClicked, // eslint-disable-line
       data, // eslint-disable-line
       sectionProperty, // eslint-disable-line
+      highlightMoveVelocity = -1,
       ...otherProps
     } = this.props;
 
     return (
-      <ListView ref={this.listViewRef} {...otherProps}>
+      <ListView
+        ref={this.listViewRef}
+        onCurrentIndexChanged={this.onCurrentIndexChanged}
+        highlightMoveVelocity={highlightMoveVelocity}
+        {...otherProps}
+      >
         {HeaderComponent && <HeaderComponent ref={this.headerRef} />}
         {HighlightComponent && <HighlightComponent ref={this.highlightRef} />}
         {SectionDelegateComponent && (

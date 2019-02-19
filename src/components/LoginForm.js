@@ -101,6 +101,7 @@ class LoginForm extends React.Component {
           <TextField
             placeholderText={qsTr('Team')}
             Layout={{ fillWidth: true, row: 4 }}
+            font={{ family: 'Lato' }}
             ref={this.domainRef}
             inputMethodHints={
               Qt.ImhNoAutoUppercase |
@@ -114,6 +115,7 @@ class LoginForm extends React.Component {
           <TextField
             placeholderText={qsTr('Email')}
             ref={this.emailRef}
+            font={{ family: 'Lato' }}
             inputMethodHints={
               Qt.ImhNoAutoUppercase |
               Qt.ImhNoPredictiveText |
@@ -127,6 +129,7 @@ class LoginForm extends React.Component {
           <TextField
             placeholderText={qsTr('Password')}
             ref={this.passwordRef}
+            font={{ family: 'Lato' }}
             verticalAlignment="AlignVCenter"
             Layout={{ fillWidth: true, row: 6 }}
             echoMode="Password"
@@ -136,6 +139,7 @@ class LoginForm extends React.Component {
           <Button
             Layout={{ fillWidth: true, row: 7 }}
             highlighted
+            font={{ family: 'Lato' }}
             text={isProcessing ? qsTr('Logging in...') : qsTr('Login')}
             onClicked={this.submit}
             enabled={!isProcessing}
@@ -143,6 +147,7 @@ class LoginForm extends React.Component {
           <Button
             onClicked={openForgotPasswordPage}
             text={qsTr('Forgot your password?')}
+            font={{ family: 'Lato' }}
             flat
             Layout={{
               alignment: Qt.AlignCenter,

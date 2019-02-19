@@ -1,5 +1,6 @@
 import { ACTIONS } from 'redux-api-call';
 import { combineReducers } from 'redux';
+import { createSelector } from 'reselect';
 import { isEmpty, path } from 'lodash/fp';
 
 import { INIT_ACCOUNT, SELECT_TEAM, TEAM_NAMESPACE } from './constants';
@@ -18,11 +19,13 @@ export const selectTeam = team => ({
 // ---------------
 export const selectedTeamIdSelector = path(`${TEAM_NAMESPACE}.selectedTeamId`);
 export const teamInfoSelector = path(`${TEAM_NAMESPACE}.teamInfo`);
-export const selectedTeamSelector = state => {
-  const teamInfo = teamInfoSelector(state);
-  const selectedTeamId = selectedTeamIdSelector(state);
-  return isEmpty(selectedTeamId) ? {} : teamInfo[selectedTeamId];
-};
+
+export const selectedTeamSelector = createSelector(
+  selectedTeamIdSelector,
+  teamInfoSelector,
+  (selectedTeamId, teamInfo) =>
+    isEmpty(selectedTeamId) ? {} : teamInfo[selectedTeamId]
+);
 
 // REDUCER
 // ---------------

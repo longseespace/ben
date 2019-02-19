@@ -9,7 +9,6 @@ import {
   INIT_USER,
   REMOVE_ACCOUNT,
 } from './constants';
-import { rtmConnect } from '../lib/slack';
 
 const API_ROOT = 'https://slack.com/api';
 
