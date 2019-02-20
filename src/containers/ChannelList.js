@@ -6,6 +6,7 @@ import * as React from 'react';
 import {
   conversationListSelector,
   selectConversation,
+  selectedConversationIdSelector,
 } from '../state/conversation';
 import { selectedTeamSelector } from '../state/team';
 import { selfSelector } from '../state/user';
@@ -18,6 +19,7 @@ const connectToRedux = connect(
   state => ({
     selectedTeam: selectedTeamSelector(state),
     conversationList: conversationListSelector(state),
+    selectedConversationId: selectedConversationIdSelector(state),
     me: selfSelector(state),
   }),
   {
@@ -86,8 +88,15 @@ class ChannelList extends React.PureComponent {
     this.props.selectConversation(item.id);
   };
 
+  keyExtractor = item => item.id;
+
   render() {
-    const { conversationList = [], selectedTeam = {}, me = {} } = this.props;
+    const {
+      conversationList = [],
+      selectedTeam = {},
+      me = {},
+      selectedConversationId,
+    } = this.props;
     const user_active = me.manual_presence === 'active';
     const user_available = !isEmpty(me);
 
@@ -120,6 +129,8 @@ class ChannelList extends React.PureComponent {
         </Rectangle>
         <ListView
           data={conversationList}
+          keyExtractor={this.keyExtractor}
+          selectedItem={selectedConversationId}
           onItemClicked={this.onItemClicked}
           sectionProperty="section"
           DelegateComponent={ChannelDelegate}
