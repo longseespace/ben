@@ -32,19 +32,46 @@ const styles = {
   header: {
     color: '#323E4C',
     z: 1, // higher stack order
+    preferredHeight: 70,
+    fillWidth: true,
+    alignment: Qt.AlignTop,
   },
   headerText: {
     color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    fontFamily: 'Lato',
   },
   notificationStatus: {
     color: '#ccc',
+    fontSize: 20,
+    fontFamily: 'Font Awesome 5 Free',
+    rightMargin: 16,
+    preferredWidth: 20,
   },
   userPresenceContainer: {
     width: 200,
     height: 17,
   },
-  userPresenceText: {
+  userPresenceIndicator: {
+    topMargin: 1,
+    preferredWidth: 9,
+    fontFamily: 'Font Awesome 5 Free',
+    fontSize: 9,
+  },
+  userPresenceIndicator__inactive: {
     color: '#ccc',
+    fontWeight: 'normal',
+  },
+  userPresenceIndicator__active: {
+    color: '#a6e576',
+    fontWeight: 'bold',
+  },
+  userPresenceText: {
+    fontSize: 14,
+    fontFamily: 'Lato',
+    color: '#ccc',
+    fillWidth: true,
   },
   listLayout: {
     fillHeight: true,
@@ -66,56 +93,29 @@ class ChannelList extends React.PureComponent {
 
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
-        <Rectangle
-          style={styles.header}
-          Layout={{
-            preferredHeight: 70,
-            fillWidth: true,
-            alignment: Qt.AlignTop,
-          }}
-        >
+        <Rectangle style={styles.header}>
           <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
             <Column Layout={{ leftMargin: 16, fillWidth: true }} spacing={0}>
-              <Text
-                text={selectedTeam.name}
-                font={{ pointSize: 20, weight: 'Bold', family: 'Lato' }}
-                style={styles.headerText}
-              />
+              <Text text={selectedTeam.name} style={styles.headerText} />
               <RowLayout style={styles.userPresenceContainer}>
                 <Text
                   visible={user_available}
                   text={`\uf111`}
-                  color={user_active ? '#a6e576' : '#ccc'}
-                  font={{
-                    pointSize: 9,
-                    family: 'Font Awesome 5 Free',
-                    weight: user_active ? 'Bold' : 'Normal',
-                  }}
-                  Layout={{
-                    topMargin: 1,
-                    preferredWidth: 9,
-                  }}
+                  style={[
+                    styles.userPresenceIndicator,
+                    user_active
+                      ? styles.userPresenceIndicator__active
+                      : styles.userPresenceIndicator__inactive,
+                  ]}
                 />
                 <Text
                   visible={user_available}
                   text={me.name}
-                  font={{ pointSize: 14, family: 'Lato' }}
                   style={styles.userPresenceText}
-                  Layout={{
-                    fillWidth: true,
-                  }}
                 />
               </RowLayout>
             </Column>
-            <Text
-              text={`\uf0f3`}
-              font={{
-                pointSize: 20,
-                family: 'Font Awesome 5 Free',
-              }}
-              style={styles.notificationStatus}
-              Layout={{ rightMargin: 16, preferredWidth: 20 }}
-            />
+            <Text text={`\uf0f3`} style={styles.notificationStatus} />
           </RowLayout>
         </Rectangle>
         <ListView

@@ -1,7 +1,16 @@
 import { ACTIONS } from 'redux-api-call';
 import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
-import { filter, flow, isEmpty, map, path, pathOr, sortBy } from 'lodash/fp';
+import {
+  filter,
+  flow,
+  isEmpty,
+  map,
+  path,
+  pathOr,
+  pick,
+  sortBy,
+} from 'lodash/fp';
 
 import {
   CONVERSATION_NAMESPACE,
@@ -53,7 +62,7 @@ export const selectedConversationId = createSelector(
 const addSection = section => map(item => ({ ...item, section }));
 const filterOpen = filter(item => item.is_open || item.is_member);
 const sortByMuted = sortBy('is_muted');
-const transformName = map(item => {
+const transformMpimName = map(item => {
   if (item.is_mpim) {
     const name = item.name
       .substring(item.name.indexOf('-') + 1, item.name.lastIndexOf('-'))
@@ -64,16 +73,40 @@ const transformName = map(item => {
   return item;
 });
 
+// ListModel disables dynamicRoles by default
+// we need to set model's schema explicitly
+// @see https://doc.qt.io/archives/qt-5.10/qml-qtqml-models-listmodel.html#dynamicRoles-prop
+const defaultConversationItem = {
+  is_im: false,
+  is_mpim: false,
+  is_private: false,
+  is_muted: false,
+  is_active: false,
+  is_open: false,
+  name: '',
+  section: '',
+  id: '',
+};
+
+const picky = pick(Object.keys(defaultConversationItem));
+
+const standardizeConversation = map(item => ({
+  ...defaultConversationItem,
+  ...picky(item),
+}));
+
 const transformSectionChannel = flow(
   addSection('Channels'),
   filterOpen,
-  sortByMuted
+  sortByMuted,
+  standardizeConversation
 );
 
 const transformSectionDirectMessage = flow(
   addSection('Direct Messages'),
   filterOpen,
-  transformName
+  transformMpimName,
+  standardizeConversation
 );
 
 const channelListSelector = createSelector(

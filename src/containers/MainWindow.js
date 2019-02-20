@@ -23,8 +23,12 @@ const windowY = localStorage.getItem('windowY') || 100;
 const windowWidth = localStorage.getItem('windowWidth') || 800;
 const windowHeight = localStorage.getItem('windowHeight') || 600;
 
-class MainWindow extends React.PureComponent {
+class MainWindow extends React.Component {
   windowRef = React.createRef();
+
+  state = {
+    visible: true,
+  };
 
   onClosing = ev => {
     // persist window's geometry
@@ -37,13 +41,14 @@ class MainWindow extends React.PureComponent {
     }
 
     ev.accepted = true;
+    this.setState({ visible: false });
   };
 
   onAppStateChanged = state => {
     // on app activate, show the window (if already closed)
     const $window = this.windowRef.current;
     if (!$window.visible && state === Qt.ApplicationActive) {
-      $window.open();
+      this.setState({ visible: true });
     }
   };
 
@@ -60,9 +65,11 @@ class MainWindow extends React.PureComponent {
   }
 
   render() {
+    const { visible } = this.state;
     return (
       <Window
-        visible
+        visible={visible}
+        visibility={visible ? 'Windowed' : 'Hidden'}
         onClosing={this.onClosing}
         x={windowX}
         y={windowY}

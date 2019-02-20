@@ -41,7 +41,7 @@ const rootReducerWithRouter = connectRouter(history)(rootReducer);
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['account', 'team', 'conversation'],
+  whitelist: ['account', 'team', 'conversation', 'user'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducerWithRouter);
 
