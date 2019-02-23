@@ -108,6 +108,10 @@ class RQListView extends React.PureComponent {
 
     const $listView = this.listViewRef.current;
     const index = $listView.currentIndex;
+    if (index === -1) {
+      return;
+    }
+
     const item = this.props.data[index];
 
     // TODO: more thought on this, do we really need to make this controlled

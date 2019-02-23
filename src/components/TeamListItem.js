@@ -1,4 +1,4 @@
-import { GridLayout, Shortcut, Text } from 'react-qml';
+import { ColumnLayout, Shortcut, Text } from 'react-qml';
 import React from 'react';
 
 import TeamButton from '../components/TeamButton.qml';
@@ -10,7 +10,7 @@ const TeamListItem = ({
   backgroundIcon,
   ...otherProps
 }) => (
-  <GridLayout {...otherProps} spacing={5} columns={1}>
+  <ColumnLayout {...otherProps} spacing={5}>
     <TeamButton
       selected={selected}
       onClicked={onSelect}
@@ -42,7 +42,7 @@ const TeamListItem = ({
       sequence={`Ctrl+${index + 1}`}
       onActivated={onSelect}
     />
-  </GridLayout>
+  </ColumnLayout>
 );
 
 export default TeamListItem;

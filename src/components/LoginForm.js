@@ -74,7 +74,6 @@ class LoginForm extends React.Component {
             rightMargin: 32,
             bottomMargin: 26,
           }}
-          columns={1}
           spacing={16}
         >
           <Image
