@@ -32,11 +32,4 @@ Button {
     radius: 6
     visible: false
   }
-
-  MouseArea {
-    id: mouseArea
-    anchors.fill: parent
-    cursorShape: Qt.PointingHandCursor
-    onPressed: mouse.accepted = false
-  }
 }

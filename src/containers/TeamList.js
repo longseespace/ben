@@ -1,4 +1,4 @@
-import { ColumnLayout } from 'react-qml';
+import { Column, ColumnLayout } from 'react-qml';
 import { connect } from 'react-redux';
 import { path } from 'lodash/fp';
 import * as React from 'react';
@@ -28,12 +28,19 @@ const styles = {
     width: 68,
     spacing: 0,
   },
-  listItem: {
-    width: 68,
+  teamList: {
+    topPadding: 16,
+    spacing: 16,
   },
   teamButton: {
     width: 36,
     height: 36,
+  },
+  addButton: {
+    preferredWidth: 36,
+    preferredHeight: 36,
+    alignment: Qt.AlignTop | Qt.AlignHCenter,
+    marginTop: 16,
   },
 };
 
@@ -51,32 +58,26 @@ class TeamList extends React.Component {
     const teamIds = Object.keys(teamInfo);
     return (
       <ColumnLayout style={styles.container}>
-        {teamIds.map((id, index) => (
-          <TeamListItem
-            key={id}
-            index={index}
-            selected={selectedTeamId === id}
-            backgroundIcon={getIcon(teamInfo[id]) || ''}
-            onSelect={() => onTeamSelected(id)}
-            Layout={{
-              row: index + 1,
-              preferredWidth: 68,
-              topMargin: 16,
-              alignment: Qt.AlignTop | Qt.AlignHCenter,
-            }}
-          />
-        ))}
+        <Column style={styles.teamList}>
+          {teamIds.map((id, index) => (
+            <TeamListItem
+              key={id}
+              index={index}
+              selected={selectedTeamId === id}
+              backgroundIcon={getIcon(teamInfo[id]) || ''}
+              onSelect={() => onTeamSelected(id)}
+              Drag={{
+                active: true,
+                dragType: 'Automatic',
+                hotSpot: Qt.point(18, 18),
+              }}
+            />
+          ))}
+        </Column>
         <AddAccountButton
           key="add-account"
-          style={styles.item}
+          style={styles.addButton}
           onClicked={onAddAccount}
-          Layout={{
-            row: 1000,
-            preferredWidth: 36,
-            preferredHeight: 36,
-            alignment: Qt.AlignTop | Qt.AlignHCenter,
-            topMargin: 16,
-          }}
         />
       </ColumnLayout>
     );

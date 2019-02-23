@@ -102,13 +102,12 @@ class ChannelList extends React.PureComponent {
 
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
-        <Rectangle style={styles.header}>
+        <Rectangle style={styles.header} visible={user_available}>
           <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
             <Column Layout={{ leftMargin: 16, fillWidth: true }} spacing={0}>
               <Text text={selectedTeam.name} style={styles.headerText} />
               <RowLayout style={styles.userPresenceContainer}>
                 <Text
-                  visible={user_available}
                   text={`\uf111`}
                   style={[
                     styles.userPresenceIndicator,
@@ -117,11 +116,7 @@ class ChannelList extends React.PureComponent {
                       : styles.userPresenceIndicator__inactive,
                   ]}
                 />
-                <Text
-                  visible={user_available}
-                  text={me.name}
-                  style={styles.userPresenceText}
-                />
+                <Text text={me.name} style={styles.userPresenceText} />
               </RowLayout>
             </Column>
             <Text text={`\uf0f3`} style={styles.notificationStatus} />

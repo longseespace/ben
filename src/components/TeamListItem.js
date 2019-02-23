@@ -1,48 +1,66 @@
-import { ColumnLayout, Shortcut, Text } from 'react-qml';
+import { Column, Item, MouseArea, Rectangle, Shortcut, Text } from 'react-qml';
 import React from 'react';
 
 import TeamButton from '../components/TeamButton.qml';
+
+const styles = {
+  container: {
+    width: 68,
+    height: 56,
+  },
+  selectedIndicator: {
+    x: -4,
+    width: 8,
+    radius: 2,
+    height: 36,
+    color: Qt.rgba(255, 255, 255, 0.5),
+  },
+  button: {
+    x: 16,
+    width: 36,
+    height: 36,
+  },
+  shortcutText: {
+    y: 40,
+    color: '#ccc',
+    fontSize: 13,
+    fontFamily: 'Lato',
+    align: 'center',
+  },
+};
 
 const TeamListItem = ({
   index,
   onSelect,
   selected,
   backgroundIcon,
+  style, // eslint-disable-line
   ...otherProps
 }) => (
-  <ColumnLayout {...otherProps} spacing={5}>
+  <Item style={styles.container} {...otherProps}>
+    <Rectangle style={styles.selectedIndicator} visible={selected} />
     <TeamButton
       selected={selected}
-      onClicked={onSelect}
       backgroundIcon={backgroundIcon}
-      Layout={{
-        row: 1,
-        preferredWidth: 36,
-        preferredHeight: 36,
-        alignment: Qt.AlignTop | Qt.AlignHCenter,
-      }}
+      style={styles.button}
     />
     <Text
       visible={index < 9}
       text={`⌘${index + 1}`}
-      color="#ccc"
-      font={{
-        pointSize: 13,
-        family: 'Lato',
-      }}
-      horizontalAlignment="AlignHCenter"
-      Layout={{
-        row: 2,
-        fillWidth: true,
-        alignment: Qt.AlignTop | Qt.AlignHCenter,
-      }}
+      style={styles.shortcutText}
+      anchors={{ horizontalCenter: 'parent.horizontalCenter' }}
     />
     <Shortcut
       enabled={index < 9}
       sequence={`Ctrl+${index + 1}`}
       onActivated={onSelect}
     />
-  </ColumnLayout>
+    <MouseArea
+      anchors={{ fill: 'parent' }}
+      onClicked={onSelect}
+      cursorShape={Qt.PointingHandCursor}
+    />
+  </Item>
 );
 
 export default TeamListItem;
