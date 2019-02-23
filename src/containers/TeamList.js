@@ -48,6 +48,20 @@ const getIcon = path('icon.image_88');
 
 // TODO: fix the ordering
 class TeamList extends React.Component {
+  state = {
+    dragging: false,
+  };
+
+  onItemDragStarted = key => {
+    console.log('onItemDragStarted', key);
+    this.setState({ dragging: true });
+  };
+
+  onItemDragFinished = key => {
+    console.log('onItemDragFinished', key);
+    this.setState({ dragging: false });
+  };
+
   render() {
     const {
       onAddAccount,
@@ -55,6 +69,7 @@ class TeamList extends React.Component {
       selectedTeamId,
       teamInfo = {},
     } = this.props;
+    const { dragging } = this.state;
     const teamIds = Object.keys(teamInfo);
     return (
       <ColumnLayout style={styles.container}>
@@ -65,12 +80,9 @@ class TeamList extends React.Component {
               index={index}
               selected={selectedTeamId === id}
               backgroundIcon={getIcon(teamInfo[id]) || ''}
-              onSelect={() => onTeamSelected(id)}
-              Drag={{
-                active: true,
-                dragType: 'Automatic',
-                hotSpot: Qt.point(18, 18),
-              }}
+              onSelected={() => onTeamSelected(id)}
+              onDragStarted={this.onItemDragStarted}
+              onDragFinished={this.onItemDragFinished}
             />
           ))}
         </Column>
@@ -78,6 +90,7 @@ class TeamList extends React.Component {
           key="add-account"
           style={styles.addButton}
           onClicked={onAddAccount}
+          visible={!dragging}
         />
       </ColumnLayout>
     );
