@@ -1,5 +1,5 @@
 # Tey
-Fast open source Slack desktop app, written in [React QML][react-qml]
+Fast, native, cross-platform Slack client, written in [React QML][react-qml]
 
 ![Screenshot](docs/screenshot.png?raw=true "Screenshot")
 
