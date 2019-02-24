@@ -12,6 +12,7 @@ import { selectedTeamSelector } from '../state/team';
 import { selfSelector } from '../state/self';
 import ChannelDelegate from '../components/ChannelDelegate.qml';
 import ChannelHighlight from '../components/ChannelHighlight.qml';
+import FontIcon from '../components/FontIcon';
 import ListView from '../components/ListView';
 import SectionDelegate from '../components/SectionDelegate.qml';
 
@@ -45,9 +46,6 @@ const styles = {
     fontFamily: 'Lato',
   },
   notificationStatus: {
-    color: '#ccc',
-    fontSize: 20,
-    fontFamily: 'Font Awesome 5 Free',
     rightMargin: 16,
     preferredWidth: 20,
   },
@@ -58,16 +56,6 @@ const styles = {
   userPresenceIndicator: {
     topMargin: 1,
     preferredWidth: 9,
-    fontFamily: 'Font Awesome 5 Free',
-    fontSize: 9,
-  },
-  userPresenceIndicator__inactive: {
-    color: '#ccc',
-    fontWeight: 'normal',
-  },
-  userPresenceIndicator__active: {
-    color: '#a6e576',
-    fontWeight: 'bold',
   },
   userPresenceText: {
     fontSize: 14,
@@ -107,19 +95,22 @@ class ChannelList extends React.PureComponent {
             <Column Layout={{ leftMargin: 16, fillWidth: true }} spacing={0}>
               <Text text={selectedTeam.name} style={styles.headerText} />
               <RowLayout style={styles.userPresenceContainer}>
-                <Text
-                  text={`\uf111`}
-                  style={[
-                    styles.userPresenceIndicator,
-                    user_active
-                      ? styles.userPresenceIndicator__active
-                      : styles.userPresenceIndicator__inactive,
-                  ]}
+                <FontIcon
+                  name="circle"
+                  size={9}
+                  color={user_active ? '#a6e576' : '#ccc'}
+                  solid={user_active}
+                  style={styles.userPresenceIndicator}
                 />
                 <Text text={me.name} style={styles.userPresenceText} />
               </RowLayout>
             </Column>
-            <Text text={`\uf0f3`} style={styles.notificationStatus} />
+            <FontIcon
+              name="bell"
+              size={20}
+              color="#ccc"
+              style={styles.notificationStatus}
+            />
           </RowLayout>
         </Rectangle>
         <ListView
