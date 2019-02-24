@@ -1,12 +1,10 @@
-import { ACTIONS, makeFetchAction } from 'redux-api-call';
+import { ACTIONS } from 'redux-api-call';
 import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 import { isEmpty, path } from 'lodash/fp';
 
-import { INIT_ACCOUNT, USERS_NAMESPACE } from './constants';
+import { INIT_ACCOUNT, SELF_NAMESPACE } from './constants';
 import { selectedTeamIdSelector } from './team';
-
-const API_ROOT = 'https://slack.com/api';
 
 // API
 // ---------------
@@ -16,7 +14,7 @@ const API_ROOT = 'https://slack.com/api';
 
 // SELECTORS
 // ---------------
-const allProfilesSelector = path(`${USERS_NAMESPACE}.self`);
+const allProfilesSelector = path(`${SELF_NAMESPACE}.info`);
 
 export const selfSelector = createSelector(
   selectedTeamIdSelector,
@@ -27,7 +25,7 @@ export const selfSelector = createSelector(
 
 // REDUCER
 // ---------------
-const self = (state = {}, { type, payload }) => {
+const info = (state = {}, { type, payload }) => {
   if (type === ACTIONS.COMPLETE && payload.name === INIT_ACCOUNT) {
     const team = payload.team;
     if (!team) {
@@ -40,7 +38,7 @@ const self = (state = {}, { type, payload }) => {
 };
 
 export default {
-  [USERS_NAMESPACE]: combineReducers({
-    self,
+  [SELF_NAMESPACE]: combineReducers({
+    info,
   }),
 };

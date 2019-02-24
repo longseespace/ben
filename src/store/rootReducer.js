@@ -4,7 +4,8 @@ import account from '../state/account';
 import team from '../state/team';
 import conversation from '../state/conversation';
 import loginWindow from '../state/loginWindow';
-import user from '../state/user';
+import self from '../state/self';
+import message from '../state/message';
 
 export default combineReducers({
   ...apiReducers,
@@ -12,5 +13,6 @@ export default combineReducers({
   ...team,
   ...loginWindow,
   ...conversation,
-  ...user,
+  ...self,
+  ...message,
 });

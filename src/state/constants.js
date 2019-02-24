@@ -22,6 +22,11 @@ export const LOGIN_WINDOW_NAMESPACE = 'loginWindow';
 export const SHOW_LOGIN_WINDOW = 'SHOW_LOGIN_WINDOW';
 export const HIDE_LOGIN_WINDOW = 'HIDE_LOGIN_WINDOW';
 
-// USERS
+// SELF
 // ---------------
-export const USERS_NAMESPACE = 'user';
+export const SELF_NAMESPACE = 'self';
+
+// MESSAGES
+// ---------------
+export const MESSAGE_NAMESPACE = 'message';
+export const FETCH_MESSAGE = 'FETCH_MESSAGE';

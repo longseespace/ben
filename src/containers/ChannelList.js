@@ -9,7 +9,7 @@ import {
   selectedConversationIdSelector,
 } from '../state/conversation';
 import { selectedTeamSelector } from '../state/team';
-import { selfSelector } from '../state/user';
+import { selfSelector } from '../state/self';
 import ChannelDelegate from '../components/ChannelDelegate.qml';
 import ChannelHighlight from '../components/ChannelHighlight.qml';
 import ListView from '../components/ListView';

@@ -17,6 +17,8 @@ import {
   INIT_USER,
   SELECT_CONVERSATION,
 } from './constants';
+import { accountListSelector } from './account';
+import { fetchMessage } from './message';
 import { selectedTeamIdSelector } from './team';
 
 // API
@@ -33,11 +35,24 @@ export const selectConversation = conversationId => (dispatch, getState) => {
     console.warn('Cannot select conversation without a team context');
     return;
   }
-  const action = {
+
+  // select action
+  const selectAction = {
     type: SELECT_CONVERSATION,
     payload: { conversationId, team: selectedTeamId },
   };
-  dispatch(action);
+  dispatch(selectAction);
+
+  // fetch message list
+  const accountList = accountListSelector(state);
+  const token = path([selectedTeamId, 'token'], accountList);
+  dispatch(
+    fetchMessage({
+      token,
+      channel: conversationId,
+      team: selectedTeamId,
+    })
+  );
 };
 
 // SELECTORS
@@ -50,7 +65,7 @@ const allGroupsSelector = path(`${CONVERSATION_NAMESPACE}.allGroups`);
 const allImsSelector = path(`${CONVERSATION_NAMESPACE}.allIms`);
 const allMpimsSelector = path(`${CONVERSATION_NAMESPACE}.allMpims`);
 
-export const selectedConversationId = createSelector(
+export const selectedConversationIdSelector = createSelector(
   selectedTeamIdSelector,
   allSelectedConversationIdsSelector,
   (selectedTeamId, allSelectedConversationIds) =>
@@ -153,6 +168,17 @@ export const conversationListSelector = createSelector(
       ...mpimList,
     ]);
     return [...sectionChannels, ...sectionDirectMessages];
+  }
+);
+
+export const selectedConversationSelector = createSelector(
+  selectedConversationIdSelector,
+  conversationListSelector,
+  (conversationId, conversationList) => {
+    if (isEmpty(conversationId)) {
+      return {};
+    }
+    return find({ id: conversationId }, conversationList);
   }
 );
 
