@@ -1,4 +1,4 @@
-import { Column, ColumnLayout } from 'react-qml';
+import { Column, ColumnLayout, NumberAnimation, Transition } from 'react-qml';
 import { connect } from 'react-redux';
 import { path } from 'lodash/fp';
 import * as React from 'react';
@@ -46,6 +46,12 @@ const styles = {
 
 const getIcon = path('icon.image_88');
 
+const addTransition = (
+  <Transition>
+    <NumberAnimation property="scale" from={0.8} to={1} duration={100} />
+  </Transition>
+);
+
 // TODO: fix the ordering
 class TeamList extends React.Component {
   state = {
@@ -73,7 +79,7 @@ class TeamList extends React.Component {
     const teamIds = Object.keys(teamInfo);
     return (
       <ColumnLayout style={styles.container}>
-        <Column style={styles.teamList}>
+        <Column add={addTransition} style={styles.teamList}>
           {teamIds.map((id, index) => (
             <TeamListItem
               key={id}
