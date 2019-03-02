@@ -16,7 +16,7 @@ const connectToRedux = connect(
     config: loginWindowConfigSelector(state),
   }),
   {
-    onClose: hideLoginWindow,
+    onClosing: hideLoginWindow,
     initWorkspace,
   }
 );
@@ -36,20 +36,9 @@ class LoginWindow extends React.Component {
     this.handleLogin = this.handleLogin.bind(this);
   }
 
-  windowRef = React.createRef();
-
   state = {
     signinError: '',
     isProcessing: false,
-  };
-
-  onClosing = ev => {
-    // we don't want default behavior
-    // window visibility will be controlled by component's prop
-    ev.accepted = false;
-
-    // should dispatch close action here
-    this.props.onClose();
   };
 
   async handleLogin(formData) {
@@ -69,7 +58,7 @@ class LoginWindow extends React.Component {
       this.setState({ signinError: '', isProcessing: false });
 
       // close this window
-      this.props.onClose();
+      this.props.onClosing();
     }
   }
 
@@ -79,19 +68,19 @@ class LoginWindow extends React.Component {
     return (
       <Window
         visible={visible}
-        visibility={visible ? 'Windowed' : 'Hidden'}
-        onClosing={this.onClosing}
+        onClosing={this.props.onClosing}
         title="Login"
         style={styles.window}
-        ref={this.windowRef}
         flags={Qt.Dialog}
       >
         <ErrorBoundary>
-          <LoginForm
-            onSubmit={this.handleLogin}
-            submissionError={signinError}
-            isProcessing={isProcessing}
-          />
+          {visible && (
+            <LoginForm
+              onSubmit={this.handleLogin}
+              submissionError={signinError}
+              isProcessing={isProcessing}
+            />
+          )}
         </ErrorBoundary>
       </Window>
     );
