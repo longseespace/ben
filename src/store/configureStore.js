@@ -12,6 +12,7 @@ import { persistStore, persistReducer } from 'redux-persist';
 import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
 import storage from 'redux-persist/lib/storage';
+import { AsyncStorage } from 'react-qml';
 
 import apiMiddleware from './apiMiddleware';
 import rootReducer from './rootReducer';
@@ -39,8 +40,9 @@ const rootReducerWithRouter = connectRouter(history)(rootReducer);
 
 // then persist storage
 const persistConfig = {
+  debug: true,
   key: 'root',
-  storage,
+  storage: AsyncStorage,
   whitelist: ['account', 'team', 'conversation', 'self'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducerWithRouter);

@@ -1,4 +1,4 @@
-import { Rectangle, RowLayout, Window } from 'react-qml';
+import { Rectangle, RowLayout, Window, AsyncStorage } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
@@ -68,6 +68,7 @@ class MainWindow extends React.Component {
     const { visible } = this.state;
     return (
       <Window
+        objectName="MainWindow"
         visible={visible}
         visibility={visible ? 'Windowed' : 'Hidden'}
         onClosing={this.onClosing}

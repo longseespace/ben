@@ -82,7 +82,7 @@ class ChannelList extends React.PureComponent {
     const {
       conversationList = [],
       selectedTeam = {},
-      me = {},
+      me = { name: '' },
       selectedConversationId,
     } = this.props;
     const user_active = me.manual_presence === 'active';
