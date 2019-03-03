@@ -105,15 +105,10 @@ package-lock.json
 
 *.app
 
-# rust
-rust/target
-*.qmlc
-rust/resources/qml
-
 Makefile
 .qmake.stash
 qrc_bundle.*
 lib*.a
 
 # qt test project
-/qt
+/native/dist

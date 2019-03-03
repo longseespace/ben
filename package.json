@@ -15,7 +15,7 @@
     "lodash": "^4.17.11",
     "qs": "^6.6.0",
     "react": "^16.8.1",
-    "react-qml": "*",
+    "react-qml": "^0.4.1",
     "react-redux": "5.0.6",
     "react-router": "^4.3.1",
     "redux": "^3.7.2",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.7.1",
-    "@react-qml/cli": "^0.1.0",
+    "@react-qml/cli": "^0.1.2",
     "babel-eslint": "^8.0.3",
     "babel-plugin-lodash": "^3.3.4",
     "eslint": "^4.13.1",
