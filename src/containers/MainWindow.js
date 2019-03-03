@@ -1,4 +1,4 @@
-import { Rectangle, RowLayout, Window, AsyncStorage } from 'react-qml';
+import { Rectangle, RowLayout, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
@@ -76,7 +76,7 @@ class MainWindow extends React.Component {
         y={windowY}
         width={windowWidth}
         height={windowHeight}
-        title="Tey"
+        title="Ben"
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
         ref={this.windowRef}
       >

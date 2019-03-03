@@ -3,14 +3,28 @@ import { QtLabsPlatform } from 'react-qml';
 
 const { MenuBar, Menu, MenuItem, MenuSeparator } = QtLabsPlatform;
 
+const collectGarbage = () => {
+  gc();
+};
+
 class AppMenu extends React.Component {
   render() {
     return (
       <MenuBar>
+        <Menu title="Ben">
+          <MenuItem text="About" role="AboutRole" />
+          <MenuItem text="Preferences" role="PreferencesRole" />
+          <MenuItem
+            text="Collect Garbage"
+            role="ApplicationSpecificRole"
+            shortcut="Ctrl+Shift+G"
+            onTriggered={collectGarbage}
+          />
+        </Menu>
         <Menu title="&File">
           <MenuItem text="Close Window" shortcut={StandardKey.Close} />
         </Menu>
-        <Menu title="&Edit">
+        <Menu title="&Edit" type="EditMenu">
           <MenuItem text="Undo" shortcut={StandardKey.Undo} />
           <MenuItem text="Redo" shortcut={StandardKey.Redo} />
           <MenuSeparator />

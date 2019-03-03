@@ -11,7 +11,6 @@ import { createLogger } from 'redux-logger';
 import { persistStore, persistReducer } from 'redux-persist';
 import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
-import storage from 'redux-persist/lib/storage';
 import { AsyncStorage } from 'react-qml';
 
 import apiMiddleware from './apiMiddleware';
