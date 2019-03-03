@@ -32,9 +32,17 @@ before_script:
   - export QMAKESPEC=macx-clang
   - mkdir -p "$TRAVIS_BUILD_DIR-build"
   - qmake -v
-  - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=release "$TRAVIS_BUILD_DIR/native"
+  - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=release PRODUCTION=true "$TRAVIS_BUILD_DIR/native"
 
 script:
   - make -C "$TRAVIS_BUILD_DIR-build" -j2 all
   - make -C "$TRAVIS_BUILD_DIR-build" -j2 check
+  - macdeployqt "$TRAVIS_BUILD_DIR-build/Ben.app" -dmg -qmldir="$TRAVIS_BUILD_DIR/native/dist"
   # - '[ "$TRAVIS_OS_NAME" != osx ] || make -C "$TRAVIS_BUILD_DIR-build/pkg/osx" dmg'
+
+deploy:
+  provider: releases
+  api_key: $RELEASES_API_KEY
+  file: "$TRAVIS_BUILD_DIR-build/Ben.dmg"
+  skip_cleanup: true
+  draft: true
