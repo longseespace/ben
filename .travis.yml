@@ -18,13 +18,10 @@ cache:
 before_cache:
   - brew cleanup
 
-before_install:
-  - brew update
-
 install:
   - yarn
-  # - brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/9a70413d137839de0054571e5f85fd07ee400955/Formula/qt.rb
-  - brew install qt5
+  # - brew tap longseespace/tap
+  - brew install https://raw.githubusercontent.com/longseespace/homebrew-tap/master/qt.rb
   - brew link --force qt
 
 before_script:
