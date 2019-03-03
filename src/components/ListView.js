@@ -1,4 +1,5 @@
-import { ListView, ListModel } from 'react-qml';
+import { ListView, ListModel, QtQuickControls2 } from 'react-qml';
+const { ScrollBar } = QtQuickControls2;
 import { isObject } from 'lodash/fp';
 import React from 'react';
 
@@ -9,6 +10,8 @@ class RQListView extends React.PureComponent {
   headerRef = React.createRef();
   highlightRef = React.createRef();
   sectionDelegateRef = React.createRef();
+  vScrollBarRef = React.createRef();
+  hScrollBarRef = React.createRef();
 
   doNotNotifyIndexChange = false;
 
@@ -54,6 +57,8 @@ class RQListView extends React.PureComponent {
     const $header = this.headerRef.current;
     const $highlight = this.highlightRef.current;
     const $sectionDelegate = this.sectionDelegateRef.current;
+    const $vScrollBar = this.vScrollBarRef.current;
+    const $hScrollBar = this.hScrollBarRef.current;
 
     if ($listView) {
       $listView.model = $model;
@@ -61,6 +66,8 @@ class RQListView extends React.PureComponent {
       $listView.header = $header;
       $listView.highlight = $highlight;
       $listView.section.delegate = $sectionDelegate;
+      $listView.ScrollBar.vertical = $vScrollBar;
+      $listView.ScrollBar.horizontal = $hScrollBar;
 
       if (this.props.sectionProperty) {
         $listView.section.property = this.props.sectionProperty;
@@ -164,6 +171,8 @@ class RQListView extends React.PureComponent {
         )}
         <ListModel ref={this.modelRef} />
         <DelegateComponent ref={this.delegateRef} />
+        <ScrollBar ref={this.vScrollBarRef} />
+        <ScrollBar ref={this.hScrollBarRef} />
       </ListView>
     );
   }
