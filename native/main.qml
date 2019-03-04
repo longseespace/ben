@@ -16,29 +16,15 @@ ApplicationWindow {
 
   flags: Qt.Window
 
-  Settings {
-    id: __devSettings
-
-    property alias windowX: __devWindow.x
-    property alias windowY: __devWindow.y
-    property alias windowWidth: __devWindow.width
-    property alias windowHeight: __devWindow.height
-    property string entry: 'http://localhost:8081/index.qml'
-    property bool supportHMR: true
-    property string hmrUrl: 'ws://localhost:8081/hot'
-
-    Component.onCompleted: {
-      // load main component
-      __appLoader.active = true;
-    }
-  }
+  property string entry: PRODUCTION_BUILD ? 'qrc:/index.qml' : 'http://localhost:8081/index.qml'
+  property bool supportHMR: PRODUCTION_BUILD ? false : true
+  property string hmrUrl: 'ws://localhost:8081/hot'
 
   Loader {
     id: __appLoader
     asynchronous: true
-    active: false
 
-    source: __devSettings.entry
+    source: __devWindow.entry
 
     onStatusChanged: {
       if (__appLoader.status === Loader.Error) {
@@ -67,7 +53,7 @@ ApplicationWindow {
     title: "Error"
     icon: StandardIcon.Warning
     text: "Failed to load entry url."
-    informativeText: "Failed to load " + __devSettings.entry
+    informativeText: "Failed to load " + __devWindow.entry
     onAccepted: {
       Qt.quit();
     }
@@ -76,8 +62,8 @@ ApplicationWindow {
   // websocket for HMR
   WebSocket {
     id: __hotWs
-    url: __devSettings.hmrUrl
-    active: __devSettings.supportHMR
+    url: __devWindow.hmrUrl
+    active: __devWindow.supportHMR
 
     onStatusChanged: {
       if (status === WebSocket.Error) {

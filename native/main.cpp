@@ -43,11 +43,10 @@ int main(int argc, char *argv[]) {
   QQmlApplicationEngine engine;
   engine.addImportPath(QStringLiteral("qrc:/"));
 
-  if (PRODUCTION_BUILD) {
-    engine.load(QUrl(QLatin1String("qrc:/index.qml")));
-  } else {
-    engine.load(QUrl(QLatin1String("qrc:/react-qml/main.qml")));
-  }
+  engine.rootContext()->setContextProperty("PRODUCTION_BUILD",
+                                           PRODUCTION_BUILD);
+
+  engine.load(QUrl(QLatin1String("qrc:/react-qml/main.qml")));
 
   return app.exec();
 }
