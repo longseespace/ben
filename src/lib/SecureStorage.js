@@ -1,6 +1,6 @@
 // TODO: move this to `react-qml`
 
-const SERVICE_NAME = 'Ben';
+const SERVICE_NAME = __DEV__ ? 'Ben-dev' : 'Ben';
 const Keychain = RQ.keychain();
 
 async function getItem(key) {
