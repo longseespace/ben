@@ -1,6 +1,7 @@
 #ifndef RQ_H
 #define RQ_H
 
+#include "rqkeychain.h"
 #include "rqnetworkaccessmanagerfactory.h"
 
 #include <QObject>
@@ -19,6 +20,7 @@ public:
   Q_INVOKABLE void clearCache();
   Q_INVOKABLE QObject *createTimer();
   Q_INVOKABLE QObject *createWebSocket();
+  Q_INVOKABLE RQKeychain *keychain();
 
 private slots:
   void onQmlWarnings(const QList<QQmlError> &warnings);
@@ -37,6 +39,7 @@ private:
   QQmlComponent *m_ws_component;
 
   RQNetworkAccessManagerFactory *m_nam;
+  RQKeychain *m_keychain;
 };
 
 #endif // RQ_H

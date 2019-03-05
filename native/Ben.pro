@@ -1,3 +1,6 @@
+# qtkeychain
+include(ReactQML/qtkeychain/qt5keychain.pri)
+
 QT += quickcontrols2 websockets svg network
 android|ios|qnx|winrt|isEmpty(QT.widgets.name): CONFIG += no_desktop
 !no_desktop: QT += widgets
@@ -20,11 +23,13 @@ TARGET = Ben
 HEADERS += \
   qtquickcontrolsapplication.h \
   ReactQML/rq.h \
-  ReactQML/rqnetworkaccessmanagerfactory.h
+  ReactQML/rqnetworkaccessmanagerfactory.h \
+    ReactQML/rqkeychain.h
 
 
 SOURCES += main.cpp \
   ReactQML/rq.cpp \
-  ReactQML/rqnetworkaccessmanagerfactory.cpp
+  ReactQML/rqnetworkaccessmanagerfactory.cpp \
+    ReactQML/rqkeychain.cpp
 
 RESOURCES += main.qrc

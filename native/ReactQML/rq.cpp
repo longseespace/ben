@@ -11,7 +11,8 @@ QObject *RQ::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine) {
 }
 
 RQ::RQ(QQmlEngine *engine)
-    : m_engine(engine), m_nam(new RQNetworkAccessManagerFactory()) {
+    : m_engine(engine), m_nam(new RQNetworkAccessManagerFactory()),
+      m_keychain(new RQKeychain()) {
   // timer context
   m_timer_context = new QQmlContext(m_engine->rootContext());
   m_timer_component = new QQmlComponent(m_engine);
@@ -34,6 +35,9 @@ RQ::~RQ() {
   delete m_timer_component;
   delete m_ws_context;
   delete m_ws_component;
+
+  delete m_nam;
+  delete m_keychain;
 }
 
 void RQ::clearCache() { m_engine->trimComponentCache(); }
@@ -49,6 +53,8 @@ QObject *RQ::createWebSocket() {
   QQmlEngine::setObjectOwnership(ws, QQmlEngine::JavaScriptOwnership);
   return ws;
 }
+
+RQKeychain *RQ::keychain() { return m_keychain; }
 
 void RQ::onQmlWarnings(const QList<QQmlError> &warnings) {
   QVariantList list;
