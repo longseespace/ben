@@ -7,11 +7,9 @@ import {
   connectRouter,
   routerMiddleware as createRouterMiddleware,
 } from 'connected-react-router';
-import { createLogger } from 'redux-logger';
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore } from 'redux-persist';
 import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
-import { AsyncStorage } from 'react-qml';
 
 import apiMiddleware from './apiMiddleware';
 import rootReducer from './rootReducer';
@@ -37,34 +35,6 @@ const composeEnhancers = composeWithDevTools({
 // then router
 const rootReducerWithRouter = connectRouter(history)(rootReducer);
 
-// then persist storage
-const persistConfig = {
-  debug: true,
-  key: 'root',
-  storage: AsyncStorage,
-  whitelist: ['account', 'team', 'conversation', 'self'],
-};
-const persistedReducer = persistReducer(persistConfig, rootReducerWithRouter);
-
-// then logger
-const logger = createLogger({
-  colors: false,
-  logger: {
-    log: (...args) => {
-      console.log(require('util').inspect(args, { depth: 2 }));
-    },
-    info: (...args) => {
-      console.log(require('util').inspect(args, { depth: 2 }));
-    },
-    error: (...args) => {
-      console.log(require('util').inspect(args, { depth: 2 }));
-    },
-    warn: (...args) => {
-      console.log(require('util').inspect(args, { depth: 2 }));
-    },
-  },
-});
-
 // finally composeEnhancers
 const enhancers = composeEnhancers(
   applyMiddleware(
@@ -72,24 +42,19 @@ const enhancers = composeEnhancers(
     apiMiddleware,
     // epicMiddleware,
     routerMiddleware
-    // logger
   )
 );
 
 export { history };
 export default initialState => {
-  const store = createStore(persistedReducer, initialState, enhancers);
+  const store = createStore(rootReducerWithRouter, initialState, enhancers);
   const persistor = persistStore(store);
 
   if (module.hot) {
     module.hot.accept('./rootReducer', () => {
       const nextReducer = require('./rootReducer').default;
       const rootReducerWithRouter = connectRouter(history)(nextReducer);
-      const persistedReducer = persistReducer(
-        persistConfig,
-        rootReducerWithRouter
-      );
-      store.replaceReducer(connectRouter(history)(persistedReducer));
+      store.replaceReducer(rootReducerWithRouter);
     });
     // module.hot.accept('./rootEpic', () => {
     //   const rootEpic = require('./rootEpic').default;
