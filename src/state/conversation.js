@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { createSelector } from 'reselect';
 import {
   filter,
+  find,
   flow,
   isEmpty,
   map,

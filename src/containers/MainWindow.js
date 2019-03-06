@@ -7,6 +7,7 @@ import AppMenu from './AppMenu';
 import ChannelList from './ChannelList';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoginWindow from './LoginWindow';
+import MessageList from './MessageList';
 import TeamList from './TeamList';
 
 const connectToRedux = connect(
@@ -32,6 +33,15 @@ class MainWindow extends React.Component {
   };
 
   onClosing = ev => {
+    // persist window's geometry
+    const $window = this.windowRef.current;
+    if ($window) {
+      localStorage.setItem('windowX', $window.x);
+      localStorage.setItem('windowY', $window.y);
+      localStorage.setItem('windowWidth', $window.width);
+      localStorage.setItem('windowHeight', $window.height);
+    }
+
     ev.accepted = true;
     this.setState({ visible: false });
   };
@@ -54,15 +64,6 @@ class MainWindow extends React.Component {
 
   componentWillUnmount() {
     Qt.application.stateChanged.disconnect(this.onAppStateChanged);
-
-    // persist window's geometry
-    const $window = this.windowRef.current;
-    if ($window) {
-      localStorage.setItem('windowX', $window.x);
-      localStorage.setItem('windowY', $window.y);
-      localStorage.setItem('windowWidth', $window.width);
-      localStorage.setItem('windowHeight', $window.height);
-    }
   }
 
   render() {
@@ -109,7 +110,9 @@ class MainWindow extends React.Component {
                 fillHeight: true,
               }}
               color="#FFFFFF"
-            />
+            >
+              <MessageList />
+            </Rectangle>
           </RowLayout>
         </ErrorBoundary>
       </Window>
