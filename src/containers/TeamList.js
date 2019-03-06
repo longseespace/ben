@@ -1,4 +1,11 @@
-import { Column, ColumnLayout, NumberAnimation, Transition } from 'react-qml';
+import {
+  Column,
+  NumberAnimation,
+  QtQuickControls2,
+  Transition,
+} from 'react-qml';
+
+const { ScrollView } = QtQuickControls2;
 import { connect } from 'react-redux';
 import { path } from 'lodash/fp';
 import * as React from 'react';
@@ -26,10 +33,11 @@ const connectToRedux = connect(
 const styles = {
   container: {
     width: 68,
-    spacing: 0,
+    spacing: 16,
+    topPadding: 16,
+    bottomPadding: 16,
   },
   teamList: {
-    topPadding: 16,
     spacing: 16,
   },
   teamButton: {
@@ -37,10 +45,10 @@ const styles = {
     height: 36,
   },
   addButton: {
-    preferredWidth: 36,
-    preferredHeight: 36,
-    alignment: Qt.AlignTop | Qt.AlignHCenter,
-    marginTop: 16,
+    width: 36,
+    height: 36,
+    x: 16,
+    y: 16,
   },
 };
 
@@ -51,6 +59,8 @@ const addTransition = (
     <NumberAnimation property="scale" from={0.8} to={1} duration={100} />
   </Transition>
 );
+
+const fillParent = { fill: 'parent' };
 
 // TODO: fix the ordering
 class TeamList extends React.Component {
@@ -78,27 +88,29 @@ class TeamList extends React.Component {
     const { dragging } = this.state;
     const teamIds = Object.keys(teamInfo);
     return (
-      <ColumnLayout style={styles.container}>
-        <Column add={addTransition} style={styles.teamList}>
-          {teamIds.map((id, index) => (
-            <TeamListItem
-              key={id}
-              index={index}
-              selected={selectedTeamId === id}
-              backgroundIcon={getIcon(teamInfo[id]) || ''}
-              onSelected={() => onTeamSelected(id)}
-              onDragStarted={this.onItemDragStarted}
-              onDragFinished={this.onItemDragFinished}
-            />
-          ))}
+      <ScrollView anchors={fillParent} style={{}}>
+        <Column style={styles.container}>
+          <Column add={addTransition} style={styles.teamList}>
+            {teamIds.map((id, index) => (
+              <TeamListItem
+                key={id}
+                index={index}
+                selected={selectedTeamId === id}
+                backgroundIcon={getIcon(teamInfo[id]) || ''}
+                onSelected={() => onTeamSelected(id)}
+                onDragStarted={this.onItemDragStarted}
+                onDragFinished={this.onItemDragFinished}
+              />
+            ))}
+          </Column>
+          <AddAccountButton
+            key="add-account"
+            style={styles.addButton}
+            onClicked={onAddAccount}
+            visible={!dragging}
+          />
         </Column>
-        <AddAccountButton
-          key="add-account"
-          style={styles.addButton}
-          onClicked={onAddAccount}
-          visible={!dragging}
-        />
-      </ColumnLayout>
+      </ScrollView>
     );
   }
 }
