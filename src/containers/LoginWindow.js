@@ -2,11 +2,12 @@ import { Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { initWorkspace } from '../state/account';
 import {
   hideLoginWindow,
   loginWindowConfigSelector,
 } from '../state/loginWindow';
+import { initWorkspace } from '../state/account';
+import { selectTeam } from '../state/team';
 import { signInWithPassword } from '../lib/slack';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoginForm from '../components/LoginForm';
@@ -18,6 +19,7 @@ const connectToRedux = connect(
   {
     onClosing: hideLoginWindow,
     initWorkspace,
+    selectTeam,
   }
 );
 
@@ -33,6 +35,8 @@ class LoginWindow extends React.Component {
   constructor(props) {
     super(props);
 
+    // TODO: is this a bug
+    // why do we have to manually bind hmmm
     this.handleLogin = this.handleLogin.bind(this);
   }
 
@@ -51,8 +55,11 @@ class LoginWindow extends React.Component {
       this.setState({ signinError: resp.error, isProcessing: false });
     } else {
       // initWorkspace
-      const { team, user, userEmail, token } = resp;
-      this.props.initWorkspace({ team, user, userEmail, token });
+      const { team, token } = resp;
+      this.props.initWorkspace({ team, token });
+
+      // select newly added team
+      this.props.selectTeam(team);
 
       // reset error
       this.setState({ signinError: '', isProcessing: false });
@@ -69,7 +76,7 @@ class LoginWindow extends React.Component {
       <Window
         visible={visible}
         onClosing={this.props.onClosing}
-        title="Login"
+        title={qsTr('Sign In')}
         style={styles.window}
         flags={Qt.Dialog}
       >

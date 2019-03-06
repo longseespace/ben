@@ -6,10 +6,12 @@ const { Button } = QtQuickControls2;
 import TextField from './TextField';
 import lockSvg from '../assets/lock.svg';
 
-const openForgotPasswordPage = () => {
-  Qt.openUrlExternally(
-    'https://get.slack.help/hc/en-us/articles/201909068-Manage-your-password#reset-your-password'
-  );
+const styles = {
+  noPasswordStored: {
+    fontFamily: 'Lato',
+    fontSize: 12,
+    marginBottom: 16,
+  },
 };
 
 class LoginForm extends React.Component {
@@ -135,23 +137,18 @@ class LoginForm extends React.Component {
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
           />
+          <Text
+            text={qsTr('Ben does not store your password')}
+            Layout={{ fillWidth: true, row: 3 }}
+            style={styles.noPasswordStored}
+          />
           <Button
             Layout={{ fillWidth: true, row: 7 }}
             highlighted
             font={{ family: 'Lato' }}
-            text={isProcessing ? qsTr('Logging in...') : qsTr('Login')}
+            text={isProcessing ? qsTr('Signing In...') : qsTr('Sign In')}
             onClicked={this.submit}
             enabled={!isProcessing}
-          />
-          <Button
-            onClicked={openForgotPasswordPage}
-            text={qsTr('Forgot your password?')}
-            font={{ family: 'Lato' }}
-            flat
-            Layout={{
-              alignment: Qt.AlignCenter,
-              row: 8,
-            }}
           />
         </ColumnLayout>
       </ColumnLayout>

@@ -65,13 +65,8 @@ export const initAccount = InitAccountAPI.actionCreator;
 export const initUser = InitUserAPI.actionCreator;
 
 // thunk
-export const initWorkspace = ({
-  team,
-  user,
-  userEmail,
-  token,
-}) => async dispatch => {
-  dispatch(addAccount({ team, user, userEmail, token }));
+export const initWorkspace = ({ team, token }) => async dispatch => {
+  dispatch(addAccount({ team, token }));
   dispatch(initAccount({ token, team }));
   dispatch(initUser({ token, team }));
 };
