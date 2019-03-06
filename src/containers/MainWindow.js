@@ -18,6 +18,7 @@ const connectToRedux = connect(
   }
 );
 
+// use localStorage since its API is sync
 const windowX = localStorage.getItem('windowX') || 100;
 const windowY = localStorage.getItem('windowY') || 100;
 const windowWidth = localStorage.getItem('windowWidth') || 800;
@@ -31,15 +32,6 @@ class MainWindow extends React.Component {
   };
 
   onClosing = ev => {
-    // persist window's geometry
-    const $window = this.windowRef.current;
-    if ($window) {
-      localStorage.setItem('windowX', $window.x);
-      localStorage.setItem('windowY', $window.y);
-      localStorage.setItem('windowWidth', $window.width);
-      localStorage.setItem('windowHeight', $window.height);
-    }
-
     ev.accepted = true;
     this.setState({ visible: false });
   };
@@ -62,6 +54,15 @@ class MainWindow extends React.Component {
 
   componentWillUnmount() {
     Qt.application.stateChanged.disconnect(this.onAppStateChanged);
+
+    // persist window's geometry
+    const $window = this.windowRef.current;
+    if ($window) {
+      localStorage.setItem('windowX', $window.x);
+      localStorage.setItem('windowY', $window.y);
+      localStorage.setItem('windowWidth', $window.width);
+      localStorage.setItem('windowHeight', $window.height);
+    }
   }
 
   render() {
