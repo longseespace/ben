@@ -1,4 +1,5 @@
 import qs from 'qs';
+const Keychain = RQ.keychain();
 
 function apiCall(method, data) {
   const url = `https://slack.com/api/${method}`;
@@ -39,5 +40,20 @@ export async function rtmConnect(token) {
   }
   return false;
 }
+
+export const fetchTokensFromSlack = () =>
+  new Promise((resolve, reject) => {
+    Keychain.readPassword('Slack', 'tokens', (error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      try {
+        const tokens = JSON.parse(result);
+        return resolve(tokens);
+      } catch (e) {
+        return reject('Invalid response');
+      }
+    });
+  });
 
 export default {};

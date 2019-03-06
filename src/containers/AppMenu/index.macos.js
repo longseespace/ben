@@ -1,5 +1,15 @@
-import * as React from 'react';
 import { QtLabsPlatform } from 'react-qml';
+import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { fetchTokensFromSlack } from '../../lib/slack';
+import { initWorkspace } from '../../state/account';
+import {
+  selectTeam,
+  selectedTeamIdSelector,
+  teamInfoSelector,
+} from '../../state/team';
+import { showLoginWindow } from '../../state/loginWindow';
 
 const { MenuBar, Menu, MenuItem, MenuSeparator } = QtLabsPlatform;
 
@@ -7,7 +17,48 @@ const collectGarbage = () => {
   gc();
 };
 
+const connectToRedux = connect(
+  state => ({
+    teamInfo: teamInfoSelector(state),
+    selectedTeamId: selectedTeamIdSelector(state),
+  }),
+  {
+    onAddAccount: showLoginWindow,
+    onTeamSelected: selectTeam,
+    initWorkspace,
+  }
+);
+
 class AppMenu extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.importFromSlack = this.importFromSlack.bind(this);
+  }
+
+  async importFromSlack() {
+    // TODO:
+    // ideally this should be within a dialog / custom view
+    // so we can show progress / error
+    try {
+      const tokens = await fetchTokensFromSlack();
+
+      for (const teamId in tokens) {
+        if (tokens.hasOwnProperty(teamId)) {
+          const item = tokens[teamId];
+          this.props.initWorkspace({
+            team: item.teamId,
+            token: item.token,
+          });
+        }
+      }
+    } catch (er) {
+      // TODO: show error dialog
+      console.log('error fetching token');
+      console.log(require('util').inspect(er, { depth: 1 }));
+    }
+  }
+
   render() {
     return (
       <MenuBar>
@@ -51,6 +102,15 @@ class AppMenu extends React.Component {
           <MenuItem text="Zoom" />
           <MenuSeparator />
           <MenuItem text="Bring All to Front" />
+          <MenuSeparator />
+          <MenuItem
+            text={qsTr('Sign in to Another Workspace...')}
+            onTriggered={this.props.onAddAccount}
+          />
+          <MenuItem
+            text={qsTr('Import from Slack...')}
+            onTriggered={this.importFromSlack}
+          />
         </Menu>
         <Menu title="&Help">
           <MenuItem text="Keyboard Shortcuts" />
@@ -62,4 +122,4 @@ class AppMenu extends React.Component {
   }
 }
 
-export default AppMenu;
+export default connectToRedux(AppMenu);
