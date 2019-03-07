@@ -1,7 +1,10 @@
 import qs from 'qs';
+
+declare const RQ: ReactQML.RQ;
+
 const Keychain = RQ.keychain();
 
-function apiCall(method, data) {
+function apiCall(method: string, data: object) {
   const url = `https://slack.com/api/${method}`;
   return fetch(url, {
     method: 'post',
@@ -12,7 +15,11 @@ function apiCall(method, data) {
   });
 }
 
-export async function signInWithPassword(domain, email, password) {
+export async function signInWithPassword(
+  domain: string,
+  email: string,
+  password: string
+) {
   const findTeamResp = await apiCall('auth.findTeam', { domain });
   const teamJson = await findTeamResp.json();
   if (!teamJson.ok) {
@@ -27,7 +34,7 @@ export async function signInWithPassword(domain, email, password) {
   return json;
 }
 
-export async function rtmConnect(token) {
+export async function rtmConnect(token: string) {
   const connectResp = await apiCall('rtm.connect', {
     token,
     batch_presence_aware: 1,
@@ -55,5 +62,3 @@ export const fetchTokensFromSlack = () =>
       }
     });
   });
-
-export default {};

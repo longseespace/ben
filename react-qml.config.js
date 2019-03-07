@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = ({ root, platform }) => ({
   context: path.resolve(root, 'src'),
-  entry: [`./index.qml`, `./index.js`],
+  entry: [`./index.qml`, `./index.tsx`],
   output: {
     path: path.join(root, 'native/dist'),
     filename: `${platform}.bundle.js`,
