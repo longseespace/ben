@@ -14,7 +14,7 @@ import configureStore from './store/configureStore';
 
 const { store, persistor } = configureStore();
 
-export default root => {
+export default (root: any) => {
   render(<App store={store} persistor={persistor} />, root);
 
   if (module.hot) {

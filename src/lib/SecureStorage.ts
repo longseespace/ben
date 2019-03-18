@@ -1,7 +1,4 @@
 // TODO: move this to `react-qml`
-
-declare const RQ: ReactQML.RQ;
-
 const Keychain = RQ.keychain();
 
 class SecureStorage {

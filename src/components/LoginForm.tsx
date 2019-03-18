@@ -14,14 +14,30 @@ const styles = {
   },
 };
 
-class LoginForm extends React.Component {
-  state = {
+export type SigninFormData = {
+  domain: string;
+  email: string;
+  password: string;
+};
+
+type Props = {
+  submissionError?: string;
+  isProcessing?: boolean;
+  onSubmit?: (formData: SigninFormData) => void;
+};
+
+type State = {
+  validationErrorMessage: string;
+};
+
+class LoginForm extends React.Component<Props, State> {
+  state: State = {
     validationErrorMessage: '',
   };
 
-  domainRef = React.createRef();
-  emailRef = React.createRef();
-  passwordRef = React.createRef();
+  private domainRef = React.createRef<TextField>();
+  private emailRef = React.createRef<TextField>();
+  private passwordRef = React.createRef<TextField>();
 
   submit = () => {
     const $domainInput = this.domainRef.current;

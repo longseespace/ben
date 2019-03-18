@@ -1,17 +1,44 @@
-import { ListView, ListModel, QtQuickControls2 } from 'react-qml';
+import {
+  ListView as NativeListView,
+  ListModel,
+  QtQuickControls2,
+} from 'react-qml';
 const { ScrollBar } = QtQuickControls2;
-import { isObject } from 'lodash/fp';
 import React from 'react';
+import {
+  QQuickListView,
+  QQmlListModel,
+} from 'react-qml/dist/components/QtQuick';
+import { QQmlComponent } from 'react-qml/dist/components/QtQml';
+import {
+  QQuickScrollBar,
+  QQuickScrollBarAttached,
+} from 'react-qml/dist/components/QtQuickControls2';
 
-class RQListView extends React.PureComponent {
-  listViewRef = React.createRef();
-  modelRef = React.createRef();
-  delegateRef = React.createRef();
-  headerRef = React.createRef();
-  highlightRef = React.createRef();
-  sectionDelegateRef = React.createRef();
-  vScrollBarRef = React.createRef();
-  hScrollBarRef = React.createRef();
+type Props = {
+  data: Array<any>;
+  keyExtractor?: (value: any, index?: number) => any;
+  selectedItem?: string;
+  sectionProperty?: string;
+  HeaderComponent?: any;
+  DelegateComponent?: any;
+  HighlightComponent?: any;
+  SectionDelegateComponent?: any;
+} & { [key: string]: any };
+
+type WithScrollBar = {
+  ScrollBar: QQuickScrollBarAttached;
+};
+
+class ListView extends React.PureComponent<Props> {
+  private listViewRef = React.createRef<QQuickListView & WithScrollBar>();
+  private modelRef = React.createRef<QQmlListModel>();
+  private delegateRef = React.createRef<QQmlComponent>();
+  private headerRef = React.createRef<QQmlComponent>();
+  private highlightRef = React.createRef<QQmlComponent>();
+  private sectionDelegateRef = React.createRef<QQmlComponent>();
+  private vScrollBarRef = React.createRef<QQuickScrollBar>();
+  private hScrollBarRef = React.createRef<QQuickScrollBar>();
 
   doNotNotifyIndexChange = false;
 
@@ -62,6 +89,7 @@ class RQListView extends React.PureComponent {
 
     if ($listView) {
       $listView.model = $model;
+
       $listView.delegate = $delegate;
       $listView.header = $header;
       $listView.highlight = $highlight;
@@ -77,7 +105,7 @@ class RQListView extends React.PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     const $listView = this.listViewRef.current;
     const $delegate = this.delegateRef.current;
     const $header = this.headerRef.current;
@@ -114,28 +142,28 @@ class RQListView extends React.PureComponent {
     }
 
     const $listView = this.listViewRef.current;
-    const index = $listView.currentIndex;
-    if (index === -1) {
-      return;
+
+    if ($listView) {
+      const index = $listView.currentIndex;
+      if (index === undefined || index === -1) {
+        return;
+      }
+
+      const item = this.props.data[index];
+
+      // TODO: more thought on this, do we really need to make this controlled
+      // reset currentIndex back to -1
+      // to make this component controlled
+      // this.doNotNotifyIndexChange = true;
+      // $listView.currentIndex = -1;
+      // this.doNotNotifyIndexChange = false;
+
+      this.props.onItemClicked(item);
     }
-
-    const item = this.props.data[index];
-
-    // TODO: more thought on this, do we really need to make this controlled
-    // reset currentIndex back to -1
-    // to make this component controlled
-    // this.doNotNotifyIndexChange = true;
-    // $listView.currentIndex = -1;
-    // this.doNotNotifyIndexChange = false;
-
-    this.props.onItemClicked(item);
   };
 
-  defaultKeyExtractor = (item, index) => {
-    if (isObject(item)) {
-      return item.hasOwnProperty('key') ? item.key : index;
-    }
-    return index;
+  defaultKeyExtractor = (item: any, index: number) => {
+    return item.hasOwnProperty('key') ? item.key : index;
   };
 
   render() {
@@ -157,7 +185,7 @@ class RQListView extends React.PureComponent {
     const currentIndex = this.calculateCurrentIndex();
 
     return (
-      <ListView
+      <NativeListView
         ref={this.listViewRef}
         onCurrentIndexChanged={this.onCurrentIndexChanged}
         currentIndex={currentIndex}
@@ -173,9 +201,9 @@ class RQListView extends React.PureComponent {
         <DelegateComponent ref={this.delegateRef} />
         <ScrollBar ref={this.vScrollBarRef} />
         <ScrollBar ref={this.hScrollBarRef} />
-      </ListView>
+      </NativeListView>
     );
   }
 }
 
-export default RQListView;
+export default ListView;

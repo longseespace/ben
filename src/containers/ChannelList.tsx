@@ -2,21 +2,23 @@ import { ColumnLayout } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import {
-  conversationListSelector,
-  selectConversation,
-  selectedConversationIdSelector,
-} from '../state/conversation';
 import ChannelDelegate from '../components/ChannelDelegate.qml';
 import ChannelHighlight from '../components/ChannelHighlight.qml';
 import ChannelListHeader from './ChannelListHeader';
 import ListView from '../components/ListView';
 import SectionDelegate from '../components/SectionDelegate.qml';
+import {
+  getConverstionList,
+  getSelectedConversationId,
+} from '../reducers/selectors';
+import { selectConversation } from '../actions/app-teams-actions';
+import { RootState } from '../reducers';
+import { Conversation } from '../actions/conversations-actions';
 
 const connectToRedux = connect(
-  state => ({
-    conversationList: conversationListSelector(state),
-    selectedConversationId: selectedConversationIdSelector(state),
+  (state: RootState) => ({
+    conversationList: getConverstionList(state),
+    selectedConversationId: getSelectedConversationId(state) || '',
   }),
   {
     selectConversation,
@@ -34,16 +36,22 @@ const styles = {
   },
 };
 
-class ChannelList extends React.PureComponent {
-  onItemClicked = item => {
+type Props = {
+  conversationList: Array<Conversation>;
+  selectedConversationId: string;
+  selectConversation: Function;
+};
+
+class ChannelList extends React.PureComponent<Props> {
+  onItemClicked = (item: Conversation) => {
     console.log('onItemClicked', item.name);
     this.props.selectConversation(item.id);
   };
 
-  keyExtractor = item => item.id;
+  keyExtractor = (item: Conversation) => item.id;
 
   render() {
-    const { conversationList = [], selectedConversationId } = this.props;
+    const { conversationList = [], selectedConversationId = '' } = this.props;
 
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>

@@ -4,14 +4,20 @@ import { RedBox } from 'react-qml';
 
 // const PRODUCTION_MODE = process.env.NODE_ENV === 'production';
 
-class ErrorBoundary extends React.Component {
-  state = {
+type State = {
+  hasError: boolean;
+  error: Error | null;
+  errorInfo: React.ErrorInfo | null;
+};
+
+class ErrorBoundary extends React.Component<{}, State> {
+  readonly state: State = {
     hasError: false,
-    error: {},
-    errorInfo: {},
+    error: null,
+    errorInfo: null,
   };
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.log('componentDidCatch');
     console.log(error);
     this.setState({
@@ -24,7 +30,7 @@ class ErrorBoundary extends React.Component {
   render() {
     const { children } = this.props;
     const { hasError, error, errorInfo } = this.state;
-    if (hasError) {
+    if (hasError && error && errorInfo) {
       // if (PRODUCTION_MODE) {
       //   return (
       //     <Rectangle {...fillWindow}>

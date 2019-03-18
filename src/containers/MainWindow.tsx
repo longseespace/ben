@@ -2,21 +2,22 @@ import { Rectangle, RowLayout, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { accountListSelector, initWorkspace } from '../state/account';
 import AppMenu from './AppMenu';
-import ChannelList from './ChannelList';
 import ErrorBoundary from '../components/ErrorBoundary';
-import LoginWindow from './LoginWindow';
-import MessageList from './MessageList';
+import SigninWindow from './SigninWindow';
+import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
+import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
+import { getAccounts } from '../reducers/selectors';
+import { AccountsState } from '../reducers/accounts-reducer';
+import { RootState } from '../reducers';
 import TeamList from './TeamList';
+import ChannelList from './ChannelList';
 
 const connectToRedux = connect(
-  state => ({
-    accountList: accountListSelector(state),
+  (state: RootState) => ({
+    accounts: getAccounts(state),
   }),
-  {
-    initWorkspace,
-  }
+  {}
 );
 
 // use localStorage since its API is sync
@@ -25,40 +26,48 @@ const windowY = localStorage.getItem('windowY') || 100;
 const windowWidth = localStorage.getItem('windowWidth') || 800;
 const windowHeight = localStorage.getItem('windowHeight') || 600;
 
-class MainWindow extends React.Component {
-  windowRef = React.createRef();
+type Props = {
+  accounts: AccountsState;
+};
 
-  state = {
+type State = {
+  visible: boolean;
+};
+
+class MainWindow extends React.Component<Props, State> {
+  windowRef = React.createRef<QQuickWindow>();
+
+  state: State = {
     visible: true,
   };
 
-  onClosing = ev => {
+  onClosing = (ev: QQuickCloseEvent) => {
     // persist window's geometry
     const $window = this.windowRef.current;
     if ($window) {
-      localStorage.setItem('windowX', $window.x);
-      localStorage.setItem('windowY', $window.y);
-      localStorage.setItem('windowWidth', $window.width);
-      localStorage.setItem('windowHeight', $window.height);
+      localStorage.setItem('windowX', String($window.x));
+      localStorage.setItem('windowY', String($window.y));
+      localStorage.setItem('windowWidth', String($window.width));
+      localStorage.setItem('windowHeight', String($window.height));
     }
 
     ev.accepted = true;
     this.setState({ visible: false });
   };
 
-  onAppStateChanged = state => {
+  onAppStateChanged = (state: any) => {
     // on app activate, show the window (if already closed)
     const $window = this.windowRef.current;
-    if (!$window.visible && state === Qt.ApplicationActive) {
+    if ($window && !$window.visible && state === Qt.ApplicationActive) {
       this.setState({ visible: true });
     }
   };
 
   componentDidMount() {
-    Object.keys(this.props.accountList).forEach(id => {
-      const account = this.props.accountList[id];
-      this.props.initWorkspace(account);
-    });
+    // Object.keys(this.props.accounts).forEach(id => {
+    //   const account = this.props.accounts[id];
+    //   this.props.initWorkspace(account);
+    // });
     Qt.application.stateChanged.connect(this.onAppStateChanged);
   }
 
@@ -84,7 +93,7 @@ class MainWindow extends React.Component {
       >
         <ErrorBoundary>
           <AppMenu />
-          <LoginWindow />
+          <SigninWindow />
           <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
             <Rectangle
               Layout={{
@@ -111,7 +120,7 @@ class MainWindow extends React.Component {
               }}
               color="#FFFFFF"
             >
-              <MessageList />
+              {/* <MessageList /> */}
             </Rectangle>
           </RowLayout>
         </ErrorBoundary>

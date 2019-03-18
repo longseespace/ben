@@ -1,15 +1,10 @@
-import { QtLabsPlatform } from 'react-qml';
+import { QtLabsPlatform, StandardKey } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { fetchTokensFromSlack } from '../../lib/slack';
-import { initWorkspace } from '../../state/account';
-import {
-  selectTeam,
-  selectedTeamIdSelector,
-  teamInfoSelector,
-} from '../../state/team';
-import { showLoginWindow } from '../../state/loginWindow';
+import { openSigninWindow } from '../../actions/window-actions';
+import { initWorkspace } from '../../actions/workspace-actions';
 
 const { MenuBar, Menu, MenuItem, MenuSeparator } = QtLabsPlatform;
 
@@ -18,38 +13,32 @@ const collectGarbage = () => {
 };
 
 const connectToRedux = connect(
-  state => ({
-    teamInfo: teamInfoSelector(state),
-    selectedTeamId: selectedTeamIdSelector(state),
-  }),
+  state => ({}),
   {
-    onAddAccount: showLoginWindow,
-    onTeamSelected: selectTeam,
+    onSigninClicked: openSigninWindow,
     initWorkspace,
   }
 );
 
-class AppMenu extends React.Component {
-  constructor(props) {
-    super(props);
+type Props = {
+  onSigninClicked: Function;
+  initWorkspace: Function;
+};
 
-    this.importFromSlack = this.importFromSlack.bind(this);
-  }
-
-  async importFromSlack() {
+class AppMenu extends React.Component<Props> {
+  importFromSlack = async () => {
     // TODO:
     // ideally this should be within a dialog / custom view
     // so we can show progress / error
     try {
       const tokens = await fetchTokensFromSlack();
+      console.log('tokens');
+      console.log(require('util').inspect(tokens, { depth: 1 }));
 
       for (const teamId in tokens) {
         if (tokens.hasOwnProperty(teamId)) {
           const item = tokens[teamId];
-          this.props.initWorkspace({
-            team: item.teamId,
-            token: item.token,
-          });
+          this.props.initWorkspace(item.teamId, item.token, false);
         }
       }
     } catch (er) {
@@ -57,7 +46,7 @@ class AppMenu extends React.Component {
       console.log('error fetching token');
       console.log(require('util').inspect(er, { depth: 1 }));
     }
-  }
+  };
 
   render() {
     return (
@@ -105,7 +94,7 @@ class AppMenu extends React.Component {
           <MenuSeparator />
           <MenuItem
             text={qsTr('Sign in to Another Workspace...')}
-            onTriggered={this.props.onAddAccount}
+            onTriggered={this.props.onSigninClicked}
           />
           <MenuItem
             text={qsTr('Import from Slack...')}

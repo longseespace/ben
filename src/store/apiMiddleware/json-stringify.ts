@@ -1,17 +1,15 @@
 // stringify a body object and add request headers
-import qs from 'qs';
-
-const formStringify = next => req => {
+const stringify = (next: any) => async (req: any) => {
   // only stringify POST, PUT, PATCH requests with body is an object
   if (
     req.method &&
     req.method.match(/POST|PUT|PATCH/) &&
-    typeof req.form === 'object'
+    typeof req.json === 'object'
   ) {
-    const body = qs.stringify(req.form);
+    const body = JSON.stringify(req.json);
     const headers = {
       ...req.headers,
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'content-type': 'application/json',
     };
     return next({ ...req, body, headers });
   }
@@ -19,4 +17,4 @@ const formStringify = next => req => {
   return next(req);
 };
 
-export default formStringify;
+export default stringify;

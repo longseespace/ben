@@ -1,10 +1,9 @@
 import qs from 'qs';
-
-declare const RQ: ReactQML.RQ;
+import { StringMap } from '../constants';
 
 const Keychain = RQ.keychain();
 
-function apiCall(method: string, data: object) {
+export function apiCall(method: string, data: object) {
   const url = `https://slack.com/api/${method}`;
   return fetch(url, {
     method: 'post',
@@ -12,7 +11,15 @@ function apiCall(method: string, data: object) {
       'Content-Type': 'application/x-www-form-urlencoded',
     }),
     body: qs.stringify(data),
-  });
+  })
+    .then(resp => resp.json())
+    .then(json => {
+      if (json.ok) {
+        return json;
+      }
+
+      throw json;
+    });
 }
 
 export async function signInWithPassword(
@@ -20,26 +27,24 @@ export async function signInWithPassword(
   email: string,
   password: string
 ) {
-  const findTeamResp = await apiCall('auth.findTeam', { domain });
-  const teamJson = await findTeamResp.json();
-  if (!teamJson.ok) {
-    return teamJson;
+  try {
+    const teamJson = await apiCall('auth.findTeam', { domain });
+    const json = await apiCall('auth.signin', {
+      team: teamJson.team_id,
+      email,
+      password,
+    });
+    return json;
+  } catch (error) {
+    return error;
   }
-  const signinResp = await apiCall('auth.signin', {
-    team: teamJson.team_id,
-    email,
-    password,
-  });
-  const json = await signinResp.json();
-  return json;
 }
 
 export async function rtmConnect(token: string) {
-  const connectResp = await apiCall('rtm.connect', {
+  const connectJson = await apiCall('rtm.connect', {
     token,
     batch_presence_aware: 1,
   });
-  const connectJson = await connectResp.json();
 
   if (connectJson.ok) {
     const ws = new WebSocket(connectJson.url);
@@ -48,8 +53,15 @@ export async function rtmConnect(token: string) {
   return false;
 }
 
+type TokenEntry = {
+  teamId: string;
+  token: string;
+};
+
+export type TokenPairs = StringMap<TokenEntry>;
+
 export const fetchTokensFromSlack = () =>
-  new Promise((resolve, reject) => {
+  new Promise<TokenPairs>((resolve, reject) => {
     Keychain.readPassword('Slack', 'tokens', (error, result) => {
       if (error) {
         return reject(error);
@@ -62,3 +74,7 @@ export const fetchTokensFromSlack = () =>
       }
     });
   });
+
+export default {
+  apiCall,
+};

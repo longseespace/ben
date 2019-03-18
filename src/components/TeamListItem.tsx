@@ -1,7 +1,7 @@
 import { Item, MouseArea, Rectangle, Shortcut, Text } from 'react-qml';
 import React from 'react';
-
-import TeamButton from '../components/TeamButton.qml';
+import TeamButton from './TeamButton.qml';
+import { QQuickItem, QQuickMouseArea } from 'react-qml/dist/components/QtQuick';
 
 const styles = {
   container: {
@@ -29,12 +29,22 @@ const styles = {
   },
 };
 
-class TeamListItem extends React.Component {
-  controlRef = React.createRef();
-  mouseAreaRef = React.createRef();
+type Props = {
+  index: number;
+  onSelected?: Function;
+  selected?: boolean;
+  backgroundIcon?: string;
+  style?: any;
+  onDragStarted?: Function;
+  onDragFinished?: Function;
+};
 
-  startX: 0;
-  startY: 0;
+class TeamListItem extends React.Component<Props> {
+  controlRef = React.createRef<QQuickItem>();
+  mouseAreaRef = React.createRef<QQuickMouseArea>();
+
+  startX = 0;
+  startY = 0;
 
   // componentDidMount() {
   //   const $control = this.controlRef.current;
@@ -47,22 +57,26 @@ class TeamListItem extends React.Component {
   onPressedChanged = () => {
     const $control = this.controlRef.current;
 
-    this.startX = $control.x;
-    this.startY = $control.y;
+    if ($control) {
+      this.startX = Number($control.x);
+      this.startY = Number($control.y);
+    }
   };
 
   onPressAndHold = () => {
     const $control = this.controlRef.current;
     const $mouseArea = this.mouseAreaRef.current;
 
-    $mouseArea.drag.target = $control;
+    if ($mouseArea && $control) {
+      $control.scale = 1.2;
+      $control.z = 2;
 
-    $control.scale = 1.2;
-    $control.z = 2;
+      $mouseArea.drag.target = $control;
 
-    const { index, onDragStarted } = this.props;
-    if (onDragStarted) {
-      onDragStarted(index);
+      const { index, onDragStarted } = this.props;
+      if (onDragStarted) {
+        onDragStarted(index);
+      }
     }
   };
 
@@ -70,9 +84,10 @@ class TeamListItem extends React.Component {
     const $control = this.controlRef.current;
     const $mouseArea = this.mouseAreaRef.current;
 
-    if ($mouseArea.drag.target) {
+    if ($control && $mouseArea && $mouseArea.drag.target) {
       const { index, onDragFinished } = this.props;
 
+      // @ts-ignore
       $mouseArea.drag.target = undefined;
 
       $control.scale = 1;
@@ -88,7 +103,7 @@ class TeamListItem extends React.Component {
     }
   };
 
-  onPositionChanged = ev => {
+  onPositionChanged = (ev: any) => {
     // console.log('onPositionChanged', ev.x, ev.y);
   };
 

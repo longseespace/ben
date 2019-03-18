@@ -12,7 +12,7 @@ import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
 
 import apiMiddleware from './apiMiddleware';
-import rootReducer from './rootReducer';
+import rootReducer, { RootState } from '../reducers';
 
 const history = createHistory();
 // const epicMiddleware = createEpicMiddleware(rootEpic);
@@ -28,12 +28,12 @@ const routerMiddleware = createRouterMiddleware(history);
 const composeEnhancers = composeWithDevTools({
   hostname: process.env.DEV_SERVER_HOST || 'localhost',
   port: 8000,
-  suppressConnectErrors: false,
   realtime: process.env.NODE_ENV !== 'production',
 });
 
 // then router
-const rootReducerWithRouter = connectRouter(history)(rootReducer);
+const connectRouterHistory = connectRouter(history);
+const rootReducerWithRouter = connectRouterHistory<RootState>(rootReducer);
 
 // finally composeEnhancers
 const enhancers = composeEnhancers(
@@ -46,14 +46,17 @@ const enhancers = composeEnhancers(
 );
 
 export { history };
-export default initialState => {
-  const store = createStore(rootReducerWithRouter, initialState, enhancers);
+
+function configureStore() {
+  const store = createStore(rootReducerWithRouter, {}, enhancers);
   const persistor = persistStore(store);
 
   if (module.hot) {
-    module.hot.accept('./rootReducer', () => {
-      const nextReducer = require('./rootReducer').default;
-      const rootReducerWithRouter = connectRouter(history)(nextReducer);
+    module.hot.accept('../reducers', () => {
+      const nextReducer = require('../reducers').default;
+      const rootReducerWithRouter = connectRouterHistory<RootState>(
+        nextReducer
+      );
       store.replaceReducer(rootReducerWithRouter);
     });
     // module.hot.accept('./rootEpic', () => {
@@ -63,4 +66,6 @@ export default initialState => {
   }
 
   return { store, persistor };
-};
+}
+
+export default configureStore;

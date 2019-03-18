@@ -1,9 +1,18 @@
 import React from 'react';
 
 import TextField from './TextField.qml';
+import { QQuickKeyEvent } from 'react-qml/dist/components/QtQuick';
+import { QQuickTextField } from 'react-qml/dist/components/QtQuickControls2';
 
-class TextFieldWrapper extends React.Component {
-  inputRef = React.createRef();
+type Props = {
+  onTextEdited?: Function;
+  onPressed?: Function;
+  onReleased?: Function;
+  onSubmitEditing?: Function;
+} & { [key: string]: any };
+
+class TextFieldWrapper extends React.Component<Props> {
+  private inputRef = React.createRef<QQuickTextField>();
 
   get value() {
     const $textfield = this.inputRef.current;
@@ -21,13 +30,13 @@ class TextFieldWrapper extends React.Component {
     }
   };
 
-  onPressed = ev => {
+  onPressed = (ev: QQuickKeyEvent) => {
     if (this.props.onPressed) {
       this.props.onPressed(ev);
     }
   };
 
-  onReleased = ev => {
+  onReleased = (ev: QQuickKeyEvent) => {
     if (this.props.onReleased) {
       this.props.onReleased(ev);
     }

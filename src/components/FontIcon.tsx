@@ -1,15 +1,27 @@
 import { Text } from 'react-qml';
-import { find } from 'lodash/fp';
 import React from 'react';
 import iconChars from './fa.json';
 
-function iconNameToUnicode(name, solid = false) {
+function iconNameToUnicode(name: string, solid = false) {
   const iconSet = solid ? iconChars.solid : iconChars.regular;
-  const icon = find({ name }, iconSet);
+  const icon = iconSet.find(icon => icon.name === name);
   return icon ? icon.unicode : '';
 }
 
-const FontIcon = ({ name, solid = false, size = 9, ...otherProps }) => (
+type Props = {
+  name: string;
+  solid?: boolean;
+  size?: number;
+  color?: string | number;
+  style?: any;
+};
+
+const FontIcon: React.FC<Props> = ({
+  name,
+  solid = false,
+  size = 9,
+  ...otherProps
+}) => (
   <Text
     text={iconNameToUnicode(name, solid)}
     width={size}

@@ -1,6 +1,6 @@
 const SLACK_API_ROOT = 'https://slack.com/api/';
 
-const slackOK = next => async req => {
+const slackOK = (next: any) => async (req: any) => {
   // check if response is from slack api
   if (req.endpoint && req.endpoint.indexOf(SLACK_API_ROOT) === 0) {
     try {

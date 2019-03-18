@@ -1,11 +1,17 @@
 import { Provider } from 'react-redux';
 import * as React from 'react';
 import { PersistGate } from 'redux-persist/integration/react';
-import { ThemeProvider } from './theming';
 
 import MainWindow from './containers/MainWindow';
+import { Persistor } from 'redux-persist';
+import { Store } from 'redux';
 
-class App extends React.Component {
+type AppProps = {
+  store: Store;
+  persistor: Persistor;
+};
+
+class App extends React.Component<AppProps> {
   componentDidMount() {
     console.log('App', 'componentDidMount');
   }
@@ -19,9 +25,7 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ThemeProvider>
-            <MainWindow />
-          </ThemeProvider>
+          <MainWindow />
         </PersistGate>
       </Provider>
     );

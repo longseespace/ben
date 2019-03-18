@@ -7,25 +7,23 @@ import {
 
 const { ScrollView } = QtQuickControls2;
 import { connect } from 'react-redux';
-import { path } from 'lodash/fp';
 import * as React from 'react';
 
-import {
-  selectTeam,
-  selectedTeamIdSelector,
-  teamInfoSelector,
-} from '../state/team';
-import { showLoginWindow } from '../state/loginWindow';
 import AddAccountButton from '../components/AddAccountButton.qml';
 import TeamListItem from '../components/TeamListItem';
+import { openSigninWindow } from '../actions/window-actions';
+import { selectTeam } from '../actions/app-teams-actions';
+import { getSelectedTeamId, getSortedTeams } from '../reducers/selectors';
+import { RootState } from '../reducers';
+import { Team } from '../actions/team-actions';
 
 const connectToRedux = connect(
-  state => ({
-    teamInfo: teamInfoSelector(state),
-    selectedTeamId: selectedTeamIdSelector(state),
+  (state: RootState) => ({
+    teamList: getSortedTeams(state),
+    selectedTeamId: getSelectedTeamId(state),
   }),
   {
-    onAddAccount: showLoginWindow,
+    onAddAccount: openSigninWindow,
     onTeamSelected: selectTeam,
   }
 );
@@ -52,8 +50,6 @@ const styles = {
   },
 };
 
-const getIcon = path('icon.image_88');
-
 const addTransition = (
   <Transition>
     <NumberAnimation property="scale" from={0.8} to={1} duration={100} />
@@ -62,18 +58,29 @@ const addTransition = (
 
 const fillParent = { fill: 'parent' };
 
+type Props = {
+  onAddAccount: Function;
+  onTeamSelected: Function;
+  selectedTeamId: string | null;
+  teamList: Array<Team>;
+};
+
+type State = {
+  dragging: boolean;
+};
+
 // TODO: fix the ordering
-class TeamList extends React.Component {
-  state = {
+class TeamList extends React.Component<Props, State> {
+  state: State = {
     dragging: false,
   };
 
-  onItemDragStarted = key => {
+  onItemDragStarted = (key: string) => {
     console.log('onItemDragStarted', key);
     this.setState({ dragging: true });
   };
 
-  onItemDragFinished = key => {
+  onItemDragFinished = (key: string) => {
     console.log('onItemDragFinished', key);
     this.setState({ dragging: false });
   };
@@ -83,21 +90,20 @@ class TeamList extends React.Component {
       onAddAccount,
       onTeamSelected,
       selectedTeamId,
-      teamInfo = {},
+      teamList = [],
     } = this.props;
     const { dragging } = this.state;
-    const teamIds = Object.keys(teamInfo);
     return (
-      <ScrollView anchors={fillParent} style={{}}>
+      <ScrollView anchors={fillParent}>
         <Column style={styles.container}>
           <Column add={addTransition} style={styles.teamList}>
-            {teamIds.map((id, index) => (
+            {teamList.map((team, index) => (
               <TeamListItem
-                key={id}
+                key={team.id}
                 index={index}
-                selected={selectedTeamId === id}
-                backgroundIcon={getIcon(teamInfo[id]) || ''}
-                onSelected={() => onTeamSelected(id)}
+                selected={selectedTeamId === team.id}
+                backgroundIcon={team.icon.image_88 || ''}
+                onSelected={() => onTeamSelected(team.id)}
                 onDragStarted={this.onItemDragStarted}
                 onDragFinished={this.onItemDragFinished}
               />

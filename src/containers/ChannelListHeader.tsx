@@ -1,16 +1,18 @@
 import { Column, Rectangle, RowLayout, Text } from 'react-qml';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash/fp';
 import React from 'react';
 
-import { selectedTeamSelector } from '../state/team';
-import { selfSelector } from '../state/self';
 import FontIcon from '../components/FontIcon';
+import {
+  getSelectedTeamName,
+  getCurrentTeamUserName,
+} from '../reducers/selectors';
+import { RootState } from '../reducers';
 
 const connectToRedux = connect(
-  state => ({
-    selectedTeam: selectedTeamSelector(state),
-    me: selfSelector(state),
+  (state: RootState) => ({
+    teamName: getSelectedTeamName(state),
+    userName: getCurrentTeamUserName(state),
   }),
   {}
 );
@@ -49,18 +51,21 @@ const styles = {
   },
 };
 
-class ChannelListHeader extends React.Component {
-  render() {
-    const { selectedTeam = {}, me = { name: '' } } = this.props;
+type Props = {
+  teamName: string;
+  userName: string;
+};
 
-    const user_active = me.manual_presence === 'active';
-    const user_available = !isEmpty(me);
+class ChannelListHeader extends React.Component<Props> {
+  render() {
+    const { teamName, userName } = this.props;
+    const user_active = false;
 
     return (
-      <Rectangle style={styles.header} visible={user_available}>
+      <Rectangle style={styles.header}>
         <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
           <Column Layout={{ leftMargin: 16, fillWidth: true }} spacing={0}>
-            <Text text={selectedTeam.name} style={styles.headerText} />
+            <Text text={teamName} style={styles.headerText} />
             <RowLayout style={styles.userPresenceContainer}>
               <FontIcon
                 name="circle"
@@ -69,7 +74,7 @@ class ChannelListHeader extends React.Component {
                 solid={user_active}
                 style={styles.userPresenceIndicator}
               />
-              <Text text={me.name} style={styles.userPresenceText} />
+              <Text text={userName} style={styles.userPresenceText} />
             </RowLayout>
           </Column>
           <FontIcon
