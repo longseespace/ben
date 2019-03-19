@@ -110,6 +110,22 @@ class TeamList extends React.Component<Props, State> {
     }
   };
 
+  componentDidUpdate() {
+    // this is bad, i know
+    // but until we can have redux-observable working property
+    // this is the best way
+    const { teamsBadgeCounts } = this.props;
+    const totalCount = Object.keys(teamsBadgeCounts).reduce(
+      (total, teamId) => total + teamsBadgeCounts[teamId],
+      0
+    );
+    if (totalCount > 0) {
+      RQ.setBadgeLabelText(String(totalCount));
+    } else {
+      RQ.setBadgeLabelText('');
+    }
+  }
+
   render() {
     const {
       onAddAccount,

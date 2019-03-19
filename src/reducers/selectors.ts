@@ -80,6 +80,11 @@ export const getCurrentTeamUserName = createSelector(
   selectedTeam => (selectedTeam ? selectedTeam.user.name : '')
 );
 
+export const getCurrentUser = createSelector(
+  getSelectedTeam,
+  selectedTeam => (selectedTeam ? selectedTeam.user : {})
+);
+
 // Conversations
 export const getAllConversations = (state: RootState) => state.conversations;
 export const getConverstionList = createSelector(

@@ -2,6 +2,7 @@ declare namespace ReactQML {
   // global RQ object
   export interface RQ {
     keychain(): RQKeychain;
+    setBadgeLabelText(text: string): void;
   }
 
   // RQKeychain

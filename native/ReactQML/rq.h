@@ -21,6 +21,7 @@ public:
   Q_INVOKABLE QObject *createTimer();
   Q_INVOKABLE QObject *createWebSocket();
   Q_INVOKABLE RQKeychain *keychain();
+  Q_INVOKABLE void setBadgeLabelText(const QString &text);
 
 private slots:
   void onQmlWarnings(const QList<QQmlError> &warnings);

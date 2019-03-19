@@ -2,6 +2,7 @@
 
 #include <QtCore>
 #include <QtDebug>
+#include <QtMac>
 
 QObject *RQ::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine) {
   Q_UNUSED(scriptEngine)
@@ -55,6 +56,12 @@ QObject *RQ::createWebSocket() {
 }
 
 RQKeychain *RQ::keychain() { return m_keychain; }
+
+void RQ::setBadgeLabelText(const QString &text) {
+#ifdef Q_OS_MACX
+  QtMac::setBadgeLabelText(text);
+#endif
+}
 
 void RQ::onQmlWarnings(const QList<QQmlError> &warnings) {
   QVariantList list;

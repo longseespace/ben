@@ -3,16 +3,14 @@ import { connect } from 'react-redux';
 import React from 'react';
 
 import FontIcon from '../components/FontIcon';
-import {
-  getSelectedTeamName,
-  getCurrentTeamUserName,
-} from '../reducers/selectors';
+import { getSelectedTeamName, getCurrentUser } from '../reducers/selectors';
 import { RootState } from '../reducers';
+import { User } from '../actions/team-actions';
 
 const connectToRedux = connect(
   (state: RootState) => ({
     teamName: getSelectedTeamName(state),
-    userName: getCurrentTeamUserName(state),
+    user: getCurrentUser(state),
   }),
   {}
 );
@@ -53,13 +51,14 @@ const styles = {
 
 type Props = {
   teamName: string;
-  userName: string;
+  user: User;
 };
 
 class ChannelListHeader extends React.Component<Props> {
   render() {
-    const { teamName, userName } = this.props;
-    const user_active = false;
+    const { teamName, user } = this.props;
+    const userName = user.name || '';
+    const userActive = user.manual_presence === 'active';
 
     return (
       <Rectangle style={styles.header}>
@@ -70,8 +69,8 @@ class ChannelListHeader extends React.Component<Props> {
               <FontIcon
                 name="circle"
                 size={9}
-                color={user_active ? '#a6e576' : '#ccc'}
-                solid={user_active}
+                color={userActive ? '#a6e576' : '#ccc'}
+                solid={userActive}
                 style={styles.userPresenceIndicator}
               />
               <Text text={userName} style={styles.userPresenceText} />
