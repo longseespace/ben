@@ -8,7 +8,7 @@ export enum InitStatus {
   Failure = 'failure',
 }
 
-type SingleWorkspaceState = {
+export type SingleWorkspaceState = {
   initStatus?: InitStatus;
   errorMessage?: string;
 };
