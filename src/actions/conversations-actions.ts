@@ -11,6 +11,9 @@ export interface ConversationBase {
   is_active: boolean;
   is_open: boolean;
   is_member: boolean;
+  has_unreads: boolean;
+  dm_count?: number;
+  mention_count?: number;
 }
 
 export type Conversation = Readonly<ConversationBase>;

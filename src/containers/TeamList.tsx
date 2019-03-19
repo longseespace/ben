@@ -17,15 +17,20 @@ import {
   getSelectedTeamId,
   getSortedTeams,
   getSortedTeamIds,
+  getTeamsUnreads,
+  getTeamsBadgeCounts,
 } from '../reducers/selectors';
 import { RootState } from '../reducers';
 import { Team } from '../actions/team-actions';
+import { StringMap } from '../constants';
 
 const connectToRedux = connect(
   (state: RootState) => ({
     teamIds: getSortedTeamIds(state),
     teamList: getSortedTeams(state),
     selectedTeamId: getSelectedTeamId(state),
+    teamsUnreads: getTeamsUnreads(state),
+    teamsBadgeCounts: getTeamsBadgeCounts(state),
   }),
   {
     onAddAccount: openSigninWindow,
@@ -65,6 +70,8 @@ type Props = {
   selectedTeamId: string | null;
   teamList: Array<Team>;
   teamIds: Array<string>;
+  teamsUnreads: StringMap<boolean>;
+  teamsBadgeCounts: StringMap<number>;
 };
 
 type State = {
@@ -109,6 +116,8 @@ class TeamList extends React.Component<Props, State> {
       onTeamSelected,
       selectedTeamId,
       teamList = [],
+      teamsUnreads,
+      teamsBadgeCounts,
     } = this.props;
     const dragging = !!this.state.draggingKey;
 
@@ -123,6 +132,8 @@ class TeamList extends React.Component<Props, State> {
                 index={index}
                 name={team.name}
                 selected={selectedTeamId === team.id}
+                hasUnreads={teamsUnreads[team.id]}
+                badgeCount={teamsBadgeCounts[team.id]}
                 backgroundIcon={team.icon.image_88 || ''}
                 onSelected={() => onTeamSelected(team.id)}
                 onDragStarted={this.onItemDragStarted}

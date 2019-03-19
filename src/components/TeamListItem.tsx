@@ -8,6 +8,7 @@ import {
 } from 'react-qml';
 import React from 'react';
 import TeamButton from './TeamButton.qml';
+import Badge from './Badge.qml';
 import {
   QQuickItem,
   QQuickMouseArea,
@@ -26,6 +27,22 @@ const styles = {
     radius: 2,
     height: 36,
     color: Qt.rgba(255, 255, 255, 0.5),
+  },
+  unreadIndicator: {
+    x: -4,
+    width: 8,
+    radius: 2,
+    height: 6,
+    y: 15,
+    color: Qt.rgba(255, 255, 255, 0.5),
+  },
+  badge: {
+    x: 42,
+    radius: 18,
+    height: 18,
+    color: '#cf375c',
+    y: -8,
+    z: 2,
   },
   button: {
     x: 16,
@@ -47,6 +64,8 @@ type Props = {
   id: string;
   onSelected?: Function;
   selected?: boolean;
+  hasUnreads?: boolean;
+  badgeCount?: number;
   backgroundIcon?: string;
   style?: any;
   onDragStarted?: Function;
@@ -128,6 +147,8 @@ class TeamListItem extends React.Component<Props> {
       index,
       onSelected,
       selected,
+      hasUnreads,
+      badgeCount = 0,
       backgroundIcon,
       style, // eslint-disable-line
       onDragStarted, // eslint-disable-line
@@ -141,6 +162,15 @@ class TeamListItem extends React.Component<Props> {
     return (
       <Item ref={this.controlRef} style={styles.container} {...otherProps}>
         <Rectangle style={styles.selectedIndicator} visible={selected} />
+        <Rectangle
+          style={styles.unreadIndicator}
+          visible={!selected && hasUnreads}
+        />
+        <Badge
+          text={badgeCount}
+          style={styles.badge}
+          visible={badgeCount > 0}
+        />
         <TeamButton
           selected={selected}
           backgroundIcon={backgroundIcon}

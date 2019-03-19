@@ -1,17 +1,18 @@
 import { FluxStandardAction } from 'flux-standard-action';
 import { APP_TEAMS, TEAMS } from '../actions';
-import { addTeam, Team } from '../actions/team-actions';
+import { Team } from '../actions/team-actions';
+import { StringMap } from '../constants';
 
 export type AppTeamsState = {
   selectedTeamId: string | null;
-  selectedConversationId: string | null;
   teamList: Array<string>;
+  selectedConversations: StringMap<string>;
 };
 
 export const initialState: AppTeamsState = {
   selectedTeamId: null,
-  selectedConversationId: null,
   teamList: [],
+  selectedConversations: {},
 };
 
 export function reducer(
@@ -81,7 +82,17 @@ function setTeamsSorted(state: AppTeamsState, teamList: Array<string>) {
 }
 
 function selectConversation(state: AppTeamsState, conversationId: string) {
-  return { ...state, selectedConversationId: conversationId };
+  const currentTeamId = state.selectedTeamId;
+  if (!currentTeamId) {
+    console.warn('Selecting conversation without a team context. ABORT!');
+    return state;
+  }
+  const { selectedConversations } = state;
+  const newConversations = {
+    ...selectedConversations,
+    [currentTeamId]: conversationId,
+  };
+  return { ...state, selectedConversations: newConversations };
 }
 
 function selectNextTeam(state: AppTeamsState) {

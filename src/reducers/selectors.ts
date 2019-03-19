@@ -1,5 +1,6 @@
 import { RootState } from './';
 import { createSelector } from 'reselect';
+import { StringMap } from '../constants';
 
 // Accounts
 export const getAccounts = (state: RootState) => state.accounts;
@@ -21,8 +22,19 @@ export const getSigninWindowSettings = createSelector(
 export const getSortedTeamIds = (state: RootState) => state.appTeams.teamList;
 export const getSelectedTeamId = (state: RootState) =>
   state.appTeams.selectedTeamId;
-export const getSelectedConversationId = (state: RootState) =>
-  state.appTeams.selectedConversationId;
+export const getAllSelectedConversationIds = (state: RootState) =>
+  state.appTeams.selectedConversations;
+export const getSelectedConversationId = createSelector(
+  getAllSelectedConversationIds,
+  getSelectedTeamId,
+  (selectedConversations, teamId) => {
+    if (!teamId) {
+      return '';
+    }
+
+    return selectedConversations[teamId];
+  }
+);
 
 // Workspaces
 export const getAllWorkspaces = (state: RootState) => state.workspaces;
@@ -78,5 +90,41 @@ export const getConverstionList = createSelector(
       return [];
     }
     return allConversations[selectedTeamId] || [];
+  }
+);
+
+export const getTeamsUnreads = createSelector(
+  getSortedTeamIds,
+  getAllConversations,
+  (teamIds, allConversations) => {
+    const teamUnreads: StringMap<boolean> = {};
+    teamIds.forEach(teamId => {
+      const conversationList = allConversations[teamId] || [];
+      const firstUnread = conversationList.find(
+        c => !c.is_muted && c.has_unreads
+      );
+
+      teamUnreads[teamId] = !!firstUnread;
+    });
+
+    return teamUnreads;
+  }
+);
+
+export const getTeamsBadgeCounts = createSelector(
+  getSortedTeamIds,
+  getAllConversations,
+  (teamIds, allConversations) => {
+    const teamBadgeCounts: StringMap<number> = {};
+    teamIds.forEach(teamId => {
+      const conversationList = allConversations[teamId] || [];
+      teamBadgeCounts[teamId] = conversationList.reduce(
+        (acc, convo) =>
+          acc + (convo.dm_count || 0) + (convo.mention_count || 0),
+        0
+      );
+    });
+
+    return teamBadgeCounts;
   }
 );

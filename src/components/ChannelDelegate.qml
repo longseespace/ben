@@ -66,10 +66,21 @@ Component {
         }
 
         Text {
-          color: container.ListView.view.currentIndex === index ? '#fff' : model.is_muted ? Qt.rgba(255, 255, 255, 0.3) : '#eee'
+          color: {
+            if (model.is_muted) {
+              return Qt.rgba(255, 255, 255, 0.3);
+            }
+
+            if (container.ListView.view.currentIndex === index || model.has_unreads) {
+              return '#fff';
+            }
+            
+            return '#ddd';
+          }
           text: model.name
           font.pointSize: 16
           font.family: 'Lato'
+          font.weight: model.has_unreads && !model.is_muted ? Font.Black : Font.Normal
           Layout.alignment: Qt.AlignBottom | Qt.AlignLeft
           Layout.fillWidth: true
           elide: Text.ElideRight

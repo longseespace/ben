@@ -30,11 +30,16 @@ const defaultConversationItem = {
   is_active: false,
   is_open: false,
   is_member: false,
+  is_archived: false,
+  has_unreads: false,
+  dm_count: 0,
+  mention_count: 0,
 };
 
 const addSection = section => map(item => ({ ...item, section }));
 const filterOpen = filter(item => item.is_open || item.is_member);
-const sortByMuted = sortBy('is_muted');
+const filterArchived = filter(item => !item.is_archived);
+const sortByMuted = sortBy(['is_muted', 'name']);
 const transformMpimName = map(item => {
   if (item.is_mpim) {
     const name = item.name
@@ -56,6 +61,7 @@ const standardizeConversation = map(item => ({
 const transformSectionChannel = flow(
   addSection('Channels'),
   filterOpen,
+  filterArchived,
   sortByMuted,
   standardizeConversation
 );
@@ -63,6 +69,7 @@ const transformSectionChannel = flow(
 const transformSectionDirectMessage = flow(
   addSection('Direct Messages'),
   filterOpen,
+  filterArchived,
   transformMpimName,
   standardizeConversation
 );
