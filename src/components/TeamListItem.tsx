@@ -1,7 +1,19 @@
-import { Item, MouseArea, Rectangle, Shortcut, Text } from 'react-qml';
+import {
+  Item,
+  MouseArea,
+  Rectangle,
+  Shortcut,
+  Text,
+  DropArea,
+} from 'react-qml';
 import React from 'react';
 import TeamButton from './TeamButton.qml';
-import { QQuickItem, QQuickMouseArea } from 'react-qml/dist/components/QtQuick';
+import {
+  QQuickItem,
+  QQuickMouseArea,
+  QQuickDragAttached,
+  QQuickDropEvent,
+} from 'react-qml/dist/components/QtQuick';
 
 const styles = {
   container: {
@@ -31,80 +43,84 @@ const styles = {
 
 type Props = {
   index: number;
+  name: string;
+  id: string;
   onSelected?: Function;
   selected?: boolean;
   backgroundIcon?: string;
   style?: any;
   onDragStarted?: Function;
   onDragFinished?: Function;
+  onDropAreaEntered?: Function;
+};
+
+type Draggable = {
+  Drag: QQuickDragAttached;
 };
 
 class TeamListItem extends React.Component<Props> {
-  controlRef = React.createRef<QQuickItem>();
-  mouseAreaRef = React.createRef<QQuickMouseArea>();
+  private controlRef = React.createRef<QQuickItem & Draggable>();
+  private mouseAreaRef = React.createRef<QQuickMouseArea>();
 
-  startX = 0;
-  startY = 0;
-
-  // componentDidMount() {
-  //   const $control = this.controlRef.current;
-  //   const $mouseArea = this.mouseAreaRef.current;
-  //
-  //   $control.Drag.dragType = 'Automatic';
-  //
-  // }
-
-  onPressedChanged = () => {
+  componentDidMount() {
     const $control = this.controlRef.current;
+    const $mouseArea = this.mouseAreaRef.current;
 
+    if ($control && $mouseArea) {
+      $control.Drag.dragType = 'None';
+      // $control.Drag.supportedActions = Qt.MoveAction;
+      // $control.Drag.proposedAction = Qt.MoveAction;
+      $control.Drag.mimeData = {
+        'text/plain': this.props.name,
+      };
+
+      $control.Drag.dragStarted.connect(this.onDragStarted);
+      $control.Drag.dragFinished.connect(this.onDragFinished);
+    }
+  }
+
+  onDragStarted = () => {
+    const $control = this.controlRef.current;
     if ($control) {
-      this.startX = Number($control.x);
-      this.startY = Number($control.y);
+      $control.scale = 1.2;
+      $control.z = 2;
+    }
+
+    if (this.props.onDragStarted) {
+      this.props.onDragStarted(this.props.id);
+    }
+  };
+
+  onDragFinished = () => {
+    const $control = this.controlRef.current;
+    if ($control) {
+      $control.scale = 1;
+      $control.z = 1;
+      $control.Drag.drop();
+    }
+
+    if (this.props.onDragFinished) {
+      this.props.onDragFinished(this.props.id);
     }
   };
 
   onPressAndHold = () => {
     const $control = this.controlRef.current;
-    const $mouseArea = this.mouseAreaRef.current;
 
-    if ($mouseArea && $control) {
-      $control.scale = 1.2;
-      $control.z = 2;
-
-      $mouseArea.drag.target = $control;
-
-      const { index, onDragStarted } = this.props;
-      if (onDragStarted) {
-        onDragStarted(index);
-      }
+    if ($control) {
+      $control.Drag.active = true;
+      $control.Drag.startDrag(Qt.MoveAction);
     }
   };
 
-  onReleased = () => {
-    const $control = this.controlRef.current;
-    const $mouseArea = this.mouseAreaRef.current;
-
-    if ($control && $mouseArea && $mouseArea.drag.target) {
-      const { index, onDragFinished } = this.props;
-
-      // @ts-ignore
-      $mouseArea.drag.target = undefined;
-
-      $control.scale = 1;
-      $control.z = 1;
-
-      // reset x,y
-      $control.x = this.startX;
-      $control.y = this.startY;
-
-      if (onDragFinished) {
-        onDragFinished(index);
-      }
+  onDropAreaEntered = (ev: QQuickDropEvent) => {
+    if (this.props.onDropAreaEntered) {
+      this.props.onDropAreaEntered(this.props.id, this.props.index, ev);
     }
   };
 
-  onPositionChanged = (ev: any) => {
-    // console.log('onPositionChanged', ev.x, ev.y);
+  onDropped = (ev: QQuickDropEvent) => {
+    ev.accept(Qt.MoveAction);
   };
 
   render() {
@@ -116,6 +132,9 @@ class TeamListItem extends React.Component<Props> {
       style, // eslint-disable-line
       onDragStarted, // eslint-disable-line
       onDragFinished, // eslint-disable-line
+      onDropAreaEntered, // eslint-disable-line
+      name, // eslint-disable-line
+      id, // eslint-disable-line
       ...otherProps
     } = this.props;
 
@@ -146,11 +165,14 @@ class TeamListItem extends React.Component<Props> {
           ref={this.mouseAreaRef}
           drag={{
             axis: 'YAxis',
+            smoothed: false,
           }}
-          onPressedChanged={this.onPressedChanged}
           onPressAndHold={this.onPressAndHold}
-          onReleased={this.onReleased}
-          onPositionChanged={this.onPositionChanged}
+        />
+        <DropArea
+          anchors={{ fill: 'parent' }}
+          onEntered={this.onDropAreaEntered}
+          onDropped={this.onDropped}
         />
       </Item>
     );

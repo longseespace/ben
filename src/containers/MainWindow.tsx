@@ -12,12 +12,15 @@ import { AccountsState } from '../reducers/accounts-reducer';
 import { RootState } from '../reducers';
 import TeamList from './TeamList';
 import ChannelList from './ChannelList';
+import { initWorkspace } from '../actions/workspace-actions';
 
 const connectToRedux = connect(
   (state: RootState) => ({
     accounts: getAccounts(state),
   }),
-  {}
+  {
+    initWorkspace,
+  }
 );
 
 // use localStorage since its API is sync
@@ -28,6 +31,7 @@ const windowHeight = localStorage.getItem('windowHeight') || 600;
 
 type Props = {
   accounts: AccountsState;
+  initWorkspace: Function;
 };
 
 type State = {
@@ -35,7 +39,7 @@ type State = {
 };
 
 class MainWindow extends React.Component<Props, State> {
-  windowRef = React.createRef<QQuickWindow>();
+  private windowRef = React.createRef<QQuickWindow>();
 
   state: State = {
     visible: true,
@@ -64,10 +68,10 @@ class MainWindow extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    // Object.keys(this.props.accounts).forEach(id => {
-    //   const account = this.props.accounts[id];
-    //   this.props.initWorkspace(account);
-    // });
+    Object.keys(this.props.accounts).forEach(id => {
+      const account = this.props.accounts[id];
+      this.props.initWorkspace(account.teamId, account.token, false);
+    });
     Qt.application.stateChanged.connect(this.onAppStateChanged);
   }
 

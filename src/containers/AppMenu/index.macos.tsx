@@ -5,6 +5,7 @@ import * as React from 'react';
 import { fetchTokensFromSlack } from '../../lib/slack';
 import { openSigninWindow } from '../../actions/window-actions';
 import { initWorkspace } from '../../actions/workspace-actions';
+import { addAccount } from '../../actions/account-actions';
 
 const { MenuBar, Menu, MenuItem, MenuSeparator } = QtLabsPlatform;
 
@@ -17,12 +18,14 @@ const connectToRedux = connect(
   {
     onSigninClicked: openSigninWindow,
     initWorkspace,
+    addAccount,
   }
 );
 
 type Props = {
   onSigninClicked: Function;
   initWorkspace: Function;
+  addAccount: Function;
 };
 
 class AppMenu extends React.Component<Props> {
@@ -38,6 +41,9 @@ class AppMenu extends React.Component<Props> {
       for (const teamId in tokens) {
         if (tokens.hasOwnProperty(teamId)) {
           const item = tokens[teamId];
+          // add account
+          this.props.addAccount(item);
+          // then init
           this.props.initWorkspace(item.teamId, item.token, false);
         }
       }
