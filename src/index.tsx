@@ -8,6 +8,7 @@ import './assets/fa-solid.ttf';
 import './assets/fa-regular.ttf';
 import './assets/Lato-Regular.ttf';
 import './assets/Lato-Bold.ttf';
+import './assets/Lato-Black.ttf';
 
 import App from './App';
 import configureStore from './store/configureStore';

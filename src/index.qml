@@ -35,13 +35,19 @@ Item {
     source: "/assets/Lato-Bold.ttf"
   }
 
+  FontLoader {
+    id: latoBlackLoader
+    source: "/assets/Lato-Black.ttf"
+  }
+
   states: [
     State {
       name: 'loaded'
       when: faSolidLoader.status == FontLoader.Ready &&
         faRegularLoader.status == FontLoader.Ready &&
         latoRegularLoader.status == FontLoader.Ready &&
-        latoBoldLoader.status == FontLoader.Ready
+        latoBoldLoader.status == FontLoader.Ready &&
+        latoBlackLoader.status == FontLoader.Ready
     }
   ]
 
