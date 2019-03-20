@@ -7,7 +7,11 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import SigninWindow from './SigninWindow';
 import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
 import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
-import { getAccounts, getSelectedWorkspace } from '../reducers/selectors';
+import {
+  getAccounts,
+  getSelectedWorkspace,
+  getMainWindowSettings,
+} from '../reducers/selectors';
 import { AccountsState } from '../reducers/accounts-reducer';
 import { RootState } from '../reducers';
 import TeamList from './TeamList';
@@ -16,14 +20,19 @@ import { initWorkspace } from '../actions/workspace-actions';
 import ChannelLoadingView from '../components/ChannelLoadingView';
 import MessageLoadingView from '../components/MessageLoadingView';
 import { SingleWorkspaceState } from '../reducers/workspaces-reducers';
+import { closeMainWindow, openMainWindow } from '../actions/window-actions';
+import { SingleWindowState } from '../reducers/windows-reducers';
 
 const connectToRedux = connect(
   (state: RootState) => ({
     accounts: getAccounts(state),
     selectedWorkspace: getSelectedWorkspace(state),
+    settings: getMainWindowSettings(state),
   }),
   {
     initWorkspace,
+    closeMainWindow,
+    openMainWindow,
   }
 );
 
@@ -35,20 +44,15 @@ const windowHeight = localStorage.getItem('windowHeight') || 600;
 
 type Props = {
   accounts: AccountsState;
-  initWorkspace: Function;
   selectedWorkspace: SingleWorkspaceState | undefined;
+  settings: SingleWindowState;
+  initWorkspace: Function;
+  closeMainWindow: Function;
+  openMainWindow: Function;
 };
 
-type State = {
-  visible: boolean;
-};
-
-class MainWindow extends React.Component<Props, State> {
+class MainWindow extends React.Component<Props> {
   private windowRef = React.createRef<QQuickWindow>();
-
-  state: State = {
-    visible: true,
-  };
 
   onClosing = (ev: QQuickCloseEvent) => {
     // persist window's geometry
@@ -61,14 +65,15 @@ class MainWindow extends React.Component<Props, State> {
     }
 
     ev.accepted = true;
-    this.setState({ visible: false });
+    this.props.closeMainWindow();
   };
 
   onAppStateChanged = (state: any) => {
     // on app activate, show the window (if already closed)
     const $window = this.windowRef.current;
     if ($window && !$window.visible && state === Qt.ApplicationActive) {
-      this.setState({ visible: true });
+      // open
+      this.props.openMainWindow();
     }
   };
 
@@ -85,16 +90,14 @@ class MainWindow extends React.Component<Props, State> {
   }
 
   render() {
-    const { visible } = this.state;
-    const { selectedWorkspace } = this.props;
+    const { selectedWorkspace, settings } = this.props;
     const workspaceInitStatus = selectedWorkspace
       ? selectedWorkspace.initStatus
       : 'started';
     return (
       <Window
         objectName="MainWindow"
-        visible={visible}
-        visibility={visible ? 'Windowed' : 'Hidden'}
+        visible={settings.visible}
         onClosing={this.onClosing}
         x={windowX}
         y={windowY}

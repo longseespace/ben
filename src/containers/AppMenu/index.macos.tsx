@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { fetchTokensFromSlack } from '../../lib/slack';
-import { openSigninWindow } from '../../actions/window-actions';
+import {
+  openSigninWindow,
+  closeMainWindow,
+} from '../../actions/window-actions';
 import { initWorkspace } from '../../actions/workspace-actions';
 import { addAccount } from '../../actions/account-actions';
 
@@ -19,6 +22,7 @@ const connectToRedux = connect(
     onSigninClicked: openSigninWindow,
     initWorkspace,
     addAccount,
+    closeMainWindow,
   }
 );
 
@@ -26,6 +30,7 @@ type Props = {
   onSigninClicked: Function;
   initWorkspace: Function;
   addAccount: Function;
+  closeMainWindow: Function;
 };
 
 class AppMenu extends React.Component<Props> {
@@ -68,7 +73,11 @@ class AppMenu extends React.Component<Props> {
           />
         </Menu>
         <Menu title="&File">
-          <MenuItem text="Close Window" shortcut={StandardKey.Close} />
+          <MenuItem
+            text="Close Window"
+            shortcut={StandardKey.Close}
+            onTriggered={this.props.closeMainWindow}
+          />
         </Menu>
         <Menu title="&Edit" type="EditMenu">
           <MenuItem text="Undo" shortcut={StandardKey.Undo} />
