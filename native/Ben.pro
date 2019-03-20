@@ -36,3 +36,6 @@ SOURCES += main.cpp \
     ReactQML/rqkeychain.cpp
 
 RESOURCES += main.qrc
+
+# icon
+ICON = Ben.icns
