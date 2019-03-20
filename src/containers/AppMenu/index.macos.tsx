@@ -8,9 +8,13 @@ import {
   closeMainWindow,
   minimizeWindow,
   maximizeWindow,
+  toggleMaximize,
 } from '../../actions/window-actions';
 import { initWorkspace } from '../../actions/workspace-actions';
 import { addAccount } from '../../actions/account-actions';
+import { RootState } from '../../reducers';
+import { getMainWindowSettings } from '../../reducers/selectors';
+import { SingleWindowState } from '../../reducers/windows-reducers';
 
 const { MenuBar, Menu, MenuItem, MenuSeparator } = QtLabsPlatform;
 
@@ -19,24 +23,27 @@ const collectGarbage = () => {
 };
 
 const connectToRedux = connect(
-  state => ({}),
+  (state: RootState) => ({
+    mainWindowSettings: getMainWindowSettings(state),
+  }),
   {
     onSigninClicked: openSigninWindow,
     initWorkspace,
     addAccount,
     closeMainWindow,
     minimizeMainWindow: () => minimizeWindow('main'),
-    maximizeMainWindow: () => maximizeWindow('main'),
+    toggleMaximizeMainWindow: () => toggleMaximize('main'),
   }
 );
 
 type Props = {
+  mainWindowSettings: SingleWindowState;
   onSigninClicked: Function;
   initWorkspace: Function;
   addAccount: Function;
   closeMainWindow: Function;
   minimizeMainWindow: Function;
-  maximizeMainWindow: Function;
+  toggleMaximizeMainWindow: Function;
 };
 
 class AppMenu extends React.Component<Props> {
@@ -113,7 +120,10 @@ class AppMenu extends React.Component<Props> {
             shortcut="Ctrl+M"
             onTriggered={this.props.minimizeMainWindow}
           />
-          <MenuItem text="Zoom" onTriggered={this.props.maximizeMainWindow} />
+          <MenuItem
+            text="Zoom"
+            onTriggered={this.props.toggleMaximizeMainWindow}
+          />
           <MenuSeparator />
           <MenuItem text="Bring All to Front" />
           <MenuSeparator />

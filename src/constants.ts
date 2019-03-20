@@ -1,4 +1,5 @@
 import { FluxStandardAction } from 'flux-standard-action';
+import { ThunkAction } from 'redux-thunk';
 
 declare const __DEV__: boolean;
 
@@ -15,3 +16,5 @@ export const API_ROOT = 'https://slack.com/api';
 // any action
 export type AnyAction = FluxStandardAction<any, void>;
 export type StandardAction<T> = FluxStandardAction<T, void>;
+
+export type SimpleThunkAction = ThunkAction<void, {}, {}, AnyAction>;

@@ -1,4 +1,6 @@
 import { WINDOWS } from '.';
+import { SimpleThunkAction } from '../constants';
+import { RootState } from '../reducers';
 
 export const openWindow = (windowId: string) => ({
   type: WINDOWS.OPEN_WINDOW,
@@ -27,6 +29,19 @@ export const minimizeWindow = (windowId: string) =>
 
 export const maximizeWindow = (windowId: string) =>
   setWindowVisibility(windowId, 'Maximized');
+
+export const toggleMaximize = (windowId: string): SimpleThunkAction => (
+  dispatch,
+  getState
+) => {
+  const state = getState() as RootState;
+  const windowSettings = state.windows[windowId];
+  const nextVisibility =
+    windowSettings.visibility === 'Windowed' || windowSettings.visibility === 2
+      ? 'Maximized'
+      : 'Windowed';
+  dispatch(setWindowVisibility(windowId, nextVisibility));
+};
 
 export const enterFullScreen = (windowId: string) =>
   setWindowVisibility(windowId, 'FullScreen');

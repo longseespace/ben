@@ -1,13 +1,10 @@
-import { AnyAction } from 'redux';
-import { ThunkAction } from 'redux-thunk';
 import { WORKSPACE } from '.';
 import slack from '../lib/slack';
 import { Team, addTeam } from './team-actions';
 import { selectTeam } from './app-teams-actions';
 import { setConversationList } from './conversations-actions';
 import { getConversationListFromUserCountsAPI } from './helpers';
-
-type SimpleThunkAction = ThunkAction<void, {}, {}, AnyAction>;
+import { SimpleThunkAction } from '../constants';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
