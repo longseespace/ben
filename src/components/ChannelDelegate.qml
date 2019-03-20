@@ -11,6 +11,35 @@ Component {
     color: 'transparent'
     height: content.height
 
+    // badge
+    Rectangle {
+      id: badge
+      smooth: true
+      visible: model.dm_count + model.mention_count > 0
+
+      anchors.right: parent.right
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.rightMargin: 16
+      z: 2
+
+      color: '#83ad91'
+      height: 18
+      radius: height
+      width: inner.text.length > 1 ? inner.paintedWidth + height / 2 : height
+
+      Text {
+        id: inner
+
+        text: model.dm_count + model.mention_count
+        color: '#fff'
+        font.pointSize: 12
+        font.bold: true
+        anchors.fill: parent
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+      }
+    }
+
     Column {
       id: content
 

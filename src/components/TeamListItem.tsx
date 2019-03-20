@@ -169,7 +169,7 @@ class TeamListItem extends React.Component<Props> {
         <Badge
           text={badgeCount}
           style={styles.badge}
-          visible={badgeCount > 0}
+          visible={!selected && badgeCount > 0}
         />
         <TeamButton
           selected={selected}
