@@ -82,7 +82,7 @@ export const getCurrentTeamUserName = createSelector(
 
 export const getCurrentUser = createSelector(
   getSelectedTeam,
-  selectedTeam => (selectedTeam ? selectedTeam.user : {})
+  selectedTeam => (selectedTeam ? selectedTeam.user : null)
 );
 
 // Conversations

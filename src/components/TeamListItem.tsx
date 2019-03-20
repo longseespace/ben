@@ -142,6 +142,12 @@ class TeamListItem extends React.Component<Props> {
     ev.accept(Qt.MoveAction);
   };
 
+  onSelected = () => {
+    if (this.props.onSelected) {
+      this.props.onSelected(this.props.id);
+    }
+  };
+
   render() {
     const {
       index,
@@ -185,12 +191,12 @@ class TeamListItem extends React.Component<Props> {
         <Shortcut
           enabled={index < 9}
           sequence={`Ctrl+${index + 1}`}
-          onActivated={onSelected}
+          onActivated={this.onSelected}
         />
         <MouseArea
           pressAndHoldInterval={300}
           anchors={{ fill: 'parent' }}
-          onClicked={onSelected}
+          onClicked={this.onSelected}
           cursorShape={Qt.PointingHandCursor}
           ref={this.mouseAreaRef}
           drag={{

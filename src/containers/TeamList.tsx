@@ -1,9 +1,4 @@
-import {
-  Column,
-  NumberAnimation,
-  QtQuickControls2,
-  Transition,
-} from 'react-qml';
+import { Column, QtQuickControls2 } from 'react-qml';
 
 const { ScrollView } = QtQuickControls2;
 import { connect } from 'react-redux';
@@ -110,6 +105,10 @@ class TeamList extends React.Component<Props, State> {
     }
   };
 
+  onItemSelected = (key: string) => {
+    this.props.onTeamSelected(key);
+  };
+
   componentDidUpdate() {
     // this is bad, i know
     // but until we can have redux-observable working property
@@ -129,7 +128,6 @@ class TeamList extends React.Component<Props, State> {
   render() {
     const {
       onAddAccount,
-      onTeamSelected,
       selectedTeamId,
       teamList = [],
       teamsUnreads,
@@ -151,7 +149,7 @@ class TeamList extends React.Component<Props, State> {
                 hasUnreads={teamsUnreads[team.id]}
                 badgeCount={teamsBadgeCounts[team.id]}
                 backgroundIcon={team.icon.image_88 || ''}
-                onSelected={() => onTeamSelected(team.id)}
+                onSelected={this.onItemSelected}
                 onDragStarted={this.onItemDragStarted}
                 onDragFinished={this.onItemDragFinished}
                 onDropAreaEntered={this.onItemDropEntered}

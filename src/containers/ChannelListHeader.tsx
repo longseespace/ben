@@ -51,14 +51,14 @@ const styles = {
 
 type Props = {
   teamName: string;
-  user: User;
+  user: User | null;
 };
 
 class ChannelListHeader extends React.Component<Props> {
   render() {
     const { teamName, user } = this.props;
-    const userName = user.name || '';
-    const userActive = user.manual_presence === 'active';
+    const userName = user ? user.name : '';
+    const userActive = Boolean(user && user.manual_presence === 'active');
 
     return (
       <Rectangle style={styles.header}>

@@ -7,7 +7,6 @@ import {
   openSigninWindow,
   closeMainWindow,
   minimizeWindow,
-  maximizeWindow,
   toggleMaximize,
 } from '../../actions/window-actions';
 import { initWorkspace } from '../../actions/workspace-actions';
