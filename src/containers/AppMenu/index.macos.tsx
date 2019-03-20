@@ -6,6 +6,8 @@ import { fetchTokensFromSlack } from '../../lib/slack';
 import {
   openSigninWindow,
   closeMainWindow,
+  minimizeWindow,
+  maximizeWindow,
 } from '../../actions/window-actions';
 import { initWorkspace } from '../../actions/workspace-actions';
 import { addAccount } from '../../actions/account-actions';
@@ -23,6 +25,8 @@ const connectToRedux = connect(
     initWorkspace,
     addAccount,
     closeMainWindow,
+    minimizeMainWindow: () => minimizeWindow('main'),
+    maximizeMainWindow: () => maximizeWindow('main'),
   }
 );
 
@@ -31,6 +35,8 @@ type Props = {
   initWorkspace: Function;
   addAccount: Function;
   closeMainWindow: Function;
+  minimizeMainWindow: Function;
+  maximizeMainWindow: Function;
 };
 
 class AppMenu extends React.Component<Props> {
@@ -102,8 +108,12 @@ class AppMenu extends React.Component<Props> {
           <MenuItem text="Forward" shortcut={StandardKey.Forward} />
         </Menu>
         <Menu title="&Window">
-          <MenuItem text="Minimize" shortcut="Ctrl+M" />
-          <MenuItem text="Zoom" />
+          <MenuItem
+            text="Minimize"
+            shortcut="Ctrl+M"
+            onTriggered={this.props.minimizeMainWindow}
+          />
+          <MenuItem text="Zoom" onTriggered={this.props.maximizeMainWindow} />
           <MenuSeparator />
           <MenuItem text="Bring All to Front" />
           <MenuSeparator />

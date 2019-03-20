@@ -20,7 +20,11 @@ import { initWorkspace } from '../actions/workspace-actions';
 import ChannelLoadingView from '../components/ChannelLoadingView';
 import MessageLoadingView from '../components/MessageLoadingView';
 import { SingleWorkspaceState } from '../reducers/workspaces-reducers';
-import { closeMainWindow, openMainWindow } from '../actions/window-actions';
+import {
+  closeMainWindow,
+  openMainWindow,
+  setWindowVisibility,
+} from '../actions/window-actions';
 import { SingleWindowState } from '../reducers/windows-reducers';
 
 const connectToRedux = connect(
@@ -33,6 +37,7 @@ const connectToRedux = connect(
     initWorkspace,
     closeMainWindow,
     openMainWindow,
+    setWindowVisibility,
   }
 );
 
@@ -49,6 +54,7 @@ type Props = {
   initWorkspace: Function;
   closeMainWindow: Function;
   openMainWindow: Function;
+  setWindowVisibility: Function;
 };
 
 class MainWindow extends React.Component<Props> {
@@ -56,8 +62,12 @@ class MainWindow extends React.Component<Props> {
 
   onClosing = (ev: QQuickCloseEvent) => {
     // persist window's geometry
+    const { settings } = this.props;
+    const isInNormalForm =
+      settings.visibility === 'Windowed' || settings.visibility === 2;
+
     const $window = this.windowRef.current;
-    if ($window) {
+    if ($window && isInNormalForm) {
       localStorage.setItem('windowX', String($window.x));
       localStorage.setItem('windowY', String($window.y));
       localStorage.setItem('windowWidth', String($window.width));
@@ -66,6 +76,13 @@ class MainWindow extends React.Component<Props> {
 
     ev.accepted = true;
     this.props.closeMainWindow();
+  };
+
+  onVisibilityChanged = (visibility: any) => {
+    const { settings } = this.props;
+    if (settings.visibility !== visibility) {
+      this.props.setWindowVisibility('main', visibility);
+    }
   };
 
   onAppStateChanged = (state: any) => {
@@ -98,6 +115,8 @@ class MainWindow extends React.Component<Props> {
       <Window
         objectName="MainWindow"
         visible={settings.visible}
+        visibility={settings.visibility}
+        onVisibilityChanged={this.onVisibilityChanged}
         onClosing={this.onClosing}
         x={windowX}
         y={windowY}
