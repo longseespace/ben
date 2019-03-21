@@ -29,6 +29,10 @@ export const initWorkspace = (
   token: string,
   selectTeamAfterSuccess: boolean = false
 ): SimpleThunkAction => async (dispatch, getState) => {
+  if (!teamId) {
+    return;
+  }
+
   // init start
   dispatch(workspaceInitStart(teamId));
 
