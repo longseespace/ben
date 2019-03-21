@@ -1,6 +1,3 @@
-// TODO: redux-persist seems overkill, revive this later
-// also: react-router / react-observable (needed?)
-
 import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'remote-redux-devtools';
 import {
@@ -13,10 +10,22 @@ import reduxThunk from 'redux-thunk';
 
 import apiMiddleware from './apiMiddleware';
 import rootReducer, { RootState } from '../reducers';
+import rootEpic from '../epics';
+import { createEpicMiddleware } from 'redux-observable';
+import { AnyAction } from '../constants';
+import { BehaviorSubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 const history = createHistory();
-// const epicMiddleware = createEpicMiddleware(rootEpic);
 const routerMiddleware = createRouterMiddleware(history);
+
+// setup epics
+const epicMiddleware = createEpicMiddleware<AnyAction, AnyAction, RootState>();
+
+const epic$ = new BehaviorSubject(rootEpic);
+const hotReloadingEpic = (...args: any[]) =>
+  // @ts-ignore
+  epic$.pipe(switchMap(epic => epic(...args)));
 
 // dev tools
 // const composeEnhancers = composeWithDevTools({
@@ -37,18 +46,17 @@ const rootReducerWithRouter = connectRouterHistory<RootState>(rootReducer);
 
 // finally composeEnhancers
 const enhancers = composeEnhancers(
-  applyMiddleware(
-    reduxThunk,
-    apiMiddleware,
-    // epicMiddleware,
-    routerMiddleware
-  )
+  applyMiddleware(reduxThunk, apiMiddleware, epicMiddleware, routerMiddleware)
 );
 
 export { history };
 
 function configureStore() {
   const store = createStore(rootReducerWithRouter, {}, enhancers);
+
+  // @ts-ignore
+  epicMiddleware.run(hotReloadingEpic);
+
   const persistor = persistStore(store);
 
   if (module.hot) {
@@ -59,13 +67,16 @@ function configureStore() {
       );
       store.replaceReducer(rootReducerWithRouter);
     });
-    // module.hot.accept('./rootEpic', () => {
-    //   const rootEpic = require('./rootEpic').default;
-    //   epicMiddleware.replaceEpic(rootEpic);
-    // });
+    module.hot.accept('../epics', () => {
+      const nextRootEpic = require('../epics').default;
+      epic$.next(nextRootEpic);
+    });
   }
 
-  return { store, persistor };
+  return {
+    store,
+    persistor,
+  };
 }
 
 export default configureStore;
