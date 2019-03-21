@@ -110,7 +110,7 @@ class MainWindow extends React.Component<Props> {
     const { selectedWorkspace, settings } = this.props;
     const workspaceInitStatus = selectedWorkspace
       ? selectedWorkspace.initStatus
-      : 'started';
+      : 'idle';
     return (
       <Window
         objectName="MainWindow"
@@ -149,7 +149,7 @@ class MainWindow extends React.Component<Props> {
               {workspaceInitStatus === 'started' ? (
                 <ChannelLoadingView />
               ) : (
-                <ChannelList />
+                workspaceInitStatus === 'success' && <ChannelList />
               )}
             </Rectangle>
             <Rectangle

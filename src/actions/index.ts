@@ -54,8 +54,15 @@ export const WORKSPACE = {
 };
 
 // CONVERSATIONS
-export type conversationType = 'SET_CONVERSATION_LIST';
+export type conversationsType = 'SET_CONVERSATION_LIST';
 
 export const CONVERSATIONS = {
-  SET_CONVERSATION_LIST: 'SET_CONVERSATION_LIST' as conversationType,
+  SET_CONVERSATION_LIST: 'SET_CONVERSATION_LIST' as conversationsType,
+};
+
+// MESSAGES
+export type messagesType = 'FETCH_MESSAGES';
+
+export const MESSAGES = {
+  FETCH_MESSAGES: 'FETCH_MESSAGES' as messagesType,
 };

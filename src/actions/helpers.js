@@ -1,7 +1,7 @@
 // TODO: convert to .ts
 // for whatever reason, qml doesn't play nice with lodash.min.js,
 // so we need to use babel-plugins-lodash to transform imports
-import { pick, map, filter, sortBy, flow } from 'lodash/fp';
+import { map, filter, sortBy, flow } from 'lodash/fp';
 
 export const getConversationListFromUserCountsAPI = payload => {
   const sectionChannels = transformSectionChannel([
@@ -51,11 +51,11 @@ const transformMpimName = map(item => {
   return item;
 });
 
-const picky = pick(Object.keys(defaultConversationItem));
+// const picky = pick(Object.keys(defaultConversationItem));
 
 const standardizeConversation = map(item => ({
   ...defaultConversationItem,
-  ...picky(item),
+  ...item,
 }));
 
 const transformSectionChannel = flow(
