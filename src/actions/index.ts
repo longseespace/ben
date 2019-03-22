@@ -60,9 +60,10 @@ export const CONVERSATIONS = {
   SET_CONVERSATION_LIST: 'SET_CONVERSATION_LIST' as conversationsType,
 };
 
-// MESSAGES
-export type messagesType = 'FETCH_MESSAGES';
+// TIMELINES
+export type timelinesType = 'FETCH_MESSAGES' | 'SET_INITIAL_TIMELINE';
 
-export const MESSAGES = {
-  FETCH_MESSAGES: 'FETCH_MESSAGES' as messagesType,
+export const TIMELINES = {
+  FETCH_MESSAGES: 'FETCH_MESSAGES' as timelinesType,
+  SET_INITIAL_TIMELINE: 'SET_INITIAL_TIMELINE' as timelinesType,
 };

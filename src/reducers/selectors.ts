@@ -98,6 +98,18 @@ export const getConverstionList = createSelector(
   }
 );
 
+export const getSelectedConversation = createSelector(
+  getConverstionList,
+  getSelectedConversationId,
+  (conversationList, selectedConversationId) => {
+    if (!selectedConversationId) {
+      return null;
+    }
+
+    return conversationList.find(c => c.id === selectedConversationId);
+  }
+);
+
 export const getTeamsUnreads = createSelector(
   getSortedTeamIds,
   getAllConversations,
@@ -131,5 +143,21 @@ export const getTeamsBadgeCounts = createSelector(
     });
 
     return teamBadgeCounts;
+  }
+);
+
+// Timelines
+export const getAllTimelines = (state: RootState) => state.timelines;
+export const getMessageList = createSelector(
+  getAllTimelines,
+  getSelectedConversationId,
+  (allTimelines, selectedConversationId) => {
+    if (!selectedConversationId) {
+      return [];
+    }
+
+    return allTimelines[selectedConversationId]
+      ? allTimelines[selectedConversationId].messages
+      : [];
   }
 );

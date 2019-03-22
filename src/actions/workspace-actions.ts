@@ -5,6 +5,8 @@ import { selectTeam } from './app-teams-actions';
 import { setConversationList } from './conversations-actions';
 import { getConversationListFromUserCountsAPI } from './helpers';
 import { SimpleThunkAction } from '../constants';
+import { RootState } from '../reducers';
+import { Timeline, setInitialTimeline } from './timelines-actions';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
@@ -33,6 +35,8 @@ export const initWorkspace = (
     return;
   }
 
+  const state = getState() as RootState;
+
   // init start
   dispatch(workspaceInitStart(teamId));
 
@@ -56,10 +60,22 @@ export const initWorkspace = (
     _x_mode: 'online',
   });
 
+  // fetch messages if needed
+  const selectedConversationId = state.appTeams.selectedConversations[teamId];
+
+  let initTimeline = Promise.resolve(null as any);
+  if (selectedConversationId) {
+    initTimeline = slack.apiCall('conversations.history', {
+      token,
+      channel: selectedConversationId,
+    });
+  }
+
   try {
-    const [clientJson, userCountJson] = await Promise.all([
+    const [clientJson, userCountJson, timelineJson] = await Promise.all([
       initClient,
       initUser,
+      initTimeline,
     ]);
 
     const team = {
@@ -76,6 +92,16 @@ export const initWorkspace = (
       userCountJson
     );
     dispatch(setConversationList(team.id, conversationsList));
+
+    if (timelineJson) {
+      const timeline: Timeline = {
+        messages: timelineJson.messages,
+        query: {},
+        hasMore: timelineJson.has_more,
+        pinCount: timelineJson.pin_count,
+      };
+      dispatch(setInitialTimeline(selectedConversationId, timeline));
+    }
 
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {

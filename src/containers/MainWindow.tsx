@@ -26,6 +26,7 @@ import {
   setWindowVisibility,
 } from '../actions/window-actions';
 import { SingleWindowState } from '../reducers/windows-reducers';
+import MessageList from './MessageList';
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -159,7 +160,11 @@ class MainWindow extends React.Component<Props> {
               }}
               color="#FFFFFF"
             >
-              {workspaceInitStatus === 'started' && <MessageLoadingView />}
+              {workspaceInitStatus === 'started' ? (
+                <MessageLoadingView />
+              ) : (
+                workspaceInitStatus === 'success' && <MessageList />
+              )}
             </Rectangle>
           </RowLayout>
         </ErrorBoundary>

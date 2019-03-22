@@ -39,12 +39,22 @@ export function reducer(
 
 function openWindow(state: WindowsState, windowId: string) {
   const windowSettings = state[windowId];
-  return { ...state, [windowId]: { ...windowSettings, visible: true } };
+  return {
+    ...state,
+    [windowId]: {
+      ...windowSettings,
+      visible: true,
+      visibility: 'AutomaticVisibility',
+    },
+  };
 }
 
 function closeWindow(state: WindowsState, windowId: string) {
   const windowSettings = state[windowId];
-  return { ...state, [windowId]: { ...windowSettings, visible: false } };
+  return {
+    ...state,
+    [windowId]: { ...windowSettings, visible: false, visibility: 'Hidden' },
+  };
 }
 
 function setVisibility(state: WindowsState, payload: WindowVisibilityPayload) {

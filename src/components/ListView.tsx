@@ -8,6 +8,8 @@ import React from 'react';
 import {
   QQuickListView,
   QQmlListModel,
+  QQuickFlickable_BoundsBehavior,
+  QQuickFlickable_BoundsMovement,
 } from 'react-qml/dist/components/QtQuick';
 import { QQmlComponent } from 'react-qml/dist/components/QtQml';
 import {
@@ -24,6 +26,7 @@ type Props = {
   DelegateComponent?: any;
   HighlightComponent?: any;
   SectionDelegateComponent?: any;
+  initialViewAt?: 'beginning' | 'end';
 } & { [key: string]: any };
 
 type WithScrollBar = {
@@ -40,7 +43,15 @@ class ListView extends React.PureComponent<Props> {
   private vScrollBarRef = React.createRef<QQuickScrollBar>();
   private hScrollBarRef = React.createRef<QQuickScrollBar>();
 
-  doNotNotifyIndexChange = false;
+  private doNotNotifyIndexChange = false;
+
+  static StopAtBounds = QQuickFlickable_BoundsBehavior.StopAtBounds;
+  static DragOverBounds = QQuickFlickable_BoundsBehavior.DragOverBounds;
+  static OvershootBounds = QQuickFlickable_BoundsBehavior.OvershootBounds;
+  static DragAndOvershootBounds =
+    QQuickFlickable_BoundsBehavior.DragAndOvershootBounds;
+  static FollowBoundsBehavior =
+    QQuickFlickable_BoundsMovement.FollowBoundsBehavior;
 
   calculateCurrentIndex = () => {
     const {
@@ -75,6 +86,13 @@ class ListView extends React.PureComponent<Props> {
     $listView.currentIndex = currentIndex;
 
     this.doNotNotifyIndexChange = false;
+
+    const { initialViewAt } = this.props;
+    if (initialViewAt === 'beginning') {
+      $listView.positionViewAtBeginning();
+    } else if (initialViewAt === 'end') {
+      $listView.positionViewAtEnd();
+    }
   };
 
   componentDidMount() {
@@ -128,16 +146,15 @@ class ListView extends React.PureComponent<Props> {
       ) {
         $listView.section.delegate = $sectionDelegate;
       }
-    }
-
-    // TODO: revise this
-    if (this.props.data !== prevProps.data) {
-      this.updateModel();
+      // TODO: revise this
+      if (this.props.data !== prevProps.data) {
+        this.updateModel();
+      }
     }
   }
 
   onCurrentIndexChanged = () => {
-    if (this.doNotNotifyIndexChange) {
+    if (this.doNotNotifyIndexChange || !this.props.onItemClicked) {
       return;
     }
 
@@ -179,6 +196,7 @@ class ListView extends React.PureComponent<Props> {
       highlightMoveVelocity = -1,
       keyExtractor = this.defaultKeyExtractor, // eslint-disable-line
       selectedItem, // eslint-disable-line
+      initialViewAt, // eslint-disable-line
       ...otherProps
     } = this.props;
 

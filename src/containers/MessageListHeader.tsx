@@ -1,19 +1,15 @@
-import { get } from 'lodash';
-
 import { Rectangle, RowLayout, Text } from 'react-qml';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import { selectedConversationSelector } from '../state/conversation';
-import { selectedTeamSelector } from '../state/team';
-import { selfSelector } from '../state/self';
 import FontIcon from '../components/FontIcon';
+import { getSelectedConversation } from '../reducers/selectors';
+import { RootState } from '../reducers';
+import { Conversation } from '../actions/conversations-actions';
 
 const connectToRedux = connect(
-  state => ({
-    selectedTeam: selectedTeamSelector(state),
-    selectedConversation: selectedConversationSelector(state),
-    me: selfSelector(state),
+  (state: RootState) => ({
+    selectedConversation: getSelectedConversation(state),
   }),
   {}
 );
@@ -29,7 +25,7 @@ const styles = {
   headerBorderBottom: {
     color: '#ccc',
     height: 1,
-    y: 71,
+    y: 70,
   },
   headerText: {
     color: '#000',
@@ -48,9 +44,15 @@ const styles = {
 const fillParent = { fill: 'parent' };
 const fullWidth = { left: 'parent.left', right: 'parent.right' };
 
-class MessageListHeader extends React.Component {
+type Props = {
+  selectedConversation: Conversation | null | undefined;
+};
+
+class MessageListHeader extends React.Component<Props> {
   render() {
-    const convoName = get(this.props, 'selectedConversation.name', '');
+    const convoName = this.props.selectedConversation
+      ? this.props.selectedConversation.name
+      : '';
 
     return (
       <Rectangle style={styles.header}>

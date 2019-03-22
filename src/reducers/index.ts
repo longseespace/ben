@@ -10,6 +10,7 @@ import windowsReducer from './windows-reducers';
 import teamsReducer from './teams-reducers';
 import workspacesReducer from './workspaces-reducers';
 import conversationsReducer from './conversations-reducers';
+import timelinesReducer from './timelines-reducers';
 
 import SecureStorage from '../lib/SecureStorage';
 const secureStorage = new SecureStorage(KEYCHAIN_SERVICE_NAME);
@@ -35,6 +36,7 @@ const reducers = combineReducers({
   teams: teamsReducer,
   workspaces: workspacesReducer,
   conversations: conversationsReducer,
+  timelines: timelinesReducer,
 });
 
 const rootReducer = persistReducer(rootPersistConfig, reducers);
