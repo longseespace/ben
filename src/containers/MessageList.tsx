@@ -49,6 +49,7 @@ class MessageList extends React.PureComponent<Props> {
           boundsBehavior={ListView.StopAtBounds}
           boundsMovement={ListView.StopAtBounds}
           focus
+          keyNavigationEnabled={false}
         />
         <MessageListFooter />
       </ColumnLayout>
