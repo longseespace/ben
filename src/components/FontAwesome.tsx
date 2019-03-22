@@ -16,7 +16,7 @@ type Props = {
   style?: any;
 };
 
-const FontIcon: React.FC<Props> = ({
+const FontAwesome: React.FC<Props> = ({
   name,
   solid = false,
   size = 9,
@@ -35,4 +35,4 @@ const FontIcon: React.FC<Props> = ({
   />
 );
 
-export default FontIcon;
+export default FontAwesome;

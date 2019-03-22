@@ -2,7 +2,7 @@ import { Rectangle, RowLayout, Text } from 'react-qml';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import FontIcon from '../components/FontIcon';
+import FontAwesome from '../components/FontAwesome';
 import { getSelectedConversation } from '../reducers/selectors';
 import { RootState } from '../reducers';
 import { Conversation } from '../actions/conversations-actions';
@@ -58,7 +58,7 @@ class MessageListHeader extends React.Component<Props> {
       <Rectangle style={styles.header}>
         <RowLayout anchors={fillParent} spacing={0}>
           <Text text={convoName} style={styles.headerText} />
-          <FontIcon
+          <FontAwesome
             name="ellipsis-v"
             size={16}
             color="#333"

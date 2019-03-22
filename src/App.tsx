@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import MainWindow from './containers/MainWindow';
 import { Persistor } from 'redux-persist';
 import { Store } from 'redux';
+import ResourcesLoader from './components/ResourcesLoader';
 
 type AppProps = {
   store: Store;
@@ -25,7 +26,9 @@ class App extends React.Component<AppProps> {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <MainWindow />
+          <ResourcesLoader>
+            <MainWindow />
+          </ResourcesLoader>
         </PersistGate>
       </Provider>
     );

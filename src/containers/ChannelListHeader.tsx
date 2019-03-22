@@ -2,7 +2,7 @@ import { Column, Rectangle, RowLayout, Text } from 'react-qml';
 import { connect } from 'react-redux';
 import React from 'react';
 
-import FontIcon from '../components/FontIcon';
+import FontAwesome from '../components/FontAwesome';
 import { getSelectedTeamName, getCurrentUser } from '../reducers/selectors';
 import { RootState } from '../reducers';
 import { User } from '../actions/team-actions';
@@ -66,7 +66,7 @@ class ChannelListHeader extends React.Component<Props> {
           <Column Layout={{ leftMargin: 16, fillWidth: true }} spacing={0}>
             <Text text={teamName} style={styles.headerText} />
             <RowLayout style={styles.userPresenceContainer}>
-              <FontIcon
+              <FontAwesome
                 name="circle"
                 size={9}
                 color={userActive ? '#a6e576' : '#ccc'}
@@ -76,7 +76,7 @@ class ChannelListHeader extends React.Component<Props> {
               <Text text={userName} style={styles.userPresenceText} />
             </RowLayout>
           </Column>
-          <FontIcon
+          <FontAwesome
             name="bell"
             size={20}
             color="#ccc"
