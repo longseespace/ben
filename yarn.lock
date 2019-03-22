@@ -4552,10 +4552,10 @@ react-proxy@^3.0.0-alpha.0:
   dependencies:
     lodash "^4.6.1"
 
-react-qml@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/react-qml/-/react-qml-0.4.1.tgz#16dd434ffe333dc38ebdc771a5a08a128a5b8ae8"
-  integrity sha512-TTq6Cwianh1AA8tzev0VRbz5ngN4EAxorOcDEvrw6Bxs8xzXx69CJyK6uMEb9CHoYEKfWAYL1482Q64sLAO9fw==
+react-qml@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/react-qml/-/react-qml-0.4.2.tgz#222d5353e634a7362c0d2031020da197295bce4c"
+  integrity sha512-fLgpzI9/8p2Ggy4AjPW+mKmV6dR0lWRHbEcXeXj29IDVpCqTqEtJo+iYmV9lRKE4UyyFCqQgeYQtrn4jG5/Wrg==
   dependencies:
     invariant "^2.2.4"
     react-reconciler "^0.18.0"
