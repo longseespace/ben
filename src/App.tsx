@@ -13,12 +13,20 @@ type AppProps = {
 };
 
 class App extends React.Component<AppProps> {
+  onAppStateChanged = (state: any) => {
+    if (state === Qt.ApplicationInactive) {
+      gc();
+    }
+  };
+
   componentDidMount() {
     console.log('App', 'componentDidMount');
+    Qt.application.stateChanged.connect(this.onAppStateChanged);
   }
 
   componentWillUnmount() {
     console.log('App', 'componentWillUnmount');
+    Qt.application.stateChanged.disconnect(this.onAppStateChanged);
   }
 
   render() {
