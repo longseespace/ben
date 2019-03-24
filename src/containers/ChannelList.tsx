@@ -57,6 +57,10 @@ class ChannelList extends React.PureComponent<Props> {
     <ChannelListItem id={item.id} name={item.name} />
   );
 
+  componentDidUpdate() {
+    console.timeEnd('SELECT_TEAM');
+  }
+
   render() {
     const { conversationList = [] } = this.props;
 
