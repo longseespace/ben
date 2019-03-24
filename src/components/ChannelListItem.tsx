@@ -66,7 +66,6 @@ class ChannelListItem extends React.Component<Props> {
 
     return (
       <Rectangle
-        key={id}
         objectName={id}
         style={styles.container}
         color={hovering ? Qt.rgba(255, 255, 255, 0.1) : 'transparent'}

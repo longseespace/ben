@@ -54,7 +54,7 @@ class ChannelList extends React.PureComponent<Props> {
   keyExtractor = (item: Conversation) => item.id;
 
   renderItem = (item: Conversation) => (
-    <ChannelListItem id={item.id} name={item.name} />
+    <ChannelListItem key={item.id} id={item.id} name={item.name} />
   );
 
   componentDidUpdate() {
