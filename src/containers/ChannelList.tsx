@@ -1,12 +1,9 @@
-import { ColumnLayout } from 'react-qml';
+import { ColumnLayout, Text, Column } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import ChannelDelegate from '../components/ChannelDelegate.qml';
-import ChannelHighlight from '../components/ChannelHighlight.qml';
 import ChannelListHeader from './ChannelListHeader';
-import ListView from '../components/ListView';
-import SectionDelegate from '../components/SectionDelegate.qml';
+import FlatList from '../components/FlatList';
 import {
   getConverstionList,
   getSelectedConversationId,
@@ -14,6 +11,7 @@ import {
 import { selectConversation } from '../actions/app-teams-actions';
 import { RootState } from '../reducers';
 import { Conversation } from '../actions/conversations-actions';
+import ChannelListItem from '../components/ChannelListItem';
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -34,6 +32,11 @@ const styles = {
     fillWidth: true,
     alignment: Qt.AlignTop,
   },
+  listItem: {
+    fontSize: 16,
+    fontFamily: 'Lato',
+    color: '#fff',
+  },
 };
 
 type Props = {
@@ -50,21 +53,20 @@ class ChannelList extends React.PureComponent<Props> {
 
   keyExtractor = (item: Conversation) => item.id;
 
+  renderItem = (item: Conversation) => (
+    <ChannelListItem id={item.id} name={item.name} />
+  );
+
   render() {
-    const { conversationList = [], selectedConversationId = '' } = this.props;
+    const { conversationList = [] } = this.props;
 
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
         <ChannelListHeader />
-        <ListView
+        <FlatList
           data={conversationList}
           keyExtractor={this.keyExtractor}
-          selectedItem={selectedConversationId}
-          onItemClicked={this.onItemClicked}
-          sectionProperty="section"
-          DelegateComponent={ChannelDelegate}
-          HighlightComponent={ChannelHighlight}
-          SectionDelegateComponent={SectionDelegate}
+          renderItem={this.renderItem}
           style={styles.listLayout}
           focus
         />
