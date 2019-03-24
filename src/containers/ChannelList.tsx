@@ -50,6 +50,10 @@ class ChannelList extends React.PureComponent<Props> {
 
   keyExtractor = (item: Conversation) => item.id;
 
+  componentDidUpdate() {
+    console.timeEnd('SELECT_TEAM');
+  }
+
   render() {
     const { conversationList = [], selectedConversationId = '' } = this.props;
 

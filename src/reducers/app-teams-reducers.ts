@@ -69,6 +69,7 @@ function removeTeam(state: AppTeamsState, teamId: string) {
 }
 
 function selectTeam(state: AppTeamsState, teamId: string) {
+  console.time('SELECT_TEAM');
   if (!state.teamList.includes(teamId)) {
     console.error('Team not found', teamId);
     return state;
