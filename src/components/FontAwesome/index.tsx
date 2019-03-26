@@ -1,6 +1,6 @@
 import { Text } from 'react-qml';
 import React from 'react';
-import iconChars from './fa.json';
+import iconChars from './icons.json';
 
 function iconNameToUnicode(name: string, solid = false) {
   const iconSet = solid ? iconChars.solid : iconChars.regular;

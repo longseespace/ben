@@ -2,7 +2,7 @@ import { ColumnLayout } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import ChannelDelegate from '../components/ChannelDelegate.qml';
+import ChannelDelegate from '../components/ChannelDelegate';
 import ChannelHighlight from '../components/ChannelHighlight.qml';
 import ChannelListHeader from './ChannelListHeader';
 import ListView from '../components/ListView';
