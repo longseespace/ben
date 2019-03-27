@@ -10,6 +10,7 @@ import {
 import { SimpleThunkAction } from '../constants';
 import { RootState } from '../reducers';
 import { Timeline, setInitialTimeline } from './timelines-actions';
+import { connectToWorkspace } from '../store/rtmMiddleware/actions';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
@@ -106,6 +107,8 @@ export const initWorkspace = (
       };
       dispatch(setInitialTimeline(selectedConversationId, timeline));
     }
+
+    dispatch(connectToWorkspace(teamId, token));
 
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {

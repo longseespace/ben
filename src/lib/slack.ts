@@ -50,7 +50,7 @@ export async function rtmConnect(token: string) {
     const ws = new WebSocket(connectJson.url);
     return ws;
   }
-  return false;
+  throw connectJson;
 }
 
 type TokenEntry = {
@@ -77,4 +77,7 @@ export const fetchTokensFromSlack = () =>
 
 export default {
   apiCall,
+  rtmConnect,
+  fetchTokensFromSlack,
+  signInWithPassword,
 };
