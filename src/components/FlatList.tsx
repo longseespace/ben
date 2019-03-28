@@ -10,6 +10,7 @@ import {
   QQuickFlickable_BoundsBehavior,
   QQuickFlickable_BoundsMovement,
   QQmlObjectModel,
+  QQuickItemView_PositionMode,
 } from 'react-qml/dist/components/QtQuick';
 import {
   QQuickScrollBar,
@@ -53,6 +54,14 @@ class FlatList extends React.PureComponent<Props> {
       $listView.ScrollBar.vertical = $vScrollBar;
       $listView.ScrollBar.horizontal = $hScrollBar;
     }
+
+    const { initialScrollIndex } = this.props;
+    if ($listView && initialScrollIndex >= 0) {
+      $listView.positionViewAtIndex(
+        initialScrollIndex,
+        QQuickItemView_PositionMode.Visible
+      );
+    }
   }
 
   defaultKeyExtractor = (item: any, index: number) => {
@@ -61,11 +70,12 @@ class FlatList extends React.PureComponent<Props> {
 
   render() {
     const {
-      data, // eslint-disable-line
+      data,
       highlightMoveVelocity = -1,
-      keyExtractor = this.defaultKeyExtractor, // eslint-disable-line
-      initialViewAt, // eslint-disable-line
-      extraData, // eslint-disable-line
+      keyExtractor = this.defaultKeyExtractor,
+      initialViewAt,
+      extraData,
+      initialScrollIndex,
       renderItem,
       ...otherProps
     } = this.props;

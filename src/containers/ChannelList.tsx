@@ -86,6 +86,10 @@ class ChannelList extends React.Component<Props> {
       allUserPresences,
     };
 
+    const selectedIndex = conversationList.findIndex(
+      c => c.id === selectedConversationId
+    );
+
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
         <ChannelListHeader />
@@ -95,6 +99,7 @@ class ChannelList extends React.Component<Props> {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           style={styles.listLayout}
+          initialScrollIndex={selectedIndex}
         />
       </ColumnLayout>
     );
