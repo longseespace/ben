@@ -65,6 +65,7 @@ class FlatList extends React.PureComponent<Props> {
       highlightMoveVelocity = -1,
       keyExtractor = this.defaultKeyExtractor, // eslint-disable-line
       initialViewAt, // eslint-disable-line
+      extraData, // eslint-disable-line
       renderItem,
       ...otherProps
     } = this.props;

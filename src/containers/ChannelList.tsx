@@ -7,16 +7,19 @@ import FlatList from '../components/FlatList';
 import {
   getConverstionList,
   getSelectedConversationId,
+  getAllUserPresences,
 } from '../reducers/selectors';
 import { selectConversation } from '../actions/app-teams-actions';
 import { RootState } from '../reducers';
 import { Conversation } from '../actions/conversations-actions';
 import ChannelListItem from '../components/ChannelListItem';
+import { PresencesState } from '../reducers/presences-reducers';
 
 const connectToRedux = connect(
   (state: RootState) => ({
     conversationList: getConverstionList(state),
     selectedConversationId: getSelectedConversationId(state) || '',
+    allUserPresences: getAllUserPresences(state),
   }),
   {
     selectConversation,
@@ -43,9 +46,10 @@ type Props = {
   conversationList: Array<Conversation>;
   selectedConversationId: string;
   selectConversation: Function;
+  allUserPresences: PresencesState;
 };
 
-class ChannelList extends React.PureComponent<Props> {
+class ChannelList extends React.Component<Props> {
   onItemClicked = (item: Conversation) => {
     console.log('onItemClicked', item.name);
     this.props.selectConversation(item.id);
@@ -54,7 +58,16 @@ class ChannelList extends React.PureComponent<Props> {
   keyExtractor = (item: Conversation) => item.id;
 
   renderItem = (item: Conversation) => (
-    <ChannelListItem key={item.id} id={item.id} name={item.name} />
+    <ChannelListItem
+      key={item.id}
+      selected={item.id === this.props.selectedConversationId}
+      model={item}
+      onClicked={this.onItemClicked}
+      userActive={
+        item.user_id === 'USLACKBOT' ||
+        this.props.allUserPresences[item.user_id] === 'active'
+      }
+    />
   );
 
   componentDidUpdate() {
@@ -62,17 +75,26 @@ class ChannelList extends React.PureComponent<Props> {
   }
 
   render() {
-    const { conversationList = [] } = this.props;
+    const {
+      conversationList = [],
+      selectedConversationId,
+      allUserPresences,
+    } = this.props;
+
+    const extraData = {
+      selectedItemId: selectedConversationId,
+      allUserPresences,
+    };
 
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
         <ChannelListHeader />
         <FlatList
           data={conversationList}
+          extraData={extraData}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           style={styles.listLayout}
-          focus
         />
       </ColumnLayout>
     );

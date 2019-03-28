@@ -7,8 +7,11 @@ Rectangle {
   property alias text: inner.text
   property alias textColor: inner.color
   property alias fontSize: inner.font.pointSize
+  z: 2
 
+  color: '#83ad91'
   height: 18
+  radius: height
   width: inner.text.length > 1 ? inner.paintedWidth + height / 2 : height
 
   Text {
