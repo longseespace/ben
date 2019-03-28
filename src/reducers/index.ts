@@ -11,6 +11,7 @@ import teamsReducer from './teams-reducers';
 import workspacesReducer from './workspaces-reducers';
 import conversationsReducer from './conversations-reducers';
 import timelinesReducer from './timelines-reducers';
+import presencesReducer from './presences-reducers';
 
 import SecureStorage from '../lib/SecureStorage';
 const secureStorage = new SecureStorage(KEYCHAIN_SERVICE_NAME);
@@ -37,6 +38,7 @@ const reducers = combineReducers({
   workspaces: workspacesReducer,
   conversations: conversationsReducer,
   timelines: timelinesReducer,
+  presences: presencesReducer,
 });
 
 const rootReducer = persistReducer(rootPersistConfig, reducers);

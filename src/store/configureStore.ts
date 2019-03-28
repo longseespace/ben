@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, AnyAction } from 'redux';
 import { composeWithDevTools } from 'remote-redux-devtools';
 import {
   connectRouter,
@@ -13,7 +13,6 @@ import rtmMiddleware from './rtmMiddleware';
 import rootReducer, { RootState } from '../reducers';
 import rootEpic from '../epics';
 import { createEpicMiddleware } from 'redux-observable';
-import { AnyAction } from '../constants';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 

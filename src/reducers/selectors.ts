@@ -161,3 +161,6 @@ export const getMessageList = createSelector(
       : [];
   }
 );
+
+// Presences
+export const getAllUserPresences = (state: RootState) => state.presences;

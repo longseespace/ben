@@ -82,6 +82,8 @@ export const initWorkspace = (
       initTimeline,
     ]);
 
+    dispatch(connectToWorkspace(teamId, token));
+
     const team = {
       ...(clientJson.team as Team),
       user: clientJson.self,
@@ -107,8 +109,6 @@ export const initWorkspace = (
       };
       dispatch(setInitialTimeline(selectedConversationId, timeline));
     }
-
-    dispatch(connectToWorkspace(teamId, token));
 
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {

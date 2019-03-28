@@ -22,10 +22,6 @@ export function reducer(
 }
 
 function addTeam(teams: TeamsState, team: Team) {
-  if (teams[team.id]) {
-    return teams;
-  }
-
   return {
     ...teams,
     [team.id]: team,

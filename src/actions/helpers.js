@@ -21,6 +21,7 @@ export const getConversationListFromUserCountsAPI = payload => {
 // @see https://doc.qt.io/archives/qt-5.10/qml-qtqml-models-listmodel.html#dynamicRoles-prop
 const defaultConversationItem = {
   id: '',
+  user_id: '',
   name: '',
   section: '',
   is_im: false,
