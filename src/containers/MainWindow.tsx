@@ -123,7 +123,7 @@ class MainWindow extends React.Component<Props> {
         y={windowY}
         width={windowWidth}
         height={windowHeight}
-        title="Ben"
+        title={settings.title}
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
         ref={this.windowRef}
       >

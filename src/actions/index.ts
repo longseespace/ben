@@ -33,12 +33,17 @@ export const APP_TEAMS = {
 };
 
 // WINDOWs
-export type windowsType = 'OPEN_WINDOW' | 'CLOSE_WINDOW' | 'SET_VISIBILITY';
+export type windowsType =
+  | 'OPEN_WINDOW'
+  | 'CLOSE_WINDOW'
+  | 'SET_VISIBILITY'
+  | 'SET_TITLE';
 
 export const WINDOWS = {
   OPEN_WINDOW: 'OPEN_WINDOW' as windowsType,
   CLOSE_WINDOW: 'CLOSE_WINDOW' as windowsType,
   SET_VISIBILITY: 'SET_VISIBILITY' as windowsType,
+  SET_TITLE: 'SET_TITLE' as windowsType,
 };
 
 // WORKSPACE

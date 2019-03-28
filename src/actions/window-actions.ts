@@ -12,6 +12,15 @@ export const closeWindow = (windowId: string) => ({
   payload: windowId,
 });
 
+export type WindowTitlePayload = {
+  windowId: string;
+  title: string;
+};
+export const setWindowTitle = (windowId: string, title: string) => ({
+  type: WINDOWS.SET_TITLE,
+  payload: { windowId, title } as WindowTitlePayload,
+});
+
 export type WindowVisibilityPayload = {
   windowId: string;
   visibility: string;
