@@ -14,6 +14,8 @@ import { RootState } from '../reducers';
 import { Conversation } from '../actions/conversations-actions';
 import ChannelListItem from '../components/ChannelListItem';
 import { PresencesState } from '../reducers/presences-reducers';
+import SectionList, { Section } from '../components/SectionList';
+import ChannelListSection from '../components/ChannelListSection';
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -57,6 +59,10 @@ class ChannelList extends React.Component<Props> {
 
   keyExtractor = (item: Conversation) => item.id;
 
+  renderSectionHeader = (section: Section) => (
+    <ChannelListSection key={`${section.title}-header`} title={section.title} />
+  );
+
   renderItem = (item: Conversation) => (
     <ChannelListItem
       key={item.id}
@@ -81,6 +87,17 @@ class ChannelList extends React.Component<Props> {
       allUserPresences,
     } = this.props;
 
+    const sections = [
+      {
+        title: 'Channels',
+        data: conversationList.filter(c => c.section === 'Channels'),
+      },
+      {
+        title: 'Direct Messages',
+        data: conversationList.filter(c => c.section === 'Direct Messages'),
+      },
+    ];
+
     const extraData = {
       selectedItemId: selectedConversationId,
       allUserPresences,
@@ -93,11 +110,12 @@ class ChannelList extends React.Component<Props> {
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
         <ChannelListHeader />
-        <FlatList
-          data={conversationList}
+        <SectionList
+          sections={sections}
           extraData={extraData}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          renderSectionHeader={this.renderSectionHeader}
           style={styles.listLayout}
           initialScrollIndex={selectedIndex}
         />

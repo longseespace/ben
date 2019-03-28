@@ -1,17 +1,8 @@
 import React from 'react';
 import Badge from './Badge.qml';
-import {
-  RowLayout,
-  Text,
-  Rectangle,
-  MouseArea,
-  QtQuickControls2,
-} from 'react-qml';
+import { RowLayout, Text, Rectangle, MouseArea } from 'react-qml';
 import { Conversation } from '../actions/conversations-actions';
 import FontAwesome from './FontAwesome';
-import { QQuickRectangle } from 'react-qml/dist/components/QtQuick';
-import { QQuickToolTipAttached } from 'react-qml/dist/components/QtQuickControls2';
-const { ToolTip } = QtQuickControls2;
 
 const styles = {
   container: {
