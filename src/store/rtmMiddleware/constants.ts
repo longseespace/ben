@@ -1,0 +1,16 @@
+export type rtmType =
+  | 'RTM_CONNECT'
+  | 'RTM_CONNECT_SUCCESS'
+  | 'RTM_CONNECT_FAILURE'
+  | 'RTM_EVENT'
+  | 'RTM_CONNECTION_CLOSED'
+  | 'RTM_SEND';
+
+export const RTM = {
+  RTM_CONNECT: 'RTM_CONNECT' as rtmType,
+  RTM_CONNECT_SUCCESS: 'RTM_CONNECT_SUCCESS' as rtmType,
+  RTM_CONNECT_FAILURE: 'RTM_CONNECT_FAILURE' as rtmType,
+  RTM_EVENT: 'RTM_EVENT' as rtmType,
+  RTM_CONNECTION_CLOSED: 'RTM_CONNECTION_CLOSED' as rtmType,
+  RTM_SEND: 'RTM_SEND' as rtmType,
+};

@@ -3,10 +3,14 @@ import slack from '../lib/slack';
 import { Team, addTeam } from './team-actions';
 import { selectTeam } from './app-teams-actions';
 import { setConversationList } from './conversations-actions';
-import { getConversationListFromUserCountsAPI } from './helpers';
+import {
+  getConversationListFromUserCountsAPI,
+  standardizeMessage,
+} from './helpers';
 import { SimpleThunkAction } from '../constants';
 import { RootState } from '../reducers';
 import { Timeline, setInitialTimeline } from './timelines-actions';
+import { connectToWorkspace } from '../store/rtmMiddleware/actions';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
@@ -78,6 +82,8 @@ export const initWorkspace = (
       initTimeline,
     ]);
 
+    dispatch(connectToWorkspace(teamId, token));
+
     const team = {
       ...(clientJson.team as Team),
       user: clientJson.self,
@@ -94,8 +100,9 @@ export const initWorkspace = (
     dispatch(setConversationList(team.id, conversationsList));
 
     if (timelineJson) {
+      const messages = timelineJson.messages.reverse().map(standardizeMessage);
       const timeline: Timeline = {
-        messages: timelineJson.messages,
+        messages,
         query: {},
         hasMore: timelineJson.has_more,
         pinCount: timelineJson.pin_count,

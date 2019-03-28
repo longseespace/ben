@@ -3,6 +3,7 @@ import { ACTIONS } from 'redux-api-call';
 import { StringMap } from '../constants';
 import { Timeline, TimelineSetPayload } from '../actions/timelines-actions';
 import { TIMELINES } from '../actions';
+import { standardizeMessage } from '../actions/helpers';
 
 export type TimelinesState = StringMap<Timeline>;
 
@@ -29,7 +30,7 @@ function handleMessagesLoaded(state: TimelinesState, payload: any) {
 
   const timeline = state[channel] || { messages: [] };
   timeline.query = query;
-  const newMessages = messages.map((m: any) => ({ ...m, ts: Number(m.ts) }));
+  const newMessages = messages.map(standardizeMessage);
   timeline.messages = [...newMessages, ...timeline.messages];
   timeline.hasMore = payload.json.has_more;
   timeline.pinCount = payload.json.pin_count;

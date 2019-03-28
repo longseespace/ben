@@ -110,10 +110,10 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.7.1.tgz#e4bdc6fd2a7b5a41d5b599bcb62cf22c78f7f535"
   integrity sha512-gukWJ7Mwf0WXQbkcwcm5zi8+H8aT5MMnphf5hpydOw898H1ibgm2cyejHgk6Km/FTvrPp5ppUHLrlFwt0QxsQw==
 
-"@react-qml/cli@^0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@react-qml/cli/-/cli-0.1.4.tgz#41b942f0db1a7085157e3dd1995196388c874a7f"
-  integrity sha512-ammKLNcW4wwt0P+3pOZMyM+0UNKxNUeK8jPQ2p3DSRecyKB99QM3LYnQTTwlSVJVGqtwcPcM7coxxjlGeyhYaw==
+"@react-qml/cli@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@react-qml/cli/-/cli-0.1.5.tgz#0afe81877281adc20f10f49727ec41f0a7301c12"
+  integrity sha512-bKPIu6d41l/u8Ms+bOsGOPMd4QqBXHD7elpcApDBPnjlm8RC/qjMcO3Alu8E1UL4U8IBQEmCEB6RoINYEAKjEQ==
   dependencies:
     "@zamotany/react-proxy" "3.0.0-alpha.4"
     babel-core "^6.24.0"
@@ -286,6 +286,11 @@
     "@types/tapable" "*"
     "@types/uglify-js" "*"
     source-map "^0.6.0"
+
+"@types/websql@^0.0.27":
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/@types/websql/-/websql-0.0.27.tgz#621a666a7f02018e7cbb4abab956a25736c27d71"
+  integrity sha1-Yhpman8CAY58u0q6uVaiVzbCfXE=
 
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"

@@ -3,14 +3,20 @@ import { connect } from 'react-redux';
 import React from 'react';
 
 import FontAwesome from '../components/FontAwesome';
-import { getSelectedTeamName, getCurrentUser } from '../reducers/selectors';
+import {
+  getSelectedTeamName,
+  getCurrentUser,
+  getAllUserPresences,
+} from '../reducers/selectors';
 import { RootState } from '../reducers';
 import { User } from '../actions/team-actions';
+import { PresencesState } from '../reducers/presences-reducers';
 
 const connectToRedux = connect(
   (state: RootState) => ({
     teamName: getSelectedTeamName(state),
     user: getCurrentUser(state),
+    allUserPresences: getAllUserPresences(state),
   }),
   {}
 );
@@ -52,13 +58,14 @@ const styles = {
 type Props = {
   teamName: string;
   user: User | null;
+  allUserPresences: PresencesState;
 };
 
 class ChannelListHeader extends React.Component<Props> {
   render() {
-    const { teamName, user } = this.props;
+    const { teamName, user, allUserPresences } = this.props;
     const userName = user ? user.name : '';
-    const userActive = Boolean(user && user.manual_presence === 'active');
+    const userActive = Boolean(user && allUserPresences[user.id] === 'active');
 
     return (
       <Rectangle style={styles.header}>

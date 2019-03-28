@@ -21,6 +21,7 @@ export const getConversationListFromUserCountsAPI = payload => {
 // @see https://doc.qt.io/archives/qt-5.10/qml-qtqml-models-listmodel.html#dynamicRoles-prop
 const defaultConversationItem = {
   id: '',
+  user_id: '',
   name: '',
   section: '',
   is_im: false,
@@ -73,3 +74,20 @@ const transformSectionDirectMessage = flow(
   transformMpimName,
   standardizeConversation
 );
+
+// ListModel disables dynamicRoles by default
+// we need to set model's schema explicitly
+// @see https://doc.qt.io/archives/qt-5.10/qml-qtqml-models-listmodel.html#dynamicRoles-prop
+const defaultMessage = {
+  client_msg_id: '',
+  type: '',
+  text: '',
+  user: '',
+  ts: 0,
+};
+
+export const standardizeMessage = obj => ({
+  ...defaultMessage,
+  ...obj,
+  ts: Number(obj.ts),
+});

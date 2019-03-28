@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, AnyAction } from 'redux';
 import { composeWithDevTools } from 'remote-redux-devtools';
 import {
   connectRouter,
@@ -9,10 +9,10 @@ import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
 
 import apiMiddleware from './apiMiddleware';
+import rtmMiddleware from './rtmMiddleware';
 import rootReducer, { RootState } from '../reducers';
 import rootEpic from '../epics';
 import { createEpicMiddleware } from 'redux-observable';
-import { AnyAction } from '../constants';
 import { BehaviorSubject } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -46,7 +46,13 @@ const rootReducerWithRouter = connectRouterHistory<RootState>(rootReducer);
 
 // finally composeEnhancers
 const enhancers = composeEnhancers(
-  applyMiddleware(reduxThunk, apiMiddleware, epicMiddleware, routerMiddleware)
+  applyMiddleware(
+    rtmMiddleware,
+    reduxThunk,
+    apiMiddleware,
+    epicMiddleware,
+    routerMiddleware
+  )
 );
 
 export { history };

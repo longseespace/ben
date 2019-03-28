@@ -3,7 +3,7 @@ import { CONVERSATIONS } from '../actions';
 import { StringMap } from '../constants';
 import {
   Conversation,
-  TeamConversationList,
+  TeamConversationListPayload,
 } from '../actions/conversations-actions';
 
 export type ConversationsState = StringMap<Array<Conversation>>;
@@ -24,7 +24,7 @@ export function reducer(
 
 function setConversationList(
   state: ConversationsState,
-  payload: TeamConversationList
+  payload: TeamConversationListPayload
 ) {
   const { teamId, conversations } = payload;
   return { ...state, [teamId]: conversations };

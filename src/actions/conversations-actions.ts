@@ -1,9 +1,10 @@
 import { CONVERSATIONS } from '.';
 
-export interface ConversationBase {
+export interface Conversation {
   id: string;
   name: string;
   section: string;
+  user_id: string;
   is_im: boolean;
   is_mpim: boolean;
   is_private: boolean;
@@ -16,9 +17,7 @@ export interface ConversationBase {
   mention_count?: number;
 }
 
-export type Conversation = Readonly<ConversationBase>;
-
-export type TeamConversationList = {
+export type TeamConversationListPayload = {
   teamId: string;
   conversations: Array<Conversation>;
 };
@@ -31,5 +30,5 @@ export const setConversationList = (
   payload: {
     teamId,
     conversations,
-  } as TeamConversationList,
+  } as TeamConversationListPayload,
 });
