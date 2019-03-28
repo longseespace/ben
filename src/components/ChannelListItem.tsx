@@ -1,8 +1,17 @@
 import React from 'react';
 import Badge from './Badge.qml';
-import { RowLayout, Text, Rectangle, MouseArea } from 'react-qml';
+import {
+  RowLayout,
+  Text,
+  Rectangle,
+  MouseArea,
+  QtQuickControls2,
+} from 'react-qml';
 import { Conversation } from '../actions/conversations-actions';
 import FontAwesome from './FontAwesome';
+import { QQuickRectangle } from 'react-qml/dist/components/QtQuick';
+import { QQuickToolTipAttached } from 'react-qml/dist/components/QtQuickControls2';
+const { ToolTip } = QtQuickControls2;
 
 const styles = {
   container: {
@@ -155,8 +164,19 @@ class ChannelListItem extends React.Component<Props> {
 
     const unreadCount = Number(model.dm_count) + Number(model.mention_count);
 
+    const ToolTip = {
+      delay: 100,
+      text: model.name,
+      visible: hovering && model.is_mpim,
+    };
+
     return (
-      <Rectangle objectName={id} style={containerStyles} {...otherProps}>
+      <Rectangle
+        objectName={id}
+        style={containerStyles}
+        ToolTip={ToolTip}
+        {...otherProps}
+      >
         <Badge
           visible={unreadCount > 0}
           text={unreadCount}
