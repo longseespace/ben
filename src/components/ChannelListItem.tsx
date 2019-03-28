@@ -79,7 +79,7 @@ const PrivateIcon = (props: IconProps) => (
 const DirectMessageIcon = (props: IconProps) => (
   <FontAwesome
     name="circle"
-    size={10}
+    size={9}
     color={props.color}
     solid={!!props.solid}
     style={styles.indicator}
@@ -126,6 +126,38 @@ class ChannelListItem extends React.Component<Props> {
     }
   };
 
+  getIconColor = () => {
+    const { model, userActive, selected } = this.props;
+
+    if (selected && model.is_im) {
+      return '#fff';
+    }
+
+    if (model.is_muted || (model.is_im && !userActive)) {
+      return Qt.rgba(255, 255, 255, 0.5);
+    }
+
+    return '#ddd';
+  };
+
+  getTextColor = () => {
+    const { model, userActive, selected } = this.props;
+
+    if (selected && model.is_im) {
+      return '#fff';
+    }
+
+    if (model.is_muted || (model.is_im && !userActive)) {
+      return Qt.rgba(255, 255, 255, 0.5);
+    }
+
+    if (selected || model.has_unreads) {
+      return '#fff';
+    }
+
+    return '#ddd';
+  };
+
   render() {
     const {
       style, // eslint-disable-line
@@ -141,20 +173,13 @@ class ChannelListItem extends React.Component<Props> {
 
     const isPublicChannel = !model.is_im && !model.is_mpim && !model.is_private;
     const isPrivateChannel = !model.is_im && !model.is_mpim && model.is_private;
-    const iconColor = model.is_muted
-      ? Qt.rgba(255, 255, 255, 0.3)
-      : selected
-      ? '#fff'
-      : '#eee';
-    const textColor = model.is_muted
-      ? Qt.rgba(255, 255, 255, 0.3)
-      : selected || model.has_unreads
-      ? '#fff'
-      : '#ddd';
+    const iconColor = this.getIconColor();
+    const textColor = this.getTextColor();
 
-    const nameStyles = model.has_unreads
-      ? [styles.name, styles.nameHasUnreads]
-      : styles.name;
+    const nameStyles =
+      model.has_unreads && !model.is_muted
+        ? [styles.name, styles.nameHasUnreads]
+        : styles.name;
 
     const containerStyles = [
       styles.container,
