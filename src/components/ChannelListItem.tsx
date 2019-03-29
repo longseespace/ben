@@ -27,10 +27,6 @@ const styles = {
     maximumWidth: 10,
     topMargin: 2,
   },
-  hash: {
-    fontSize: 16,
-    fontFamily: 'Lato',
-  },
   name: {
     fontSize: 16,
     fontFamily: 'Lato',
@@ -54,7 +50,13 @@ type IconProps = {
 };
 
 const HashIcon = (props: IconProps) => (
-  <Text text="#" style={[styles.indicator, styles.hash]} color={props.color} />
+  <FontAwesome
+    name="hashtag"
+    size={10}
+    color={props.color}
+    solid
+    style={styles.indicator}
+  />
 );
 
 const PrivateIcon = (props: IconProps) => (
