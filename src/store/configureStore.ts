@@ -10,6 +10,7 @@ import reduxThunk from 'redux-thunk';
 
 import apiMiddleware from './apiMiddleware';
 import rtmMiddleware from './rtmMiddleware';
+import notificationMiddleware from './notificationMiddleware';
 import rootReducer, { RootState } from '../reducers';
 import rootEpic from '../epics';
 import { createEpicMiddleware } from 'redux-observable';
@@ -47,6 +48,7 @@ const rootReducerWithRouter = connectRouterHistory<RootState>(rootReducer);
 // finally composeEnhancers
 const enhancers = composeEnhancers(
   applyMiddleware(
+    notificationMiddleware,
     rtmMiddleware,
     reduxThunk,
     apiMiddleware,

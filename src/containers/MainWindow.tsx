@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import AppMenu from './AppMenu';
+import AppTrayIcon from './AppTrayIcon';
 import ErrorBoundary from '../components/ErrorBoundary';
 import SigninWindow from './SigninWindow';
 import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
@@ -129,6 +130,7 @@ class MainWindow extends React.Component<Props> {
       >
         <ErrorBoundary>
           <AppMenu />
+          <AppTrayIcon />
           <SigninWindow />
           <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
             <Rectangle
