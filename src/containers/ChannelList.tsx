@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import ChannelListHeader from './ChannelListHeader';
-import FlatList from '../components/FlatList';
 import {
-  getConverstionList,
   getSelectedConversationId,
   getAllUserPresences,
+  getConversationSectionList,
 } from '../reducers/selectors';
 import { selectConversation } from '../actions/app-teams-actions';
 import { RootState } from '../reducers';
@@ -19,7 +18,7 @@ import ChannelListSection from '../components/ChannelListSection';
 
 const connectToRedux = connect(
   (state: RootState) => ({
-    conversationList: getConverstionList(state),
+    conversationSectionList: getConversationSectionList(state),
     selectedConversationId: getSelectedConversationId(state) || '',
     allUserPresences: getAllUserPresences(state),
   }),
@@ -45,7 +44,7 @@ const styles = {
 };
 
 type Props = {
-  conversationList: Array<Conversation>;
+  conversationSectionList: Array<Section>;
   selectedConversationId: string;
   selectConversation: Function;
   allUserPresences: PresencesState;
@@ -82,42 +81,47 @@ class ChannelList extends React.Component<Props> {
 
   render() {
     const {
-      conversationList = [],
+      conversationSectionList = [],
       selectedConversationId,
       allUserPresences,
     } = this.props;
-
-    const sections = [
-      {
-        title: 'Channels',
-        data: conversationList.filter(c => c.section === 'Channels'),
-      },
-      {
-        title: 'Direct Messages',
-        data: conversationList.filter(c => c.section === 'Direct Messages'),
-      },
-    ];
 
     const extraData = {
       selectedItemId: selectedConversationId,
       allUserPresences,
     };
 
-    const selectedIndex = conversationList.findIndex(
+    let initialScrollPosition;
+    const maybeChannelIndex = conversationSectionList[0].data.findIndex(
       c => c.id === selectedConversationId
     );
+    const maybeDMIndex = conversationSectionList[1].data.findIndex(
+      c => c.id === selectedConversationId
+    );
+
+    if (maybeChannelIndex > -1) {
+      initialScrollPosition = {
+        sectionIndex: 0,
+        itemIndex: maybeChannelIndex,
+      };
+    } else if (maybeDMIndex > -1) {
+      initialScrollPosition = {
+        sectionIndex: 1,
+        itemIndex: maybeDMIndex,
+      };
+    }
 
     return (
       <ColumnLayout anchors={{ fill: 'parent' }} style={styles.container}>
         <ChannelListHeader />
         <SectionList
-          sections={sections}
+          sections={conversationSectionList}
           extraData={extraData}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           renderSectionHeader={this.renderSectionHeader}
           style={styles.listLayout}
-          initialScrollIndex={selectedIndex}
+          initialScrollPosition={initialScrollPosition}
         />
       </ColumnLayout>
     );

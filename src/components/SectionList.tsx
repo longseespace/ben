@@ -30,12 +30,17 @@ type Props = {
   renderItem: (item: any, index: number, section: Section) => any;
   renderSectionHeader?: (section: Section) => any;
   renderSectionFooter?: (section: Section) => any;
-  initialScrollIndex?: number;
+  initialScrollPosition?: ScrollPosition;
   extraData?: any;
 } & { [key: string]: any };
 
 type WithScrollBar = {
   ScrollBar: QQuickScrollBarAttached;
+};
+
+export type ScrollPosition = {
+  itemIndex: number;
+  sectionIndex: number;
 };
 
 class SectionList extends React.PureComponent<Props> {
@@ -65,14 +70,28 @@ class SectionList extends React.PureComponent<Props> {
       $listView.ScrollBar.horizontal = $hScrollBar;
     }
 
-    const { initialScrollIndex = -1 } = this.props;
-    if ($listView && initialScrollIndex >= 0) {
-      $listView.positionViewAtIndex(
-        initialScrollIndex,
-        QQuickItemView_PositionMode.Visible
-      );
+    const { initialScrollPosition } = this.props;
+    if (initialScrollPosition) {
+      this.scrollToLocation(initialScrollPosition);
     }
   }
+
+  scrollToLocation = (position: ScrollPosition) => {
+    const $listView = this.listViewRef.current;
+    if ($listView) {
+      const { sections } = this.props;
+      const { sectionIndex, itemIndex } = position;
+      const totalItemsBefore = sections
+        .slice(0, sectionIndex)
+        .reduce((acc, section) => acc + section.data.length, 0);
+      const actualIndex = totalItemsBefore + itemIndex;
+
+      $listView.positionViewAtIndex(
+        actualIndex,
+        QQuickItemView_PositionMode.Center
+      );
+    }
+  };
 
   defaultKeyExtractor = (item: any, index: number) => {
     return item.hasOwnProperty('key') ? item.key : index;
@@ -85,12 +104,13 @@ class SectionList extends React.PureComponent<Props> {
       renderSectionFooter,
       renderItem,
     } = this.props;
+
     return sections.map(section => (
-      <Column key={section.title}>
+      <React.Fragment key={section.title}>
         {renderSectionHeader && renderSectionHeader(section)}
         {section.data.map((item, index) => renderItem(item, index, section))}
         {renderSectionFooter && renderSectionFooter(section)}
-      </Column>
+      </React.Fragment>
     ));
   };
 
@@ -99,7 +119,7 @@ class SectionList extends React.PureComponent<Props> {
       sections,
       keyExtractor = this.defaultKeyExtractor,
       extraData,
-      initialScrollIndex,
+      initialScrollPosition,
       renderItem,
       renderSectionHeader,
       ...otherProps

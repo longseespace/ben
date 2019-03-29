@@ -1,5 +1,5 @@
 import React from 'react';
-import { Column, Text } from 'react-qml';
+import { Text } from 'react-qml';
 
 type Props = {
   title: string;
@@ -10,13 +10,14 @@ const styles = {
     color: '#fff',
     fontSize: 16,
     fontFamily: 'Lato',
+    leftPadding: 16,
+    topPadding: 20,
+    bottomPadding: 5,
   },
 };
 
 const ChannelListSection: React.FC<Props> = props => (
-  <Column leftPadding={16} topPadding={20} bottomPadding={5}>
-    <Text style={styles.text} text={props.title} />
-  </Column>
+  <Text style={styles.text} text={props.title} />
 );
 
 export default ChannelListSection;

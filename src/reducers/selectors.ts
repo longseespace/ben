@@ -98,6 +98,24 @@ export const getConverstionList = createSelector(
   }
 );
 
+export const getConversationSectionList = createSelector(
+  getConverstionList,
+  conversationList => {
+    const sections = [
+      {
+        title: 'Channels',
+        data: conversationList.filter(c => c.section === 'Channels'),
+      },
+      {
+        title: 'Direct Messages',
+        data: conversationList.filter(c => c.section === 'Direct Messages'),
+      },
+    ];
+
+    return sections;
+  }
+);
+
 export const getSelectedConversation = createSelector(
   getConverstionList,
   getSelectedConversationId,
