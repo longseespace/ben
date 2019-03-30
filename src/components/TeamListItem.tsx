@@ -5,6 +5,7 @@ import {
   Shortcut,
   Text,
   DropArea,
+  QtLabsPlatform,
 } from 'react-qml';
 import React from 'react';
 import TeamButton from './TeamButton.qml';
@@ -15,6 +16,11 @@ import {
   QQuickDragAttached,
   QQuickDropEvent,
 } from 'react-qml/dist/components/QtQuick';
+import { QQuickMouseEvent } from 'react-qml/dist/components/QtQml';
+import { isDesktop } from '../constants';
+import { QQuickPlatformMenu } from 'react-qml/dist/components/QtLabsPlatform';
+
+const { Menu, MenuItem } = QtLabsPlatform;
 
 const styles = {
   container: {
@@ -71,6 +77,7 @@ type Props = {
   onDragStarted?: Function;
   onDragFinished?: Function;
   onDropAreaEntered?: Function;
+  onRemoved?: Function;
 };
 
 type Draggable = {
@@ -80,6 +87,7 @@ type Draggable = {
 class TeamListItem extends React.Component<Props> {
   private controlRef = React.createRef<QQuickItem & Draggable>();
   private mouseAreaRef = React.createRef<QQuickMouseArea>();
+  private menuRef = React.createRef<QQuickPlatformMenu>();
 
   componentDidMount() {
     const $control = this.controlRef.current;
@@ -148,10 +156,28 @@ class TeamListItem extends React.Component<Props> {
     }
   };
 
+  onClicked = (ev: QQuickMouseEvent) => {
+    if (ev.button === Qt.LeftButton) {
+      this.onSelected();
+    } else if (ev.button === Qt.RightButton) {
+      const $menu = this.menuRef.current;
+      if ($menu) {
+        $menu.open(0);
+      }
+    }
+  };
+
+  onRemoved = () => {
+    if (this.props.onRemoved) {
+      this.props.onRemoved(this.props.id);
+    }
+  };
+
   render() {
     const {
       index,
       onSelected,
+      onRemoved,
       selected,
       hasUnreads,
       badgeCount = 0,
@@ -196,8 +222,9 @@ class TeamListItem extends React.Component<Props> {
         <MouseArea
           pressAndHoldInterval={300}
           anchors={{ fill: 'parent' }}
-          onClicked={this.onSelected}
+          onClicked={this.onClicked}
           cursorShape={Qt.PointingHandCursor}
+          acceptedButtons={Qt.LeftButton | Qt.RightButton}
           ref={this.mouseAreaRef}
           drag={{
             axis: 'YAxis',
@@ -210,6 +237,14 @@ class TeamListItem extends React.Component<Props> {
           onEntered={this.onDropAreaEntered}
           onDropped={this.onDropped}
         />
+        {isDesktop && (
+          <Menu ref={this.menuRef}>
+            <MenuItem
+              text={qsTr('Remove %1').arg(name)}
+              onTriggered={this.onRemoved}
+            />
+          </Menu>
+        )}
       </Item>
     );
   }

@@ -16,8 +16,9 @@ import {
   getTeamsBadgeCounts,
 } from '../reducers/selectors';
 import { RootState } from '../reducers';
-import { Team } from '../actions/team-actions';
+import { Team, removeTeam } from '../actions/team-actions';
 import { StringMap } from '../constants';
+import { removeAccount } from '../actions/account-actions';
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -31,6 +32,8 @@ const connectToRedux = connect(
     onAddAccount: openSigninWindow,
     onTeamSelected: selectTeam,
     setTeamSorted,
+    removeAccount,
+    removeTeam,
   }
 );
 
@@ -62,6 +65,8 @@ type Props = {
   onAddAccount: Function;
   onTeamSelected: Function;
   setTeamSorted: Function;
+  removeAccount: Function;
+  removeTeam: Function;
   selectedTeamId: string | null;
   teamList: Array<Team>;
   teamIds: Array<string>;
@@ -109,6 +114,12 @@ class TeamList extends React.Component<Props, State> {
     this.props.onTeamSelected(key);
   };
 
+  onItemRemoved = (key: string) => {
+    // TODO: fix this
+    this.props.removeAccount(key);
+    this.props.removeTeam(key);
+  };
+
   componentDidUpdate() {
     // this is bad, i know
     // but until we can have redux-observable working property
@@ -150,6 +161,7 @@ class TeamList extends React.Component<Props, State> {
                 badgeCount={teamsBadgeCounts[team.id]}
                 backgroundIcon={team.icon.image_88 || ''}
                 onSelected={this.onItemSelected}
+                onRemoved={this.onItemRemoved}
                 onDragStarted={this.onItemDragStarted}
                 onDragFinished={this.onItemDragFinished}
                 onDropAreaEntered={this.onItemDropEntered}
