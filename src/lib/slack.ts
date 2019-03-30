@@ -11,15 +11,7 @@ export function apiCall(method: string, data: object) {
       'Content-Type': 'application/x-www-form-urlencoded',
     }),
     body: qs.stringify(data),
-  })
-    .then(resp => resp.json())
-    .then(json => {
-      if (json.ok) {
-        return json;
-      }
-
-      throw json;
-    });
+  }).then(resp => resp.json());
 }
 
 export async function signInWithPassword(
@@ -29,13 +21,19 @@ export async function signInWithPassword(
 ) {
   try {
     const teamJson = await apiCall('auth.findTeam', { domain });
+    if (!teamJson.ok) {
+      return teamJson;
+    }
+
     const json = await apiCall('auth.signin', {
       team: teamJson.team_id,
       email,
       password,
     });
+
     return json;
   } catch (error) {
+    console.log(error);
     return error;
   }
 }

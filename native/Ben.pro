@@ -3,8 +3,9 @@ include(ReactQML/qtkeychain/qt5keychain.pri)
 
 # mac
 QT += macextras
+QTPLUGIN += qsqlite
 
-QT += quickcontrols2 websockets svg network
+QT += qml quick quickcontrols2 websockets svg network
 android|ios|qnx|winrt|isEmpty(QT.widgets.name): CONFIG += no_desktop
 !no_desktop: QT += widgets
 

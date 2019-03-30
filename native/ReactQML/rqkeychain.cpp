@@ -16,7 +16,12 @@ static const QMap<QKeychain::Error, QString> kErrorMap = {
     {Error::OtherError, "OtherError"},
 };
 
-RQKeychain::RQKeychain(QObject *parent) : QObject(parent), m_callback_map() {}
+RQKeychain::RQKeychain(QObject *parent)
+    : QObject(parent), m_callback_map(), m_insecure_fallback(false) {}
+
+void RQKeychain::setInsecureFallback(bool insecureFallback) {
+  m_insecure_fallback = insecureFallback;
+}
 
 void RQKeychain::readPassword(const QString &service, const QString &key,
                               QJSValue callback) {
@@ -26,6 +31,7 @@ void RQKeychain::readPassword(const QString &service, const QString &key,
 
   // job is auto-deleted, don't worry
   ReadPasswordJob *job = new ReadPasswordJob(service);
+  job->setInsecureFallback(m_insecure_fallback);
   job->setKey(key);
   job->connect(job, &Job::finished, this, &RQKeychain::onJobFinish);
   job->connect(job, &QObject::destroyed, this, &RQKeychain::onJobDestroyed);
@@ -43,6 +49,7 @@ void RQKeychain::writePassword(const QString &service, const QString &key,
 
   // job is auto-deleted, don't worry
   WritePasswordJob *job = new WritePasswordJob(service);
+  job->setInsecureFallback(m_insecure_fallback);
   job->setKey(key);
   job->setTextData(value);
   job->connect(job, &Job::finished, this, &RQKeychain::onJobFinish);
@@ -61,6 +68,7 @@ void RQKeychain::deletePassword(const QString &service, const QString &key,
 
   // job is auto-deleted, don't worry
   DeletePasswordJob *job = new DeletePasswordJob(service);
+  job->setInsecureFallback(m_insecure_fallback);
   job->setKey(key);
   job->connect(job, &Job::finished, this, &RQKeychain::onJobFinish);
   job->connect(job, &QObject::destroyed, this, &RQKeychain::onJobDestroyed);

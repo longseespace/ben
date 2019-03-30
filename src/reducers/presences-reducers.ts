@@ -30,12 +30,24 @@ function handleAddTeam(state: PresencesState, team: Team) {
 
 function handleRtmEvent(state: PresencesState, action: RTMAction) {
   const payload = action.payload;
-  switch (payload.type) {
-    case 'presence_change':
+  if (payload.type === 'presence_change') {
+    if (payload.users) {
+      const clonedState = { ...state };
+      return payload.users.reduce(
+        (currentState: PresencesState, user: string) => ({
+          ...currentState,
+          [user]: payload.presence,
+        }),
+        clonedState
+      );
+    }
+
+    if (payload.user) {
       return { ...state, [payload.user]: payload.presence };
-    default:
-      return state;
+    }
   }
+
+  return state;
 }
 
 export default reducer;

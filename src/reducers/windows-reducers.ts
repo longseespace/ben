@@ -17,12 +17,12 @@ export type WindowsState = StringMap<SingleWindowState>;
 const initialState: WindowsState = {
   main: {
     visible: true,
-    visibility: 'Windowed',
+    visibility: 'AutomaticVisibility',
     title: 'Ben',
   },
   signin: {
     visible: false,
-    visibility: 'Windowed',
+    visibility: 'AutomaticVisibility',
   },
 };
 

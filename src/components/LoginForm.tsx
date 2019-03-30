@@ -91,6 +91,8 @@ class LoginForm extends React.Component<Props, State> {
             topMargin: 32,
             rightMargin: 32,
             bottomMargin: 26,
+            maximumWidth: 320,
+            alignment: Qt.AlignVCenter | Qt.AlignHCenter,
           }}
           spacing={16}
         >

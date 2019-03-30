@@ -7,7 +7,10 @@ import AppTrayIcon from './AppTrayIcon';
 import ErrorBoundary from '../components/ErrorBoundary';
 import SigninWindow from './SigninWindow';
 import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
-import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
+import {
+  QQuickWindow,
+  QQuickScreenAttached,
+} from 'react-qml/dist/components/QtQuickWindow';
 import {
   getAccounts,
   getSelectedWorkspace,
@@ -28,6 +31,7 @@ import {
 } from '../actions/window-actions';
 import { SingleWindowState } from '../reducers/windows-reducers';
 import MessageList from './MessageList';
+import { isDesktop } from '../constants';
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -43,11 +47,17 @@ const connectToRedux = connect(
   }
 );
 
-// use localStorage since its API is sync
-const windowX = localStorage.getItem('windowX') || 100;
-const windowY = localStorage.getItem('windowY') || 100;
-const windowWidth = localStorage.getItem('windowWidth') || 800;
-const windowHeight = localStorage.getItem('windowHeight') || 600;
+const styles = {
+  desktop: {
+    // use localStorage since its API is sync
+    x: localStorage.getItem('windowX') || 100,
+    y: localStorage.getItem('windowY') || 100,
+    width: localStorage.getItem('windowWidth') || 100,
+    height: localStorage.getItem('windowHeight') || 100,
+  },
+  mobile: {},
+  content: { fill: 'parent' },
+};
 
 type Props = {
   accounts: AccountsState;
@@ -59,8 +69,12 @@ type Props = {
   setWindowVisibility: Function;
 };
 
+type WithScreen = {
+  Screen: QQuickScreenAttached;
+};
+
 class MainWindow extends React.Component<Props> {
-  private windowRef = React.createRef<QQuickWindow>();
+  private windowRef = React.createRef<QQuickWindow & WithScreen>();
 
   onClosing = (ev: QQuickCloseEvent) => {
     // persist window's geometry
@@ -102,6 +116,11 @@ class MainWindow extends React.Component<Props> {
       this.props.initWorkspace(account.teamId, account.token, false);
     });
     Qt.application.stateChanged.connect(this.onAppStateChanged);
+
+    const $window = this.windowRef.current;
+    if ($window) {
+      console.log($window.Screen.width);
+    }
   }
 
   componentWillUnmount() {
@@ -120,10 +139,7 @@ class MainWindow extends React.Component<Props> {
         visibility={settings.visibility}
         onVisibilityChanged={this.onVisibilityChanged}
         onClosing={this.onClosing}
-        x={windowX}
-        y={windowY}
-        width={windowWidth}
-        height={windowHeight}
+        style={isDesktop ? styles.desktop : styles.mobile}
         title={settings.title}
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
         ref={this.windowRef}
@@ -132,7 +148,7 @@ class MainWindow extends React.Component<Props> {
           <AppMenu />
           <AppTrayIcon />
           <SigninWindow />
-          <RowLayout anchors={{ fill: 'parent' }} spacing={0}>
+          <RowLayout anchors={styles.content} spacing={0}>
             <Rectangle
               Layout={{
                 fillHeight: true,

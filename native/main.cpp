@@ -46,6 +46,15 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("PRODUCTION_BUILD",
                                            PRODUCTION_BUILD);
 
+  engine.rootContext()->setContextProperty(
+      "ENTRY_URL", PRODUCTION_BUILD ? QUrl("qrc:/index.qml")
+                                    : QUrl("http://localhost:8081/index.qml"));
+
+  engine.rootContext()->setContextProperty("HMR_URL",
+                                           QUrl("ws://localhost:8081/hot"));
+
+  engine.rootContext()->setContextProperty("SUPPORT_HMR", !PRODUCTION_BUILD);
+
   engine.load(QUrl(QLatin1String("qrc:/react-qml/main.qml")));
 
   return app.exec();

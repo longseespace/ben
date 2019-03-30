@@ -5,6 +5,7 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.1
 import QtWebSockets 1.0
 import Qt.labs.settings 1.0
+import QtQml.Models 2.2
 import ReactQML 1.0
 
 ApplicationWindow {
@@ -16,15 +17,11 @@ ApplicationWindow {
 
   flags: Qt.Window
 
-  property string entry: PRODUCTION_BUILD ? 'qrc:/index.qml' : 'http://localhost:8081/index.qml'
-  property bool supportHMR: PRODUCTION_BUILD ? false : true
-  property string hmrUrl: 'ws://localhost:8081/hot'
-
   Loader {
     id: __appLoader
     asynchronous: true
 
-    source: __devWindow.entry
+    source: ENTRY_URL
 
     onStatusChanged: {
       if (__appLoader.status === Loader.Error) {
@@ -62,8 +59,8 @@ ApplicationWindow {
   // websocket for HMR
   WebSocket {
     id: __hotWs
-    url: __devWindow.hmrUrl
-    active: __devWindow.supportHMR
+    url: HMR_URL
+    active: SUPPORT_HMR
 
     onStatusChanged: {
       if (status === WebSocket.Error) {

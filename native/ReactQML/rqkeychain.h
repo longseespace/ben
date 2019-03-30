@@ -11,6 +11,8 @@ class RQKeychain : public QObject {
 public:
   explicit RQKeychain(QObject *parent = nullptr);
 
+  Q_INVOKABLE void setInsecureFallback(bool insecureFallback);
+
   Q_INVOKABLE void readPassword(const QString &service, const QString &key,
                                 QJSValue callback);
   Q_INVOKABLE void writePassword(const QString &service, const QString &key,
@@ -24,6 +26,7 @@ private slots:
 
 private:
   QHash<QKeychain::Job *, QJSValue> m_callback_map;
+  bool m_insecure_fallback;
 };
 
 #endif // RQKEYCHAIN_H

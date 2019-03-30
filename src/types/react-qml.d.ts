@@ -17,6 +17,7 @@ declare namespace ReactQML {
   ) => void;
 
   export interface RQKeychain {
+    setInsecureFallback(insecureFallback: boolean): void;
     readPassword(
       service: string,
       account: string,

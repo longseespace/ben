@@ -1,4 +1,4 @@
-import { Window } from 'react-qml';
+import { Window, QtQuickControls2 } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
@@ -14,6 +14,9 @@ import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
 import { initWorkspace } from '../actions/workspace-actions';
 import { addAccount } from '../actions/account-actions';
 import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
+import { isMobile } from '../constants';
+import FontAwesome from '../components/FontAwesome';
+const { RoundButton } = QtQuickControls2;
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -35,6 +38,16 @@ const styles = {
     width: windowWidth,
     height: windowHeight,
     color: '#f5f5f5',
+  },
+  goback: {
+    x: 30,
+    y: 30,
+    fontFamily: 'Lato',
+    fontSize: 30,
+    width: 60,
+    height: 60,
+    radius: 60,
+    color: '#666',
   },
 };
 
@@ -89,6 +102,14 @@ class SigninWindow extends React.Component<Props, State> {
     }
   };
 
+  componentDidMount() {
+    const $window = this.windowRef.current;
+    if ($window && this.props.settings.visible) {
+      $window.requestActivate();
+      $window.raise();
+    }
+  }
+
   componentDidUpdate(prevProps: Props) {
     const $window = this.windowRef.current;
     if ($window && !prevProps.settings.visible && this.props.settings.visible) {
@@ -112,9 +133,16 @@ class SigninWindow extends React.Component<Props, State> {
         maximumHeight={windowHeight}
         minimumWidth={windowWidth}
         minimumHeight={windowHeight}
-        flags={Qt.Dialog | Qt.Tool}
+        flags={Qt.Dialog}
       >
         <ErrorBoundary>
+          <RoundButton
+            text="←"
+            style={styles.goback}
+            visible={visible && isMobile}
+            flat
+            onClicked={this.props.closeSigninWindow}
+          />
           {visible && (
             <LoginForm
               onSubmit={this.handleLogin}
