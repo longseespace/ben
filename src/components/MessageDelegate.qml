@@ -22,7 +22,7 @@ Component {
       font.family: 'Lato'
       readOnly: true
       wrapMode: Text.WordWrap
-      selectByMouse: true
+      // selectByMouse: true
     }
 
     TextEdit {
@@ -33,7 +33,7 @@ Component {
       font.family: 'Lato'
       readOnly: true
       wrapMode: Text.WordWrap
-      selectByMouse: true
+      // selectByMouse: true
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Rectangle, RowLayout, Window } from 'react-qml';
+import { Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
@@ -11,32 +11,23 @@ import {
   QQuickWindow,
   QQuickScreenAttached,
 } from 'react-qml/dist/components/QtQuickWindow';
-import {
-  getAccounts,
-  getSelectedWorkspace,
-  getMainWindowSettings,
-} from '../reducers/selectors';
+import { getAccounts, getMainWindowSettings } from '../reducers/selectors';
 import { AccountsState } from '../reducers/accounts-reducer';
 import { RootState } from '../reducers';
-import TeamList from './TeamList';
-import ChannelList from './ChannelList';
 import { initWorkspace } from '../actions/workspace-actions';
-import ChannelLoadingView from '../components/ChannelLoadingView';
-import MessageLoadingView from '../components/MessageLoadingView';
-import { SingleWorkspaceState } from '../reducers/workspaces-reducers';
 import {
   closeMainWindow,
   openMainWindow,
   setWindowVisibility,
 } from '../actions/window-actions';
 import { SingleWindowState } from '../reducers/windows-reducers';
-import MessageList from './MessageList';
-import { isDesktop } from '../constants';
+import { isDesktopOS, isMobileOS, isTablet, isPhone } from '../helpers';
+import DesktopLayout from './DesktopLayout';
+import MobileLayout from './MobileLayout';
 
 const connectToRedux = connect(
   (state: RootState) => ({
     accounts: getAccounts(state),
-    selectedWorkspace: getSelectedWorkspace(state),
     settings: getMainWindowSettings(state),
   }),
   {
@@ -56,12 +47,10 @@ const styles = {
     height: localStorage.getItem('windowHeight') || 100,
   },
   mobile: {},
-  content: { fill: 'parent' },
 };
 
 type Props = {
   accounts: AccountsState;
-  selectedWorkspace: SingleWorkspaceState | undefined;
   settings: SingleWindowState;
   initWorkspace: Function;
   closeMainWindow: Function;
@@ -116,11 +105,6 @@ class MainWindow extends React.Component<Props> {
       this.props.initWorkspace(account.teamId, account.token, false);
     });
     Qt.application.stateChanged.connect(this.onAppStateChanged);
-
-    const $window = this.windowRef.current;
-    if ($window) {
-      console.log($window.Screen.width);
-    }
   }
 
   componentWillUnmount() {
@@ -128,10 +112,7 @@ class MainWindow extends React.Component<Props> {
   }
 
   render() {
-    const { selectedWorkspace, settings } = this.props;
-    const workspaceInitStatus = selectedWorkspace
-      ? selectedWorkspace.initStatus
-      : 'idle';
+    const { settings } = this.props;
     return (
       <Window
         objectName="MainWindow"
@@ -139,7 +120,7 @@ class MainWindow extends React.Component<Props> {
         visibility={settings.visibility}
         onVisibilityChanged={this.onVisibilityChanged}
         onClosing={this.onClosing}
-        style={isDesktop ? styles.desktop : styles.mobile}
+        style={isDesktopOS ? styles.desktop : styles.mobile}
         title={settings.title}
         flags={Qt.Window | Qt.WindowFullscreenButtonHint}
         ref={this.windowRef}
@@ -148,43 +129,8 @@ class MainWindow extends React.Component<Props> {
           <AppMenu />
           <AppTrayIcon />
           <SigninWindow />
-          <RowLayout anchors={styles.content} spacing={0}>
-            <Rectangle
-              Layout={{
-                fillHeight: true,
-                preferredWidth: 68,
-              }}
-              color="#191F26"
-            >
-              <TeamList />
-            </Rectangle>
-            <Rectangle
-              width={220}
-              Layout={{
-                fillHeight: true,
-              }}
-              color="#323E4C"
-            >
-              {workspaceInitStatus === 'started' ? (
-                <ChannelLoadingView />
-              ) : (
-                workspaceInitStatus === 'success' && <ChannelList />
-              )}
-            </Rectangle>
-            <Rectangle
-              Layout={{
-                fillWidth: true,
-                fillHeight: true,
-              }}
-              color="#FFFFFF"
-            >
-              {workspaceInitStatus === 'started' ? (
-                <MessageLoadingView />
-              ) : (
-                workspaceInitStatus === 'success' && <MessageList />
-              )}
-            </Rectangle>
-          </RowLayout>
+          {(isDesktopOS || isTablet) && <DesktopLayout />}
+          {isPhone && <MobileLayout />}
         </ErrorBoundary>
       </Window>
     );

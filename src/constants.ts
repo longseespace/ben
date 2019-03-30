@@ -18,6 +18,3 @@ export const API_ROOT = 'https://slack.com/api';
 export type StandardAction<T> = FluxStandardAction<T, void>;
 
 export type SimpleThunkAction = ThunkAction<void, {}, {}, AnyAction>;
-
-export const isDesktop = ['osx', 'windows', 'linux'].includes(Qt.platform.os);
-export const isMobile = ['ios', 'android'].includes(Qt.platform.os);

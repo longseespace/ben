@@ -147,7 +147,7 @@ class TeamList extends React.Component<Props, State> {
     const dragging = !!this.state.draggingKey;
 
     return (
-      <ScrollView anchors={fillParent}>
+      <ScrollView anchors={fillParent} contentWidth={-1}>
         <Column style={styles.container}>
           <Column style={styles.teamList}>
             {teamList.map((team, index) => (

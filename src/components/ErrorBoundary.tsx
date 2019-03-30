@@ -39,7 +39,7 @@ class ErrorBoundary extends React.Component<{}, State> {
       //   );
       // }
 
-      return <RedBox error={error} errorInfo={errorInfo} />;
+      return <RedBox error={error} errorInfo={errorInfo} enableStacktrace />;
     }
     return children;
   }

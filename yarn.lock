@@ -110,10 +110,10 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.7.1.tgz#e4bdc6fd2a7b5a41d5b599bcb62cf22c78f7f535"
   integrity sha512-gukWJ7Mwf0WXQbkcwcm5zi8+H8aT5MMnphf5hpydOw898H1ibgm2cyejHgk6Km/FTvrPp5ppUHLrlFwt0QxsQw==
 
-"@react-qml/cli@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@react-qml/cli/-/cli-0.1.5.tgz#0afe81877281adc20f10f49727ec41f0a7301c12"
-  integrity sha512-bKPIu6d41l/u8Ms+bOsGOPMd4QqBXHD7elpcApDBPnjlm8RC/qjMcO3Alu8E1UL4U8IBQEmCEB6RoINYEAKjEQ==
+"@react-qml/cli@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@react-qml/cli/-/cli-0.1.6.tgz#279e5c6f2e0dcf382aa5c5e8da9c1d60214f8a43"
+  integrity sha512-oLPvBhGkqLkZWI9YR5y4YagPy3rEE7l4t/9UpVaK3JkbJ+aO9v1fUHHqKAiQHVypkki/uDFGG7pQl6wdlXCicA==
   dependencies:
     "@zamotany/react-proxy" "3.0.0-alpha.4"
     babel-core "^6.24.0"
@@ -4557,10 +4557,10 @@ react-proxy@^3.0.0-alpha.0:
   dependencies:
     lodash "^4.6.1"
 
-react-qml@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/react-qml/-/react-qml-0.4.3.tgz#f7777cbf1b793e88d15ac339a72fd6e3bdc11d64"
-  integrity sha512-zxRtkvEJtvlj0+uVMHIx23Cv9DMHnjnZwJXvbZQPxDLGXPXor6OMSGwJTGUnIBDab72PDB5/TsYJr8RBSh4duQ==
+react-qml@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/react-qml/-/react-qml-0.4.4.tgz#92feb9e37ec065ce55e0d74752173a79fc217997"
+  integrity sha512-+DZ9DoNJw5+kx8SmHYJIyXriPtLW3gNT+8nh7YcTF6aeG3RZ8u8BRW5jsql0c28XP+0CSeEI0liLziDTobx/CA==
   dependencies:
     invariant "^2.2.4"
     react-reconciler "^0.20.3"

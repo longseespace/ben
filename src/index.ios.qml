@@ -13,6 +13,9 @@ import "ios.bundle.js" as JS;
 
 Item {
   id: root
+
+  // listen to all orientation changes
+  Screen.orientationUpdateMask: Qt.LandscapeOrientation | Qt.PortraitOrientation | Qt.InvertedLandscapeOrientation | Qt.InvertedPortraitOrientation
   
   Component.onCompleted: {
     try {

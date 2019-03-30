@@ -14,8 +14,7 @@ import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
 import { initWorkspace } from '../actions/workspace-actions';
 import { addAccount } from '../actions/account-actions';
 import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
-import { isMobile } from '../constants';
-import FontAwesome from '../components/FontAwesome';
+import { isMobileOS } from '../helpers';
 const { RoundButton } = QtQuickControls2;
 
 const connectToRedux = connect(
@@ -40,7 +39,7 @@ const styles = {
     color: '#f5f5f5',
   },
   goback: {
-    x: 30,
+    x: 20,
     y: 30,
     fontFamily: 'Lato',
     fontSize: 30,
@@ -139,7 +138,7 @@ class SigninWindow extends React.Component<Props, State> {
           <RoundButton
             text="←"
             style={styles.goback}
-            visible={visible && isMobile}
+            visible={visible && isMobileOS}
             flat
             onClicked={this.props.closeSigninWindow}
           />
