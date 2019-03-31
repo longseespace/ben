@@ -24,6 +24,7 @@ export type Timeline = {
   query: TimelineQuery;
   hasMore?: boolean;
   pinCount?: number;
+  initialized?: boolean;
 };
 
 // API

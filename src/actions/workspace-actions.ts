@@ -106,6 +106,7 @@ export const initWorkspace = (
         query: {},
         hasMore: timelineJson.has_more,
         pinCount: timelineJson.pin_count,
+        initialized: true,
       };
       dispatch(setInitialTimeline(selectedConversationId, timeline));
     }

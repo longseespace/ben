@@ -17,7 +17,7 @@ import {
   QQuickDropEvent,
 } from 'react-qml/dist/components/QtQuick';
 import { QQuickMouseEvent } from 'react-qml/dist/components/QtQml';
-import { isDesktop } from '../constants';
+import { isDesktopOS } from '../helpers';
 import { QQuickPlatformMenu } from 'react-qml/dist/components/QtLabsPlatform';
 
 const { Menu, MenuItem } = QtLabsPlatform;
@@ -237,7 +237,7 @@ class TeamListItem extends React.Component<Props> {
           onEntered={this.onDropAreaEntered}
           onDropped={this.onDropped}
         />
-        {isDesktop && (
+        {isDesktopOS && (
           <Menu ref={this.menuRef}>
             <MenuItem
               text={qsTr('Remove %1').arg(name)}
