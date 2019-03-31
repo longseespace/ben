@@ -16,9 +16,7 @@ import {
   QQuickScrollBar,
   QQuickScrollBarAttached,
 } from 'react-qml/dist/components/QtQuickControls2';
-import deferComponentRender from './deferComponentRender';
-
-const ListContent = React.lazy(() => import('./SectionListContent'));
+import ListContent from './SectionListContent';
 
 export type Section = {
   title: string;
@@ -43,8 +41,6 @@ export type ScrollPosition = {
   itemIndex: number;
   sectionIndex: number;
 };
-
-const DeferedFragment = deferComponentRender(React.Fragment);
 
 class SectionList extends React.PureComponent<Props> {
   private listViewRef = React.createRef<QQuickListView & WithScrollBar>();
