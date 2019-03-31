@@ -18,6 +18,7 @@ import {
   QQuickScrollBar,
   QQuickScrollBarAttached,
 } from 'react-qml/dist/components/QtQuickControls2';
+import deferComponentRender from './deferComponentRender';
 
 export type Section = {
   title: string;
@@ -42,6 +43,8 @@ export type ScrollPosition = {
   itemIndex: number;
   sectionIndex: number;
 };
+
+const DeferedFragment = deferComponentRender(React.Fragment);
 
 class SectionList extends React.PureComponent<Props> {
   private listViewRef = React.createRef<QQuickListView & WithScrollBar>();
@@ -106,11 +109,11 @@ class SectionList extends React.PureComponent<Props> {
     } = this.props;
 
     return sections.map(section => (
-      <React.Fragment key={section.title}>
+      <DeferedFragment key={section.title}>
         {renderSectionHeader && renderSectionHeader(section)}
         {section.data.map((item, index) => renderItem(item, index, section))}
         {renderSectionFooter && renderSectionFooter(section)}
-      </React.Fragment>
+      </DeferedFragment>
     ));
   };
 
