@@ -29,7 +29,7 @@ before_script:
   - export QMAKESPEC=macx-clang
   - mkdir -p "$TRAVIS_BUILD_DIR-build"
   - qmake -v
-  - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=release PRODUCTION=true "$TRAVIS_BUILD_DIR/native"
+  - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=release CONFIG+=static PRODUCTION=true "$TRAVIS_BUILD_DIR/native"
 
 script:
   - make -C "$TRAVIS_BUILD_DIR-build" -j2 all
@@ -43,3 +43,5 @@ deploy:
   file: "$TRAVIS_BUILD_DIR-build/Ben.dmg"
   skip_cleanup: true
   draft: true
+  on:
+    branch: object-model
