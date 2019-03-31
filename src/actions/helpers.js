@@ -83,11 +83,10 @@ const defaultMessage = {
   type: '',
   text: '',
   user: '',
-  ts: 0,
+  ts: '0',
 };
 
 export const standardizeMessage = obj => ({
   ...defaultMessage,
   ...obj,
-  ts: Number(obj.ts),
 });

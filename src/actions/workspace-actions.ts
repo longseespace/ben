@@ -9,7 +9,7 @@ import {
 } from './helpers';
 import { SimpleThunkAction } from '../constants';
 import { RootState } from '../reducers';
-import { Timeline, setInitialTimeline } from './timelines-actions';
+import TimelinesActions, { Timeline } from './timelines-actions';
 import { connectToWorkspace } from '../store/rtmMiddleware/actions';
 
 const workspaceInitStart = (teamId: string) => ({
@@ -108,7 +108,9 @@ export const initWorkspace = (
         pinCount: timelineJson.pin_count,
         initialized: true,
       };
-      dispatch(setInitialTimeline(selectedConversationId, timeline));
+      dispatch(
+        TimelinesActions.setInitialTimeline(selectedConversationId, timeline)
+      );
     }
 
     dispatch(workspaceInitSuccess(teamId));

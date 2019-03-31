@@ -50,7 +50,7 @@ ApplicationWindow {
     title: "Error"
     icon: StandardIcon.Warning
     text: "Failed to load entry url."
-    informativeText: "Failed to load " + __devWindow.entry
+    informativeText: "Failed to load " + ENTRY_URL
     onAccepted: {
       Qt.quit();
     }

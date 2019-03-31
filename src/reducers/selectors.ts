@@ -80,6 +80,14 @@ export const getCurrentTeamUserName = createSelector(
   selectedTeam => (selectedTeam ? selectedTeam.user.name : '')
 );
 
+export const getSelectedTeamToken = createSelector(
+  getAccounts,
+  getSelectedTeamId,
+  (accounts, teamId) => {
+    return teamId && accounts[teamId] ? accounts[teamId].token : '';
+  }
+);
+
 export const getCurrentUser = createSelector(
   getSelectedTeam,
   selectedTeam => (selectedTeam ? selectedTeam.user : null)
@@ -178,6 +186,12 @@ export const getMessageList = createSelector(
       ? allTimelines[selectedConversationId].messages
       : [];
   }
+);
+
+export const getLatestMessage = createSelector(
+  getMessageList,
+  messageList =>
+    messageList.length > 0 ? messageList[messageList.length - 1] : null
 );
 
 // Presences

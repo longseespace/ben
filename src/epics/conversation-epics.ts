@@ -1,9 +1,9 @@
 import { RootState } from '../reducers';
 import { AnyAction } from 'redux';
 import { Epic, ActionsObservable, StateObservable } from 'redux-observable';
-import { filter, mapTo, map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { APP_TEAMS } from '../actions';
-import { fetchMessages } from '../actions/timelines-actions';
+import TimelinesActions from '../actions/timelines-actions';
 
 export const fetchTimelineIfNeededEpic: Epic<
   AnyAction,
@@ -26,6 +26,6 @@ export const fetchTimelineIfNeededEpic: Epic<
       const allAccounts = state$.value.accounts;
       const selectedTeamId = state$.value.appTeams.selectedTeamId || '';
       const account = allAccounts[selectedTeamId];
-      return fetchMessages(account.token, action.payload);
+      return TimelinesActions.fetchMessages(account.token, action.payload);
     })
   );

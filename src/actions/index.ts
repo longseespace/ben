@@ -66,9 +66,13 @@ export const CONVERSATIONS = {
 };
 
 // TIMELINES
-export type timelinesType = 'FETCH_MESSAGES' | 'SET_INITIAL_TIMELINE';
+export type timelinesType =
+  | 'FETCH_MESSAGES'
+  | 'SET_INITIAL_TIMELINE'
+  | 'IM_MARK';
 
 export const TIMELINES = {
   FETCH_MESSAGES: 'FETCH_MESSAGES' as timelinesType,
   SET_INITIAL_TIMELINE: 'SET_INITIAL_TIMELINE' as timelinesType,
+  IM_MARK: 'IM_MARK' as timelinesType,
 };
