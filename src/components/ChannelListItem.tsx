@@ -225,4 +225,4 @@ class ChannelListItem extends React.Component<Props> {
   }
 }
 
-export default ChannelListItem;
+export default React.memo(ChannelListItem);

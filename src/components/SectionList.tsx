@@ -2,8 +2,6 @@ import {
   ListView as NativeListView,
   ObjectModel,
   QtQuickControls2,
-  Item,
-  Column,
 } from 'react-qml';
 const { ScrollBar } = QtQuickControls2;
 import React from 'react';
@@ -19,6 +17,8 @@ import {
   QQuickScrollBarAttached,
 } from 'react-qml/dist/components/QtQuickControls2';
 import deferComponentRender from './deferComponentRender';
+
+const ListContent = React.lazy(() => import('./SectionListContent'));
 
 export type Section = {
   title: string;
@@ -108,13 +108,16 @@ class SectionList extends React.PureComponent<Props> {
       renderItem,
     } = this.props;
 
-    return sections.map(section => (
-      <DeferedFragment key={section.title}>
-        {renderSectionHeader && renderSectionHeader(section)}
-        {section.data.map((item, index) => renderItem(item, index, section))}
-        {renderSectionFooter && renderSectionFooter(section)}
-      </DeferedFragment>
-    ));
+    return (
+      <React.Suspense fallback={null}>
+        <ListContent
+          sections={sections}
+          renderSectionHeader={renderSectionHeader}
+          renderSectionFooter={renderSectionFooter}
+          renderItem={renderItem}
+        />
+      </React.Suspense>
+    );
   };
 
   render() {
