@@ -38,6 +38,7 @@ function handleMessagesLoaded(state: TimelinesState, payload: any) {
   timeline.messages = [...newMessages, ...timeline.messages];
   timeline.hasMore = payload.json.has_more;
   timeline.pinCount = payload.json.pin_count;
+  timeline.initialized = true;
 
   return { ...state, [channel]: timeline };
 }
