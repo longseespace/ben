@@ -7,6 +7,13 @@ import { setWindowTitle } from '../actions/window-actions';
 import { getAllTeams } from '../reducers/selectors';
 import { RTM } from '../store/rtmMiddleware/constants';
 import NotificationActions from '../store/notificationMiddleware/actions';
+import EmojiConvertor from 'emoji-js';
+import { selectTeam, selectConversation } from '../actions/app-teams-actions';
+
+const emoji = new EmojiConvertor();
+emoji.init_env();
+emoji.replace_mode = 'unified';
+emoji.allow_native = true;
 
 export const pingEpic: Epic<AnyAction, AnyAction, RootState> = (
   action$: ActionsObservable<AnyAction>
@@ -68,9 +75,13 @@ export const showNotificationEpic: Epic<AnyAction, AnyAction, RootState> = (
         action.payload.type === 'desktop_notification'
     ),
     map(action =>
-      NotificationActions.showMessage(
-        action.payload.subtitle,
-        action.payload.content
-      )
+      NotificationActions.showMessage({
+        title: emoji.replace_colons(action.payload.subtitle),
+        message: emoji.replace_colons(action.payload.content),
+        clickActions: [
+          selectTeam(action.meta.teamId),
+          selectConversation(action.payload.channel),
+        ],
+      })
     )
   );

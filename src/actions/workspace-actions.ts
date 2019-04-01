@@ -100,7 +100,9 @@ export const initWorkspace = (
     dispatch(setConversationList(team.id, conversationsList));
 
     if (timelineJson) {
-      const messages = timelineJson.messages.reverse().map(standardizeMessage);
+      const messages = timelineJson.messages
+        ? timelineJson.messages.reverse().map(standardizeMessage)
+        : [];
       const timeline: Timeline = {
         messages,
         query: {},
@@ -115,6 +117,7 @@ export const initWorkspace = (
 
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {
+    console.log('workspaceInitFailure', error);
     dispatch(workspaceInitFailure(teamId, 'Unknown error'));
   }
 };

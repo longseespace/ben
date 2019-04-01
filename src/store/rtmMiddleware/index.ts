@@ -39,6 +39,8 @@ const middleware = (api: MiddlewareAPI) => (next: Dispatch) => async (
         ws.onmessage = event => {
           try {
             const messageData = JSON.parse(event.data);
+
+            // TODO: buffer events instead
             api.dispatch(rtmEvent(teamId, messageData));
           } catch (error) {
             // invalid json message

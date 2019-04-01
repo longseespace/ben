@@ -12,6 +12,7 @@
   "dependencies": {
     "@callstack/react-theme-provider": "^1.0.7",
     "connected-react-router": "^4.3.0",
+    "emoji-js": "^3.4.1",
     "flux-standard-action": "^2.0.3",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
