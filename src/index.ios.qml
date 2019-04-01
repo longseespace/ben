@@ -7,6 +7,7 @@ import QtWebSockets 1.0
 import Qt.labs.settings 1.0
 import QtQuick.LocalStorage 2.0
 import QtQml.Models 2.2
+import QtGraphicalEffects 1.0
 import ReactQML 1.0
 
 import "ios.bundle.js" as JS;
