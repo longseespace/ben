@@ -11,7 +11,11 @@ import {
   QQuickWindow,
   QQuickScreenAttached,
 } from 'react-qml/dist/components/QtQuickWindow';
-import { getAccounts, getMainWindowSettings } from '../reducers/selectors';
+import {
+  getAccounts,
+  getMainWindowSettings,
+  getSelectedTeamId,
+} from '../reducers/selectors';
 import { AccountsState } from '../reducers/accounts-reducer';
 import { RootState } from '../reducers';
 import { initWorkspace } from '../actions/workspace-actions';
@@ -28,6 +32,7 @@ import MobileLayout from './MobileLayout';
 const connectToRedux = connect(
   (state: RootState) => ({
     accounts: getAccounts(state),
+    selectedTeamId: getSelectedTeamId(state),
     settings: getMainWindowSettings(state),
   }),
   {
@@ -51,6 +56,7 @@ const styles = {
 
 type Props = {
   accounts: AccountsState;
+  selectedTeamId: string | null | undefined;
   settings: SingleWindowState;
   initWorkspace: Function;
   closeMainWindow: Function;
@@ -100,10 +106,21 @@ class MainWindow extends React.Component<Props> {
   };
 
   componentDidMount() {
-    Object.keys(this.props.accounts).forEach(id => {
-      const account = this.props.accounts[id];
+    // TODO: change this to epic instead
+    if (this.props.selectedTeamId) {
+      const account = this.props.accounts[this.props.selectedTeamId];
       this.props.initWorkspace(account.teamId, account.token, false);
-    });
+    }
+
+    setTimeout(() => {
+      Object.keys(this.props.accounts).forEach(id => {
+        if (this.props.selectedTeamId !== id) {
+          const account = this.props.accounts[id];
+          this.props.initWorkspace(account.teamId, account.token, false);
+        }
+      });
+    }, 1000);
+
     Qt.application.stateChanged.connect(this.onAppStateChanged);
   }
 
