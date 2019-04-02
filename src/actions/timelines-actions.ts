@@ -12,6 +12,7 @@ import { RootState } from '../reducers';
 export type Message = {
   client_msg_id: string;
   type: string;
+  subtype?: string;
   text: string;
   user: string;
   ts: string;

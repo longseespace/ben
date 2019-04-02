@@ -1,9 +1,14 @@
 import { FluxStandardAction } from 'flux-standard-action';
 import { ACTIONS as APIAction } from 'redux-api-call';
 import { StringMap } from '../constants';
-import { Timeline, TimelineSetPayload } from '../actions/timelines-actions';
+import {
+  Timeline,
+  TimelineSetPayload,
+  Message,
+} from '../actions/timelines-actions';
 import { TIMELINES } from '../actions';
 import { standardizeMessage } from '../actions/helpers';
+import { RTM } from '../store/rtmMiddleware/constants';
 
 export type TimelinesState = StringMap<Timeline>;
 
@@ -22,6 +27,10 @@ export function reducer(
     action.payload.name === TIMELINES.FETCH_MESSAGES
   ) {
     return handleMessagesLoaded(state, action.payload);
+  }
+
+  if (action.type === RTM.RTM_EVENT && action.payload.type === 'message') {
+    return handleMessageReceived(state, action.payload);
   }
 
   return state;
@@ -50,6 +59,27 @@ function setInitialTimeline(
   const { conversationId, timeline } = payload;
 
   return { ...state, [conversationId]: timeline };
+}
+
+function handleMessageReceived(state: TimelinesState, payload: any) {
+  const channel = payload.channel;
+  const oldMessages = state[channel].messages || [];
+
+  const message: Message = {
+    client_msg_id: payload.client_msg_id,
+    type: payload.subtype || '',
+    text: payload.text,
+    user: payload.user,
+    ts: payload.ts,
+  };
+  const messages = [...oldMessages, message];
+
+  const timeline = {
+    ...state[channel],
+    messages,
+  };
+
+  return { ...state, [channel]: timeline };
 }
 
 export default reducer;
