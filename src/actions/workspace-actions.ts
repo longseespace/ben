@@ -65,7 +65,9 @@ export const initWorkspace = (
   });
 
   // fetch messages if needed
-  const selectedConversationId = state.appTeams.selectedConversations[teamId];
+  const selectedConversationId = state.appTeams.selectedConversations
+    ? state.appTeams.selectedConversations[teamId]
+    : null;
 
   let initTimeline = Promise.resolve(null as any);
   if (selectedConversationId) {
@@ -99,7 +101,7 @@ export const initWorkspace = (
     );
     dispatch(setConversationList(team.id, conversationsList));
 
-    if (timelineJson) {
+    if (selectedConversationId && timelineJson) {
       const messages = timelineJson.messages
         ? timelineJson.messages.reverse().map(standardizeMessage)
         : [];

@@ -25,7 +25,7 @@ import {
   setWindowVisibility,
 } from '../actions/window-actions';
 import { SingleWindowState } from '../reducers/windows-reducers';
-import { isDesktopOS, isMobileOS, isTablet, isPhone } from '../helpers';
+import { isDesktopOS, isTablet, isPhone } from '../helpers';
 import DesktopLayout from './DesktopLayout';
 import MobileLayout from './MobileLayout';
 
@@ -109,12 +109,14 @@ class MainWindow extends React.Component<Props> {
     // TODO: change this to epic instead
     if (this.props.selectedTeamId) {
       const account = this.props.accounts[this.props.selectedTeamId];
-      this.props.initWorkspace(account.teamId, account.token, false);
+      if (account) {
+        this.props.initWorkspace(account.teamId, account.token, false);
+      }
     }
 
     setTimeout(() => {
       Object.keys(this.props.accounts).forEach(id => {
-        if (this.props.selectedTeamId !== id) {
+        if (this.props.selectedTeamId !== id && this.props.accounts[id]) {
           const account = this.props.accounts[id];
           this.props.initWorkspace(account.teamId, account.token, false);
         }

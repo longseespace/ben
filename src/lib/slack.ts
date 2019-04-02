@@ -33,7 +33,7 @@ export async function signInWithPassword(
 
     return json;
   } catch (error) {
-    console.log(error);
+    console.log('signInWithPassword', error);
     return error;
   }
 }

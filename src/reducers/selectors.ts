@@ -23,7 +23,7 @@ export const getSortedTeamIds = (state: RootState) => state.appTeams.teamList;
 export const getSelectedTeamId = (state: RootState) =>
   state.appTeams.selectedTeamId;
 export const getAllSelectedConversationIds = (state: RootState) =>
-  state.appTeams.selectedConversations;
+  state.appTeams.selectedConversations || {};
 export const getSelectedConversationId = createSelector(
   getAllSelectedConversationIds,
   getSelectedTeamId,

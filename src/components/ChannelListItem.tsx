@@ -3,6 +3,7 @@ import Badge from './Badge.qml';
 import { RowLayout, Text, Rectangle, MouseArea } from 'react-qml';
 import { Conversation } from '../actions/conversations-actions';
 import FontAwesome from './FontAwesome';
+import { isDesktopOS } from '../helpers';
 
 const styles = {
   container: {
@@ -214,7 +215,7 @@ class ChannelListItem extends React.Component<Props> {
         </RowLayout>
         <MouseArea
           anchors={fillParent}
-          hoverEnabled
+          hoverEnabled={isDesktopOS}
           cursorShape={Qt.PointingHandCursor}
           onEntered={this.handleMouseEnter}
           onExited={this.handleMouseLeave}

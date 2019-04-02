@@ -56,7 +56,7 @@ function removeTeam(state: AppTeamsState, teamId: string) {
     // need to update selectedTeamId also
     let selectedTeamId = state.selectedTeamId;
     if (state.selectedTeamId === teamId) {
-      selectedTeamId = state.teamList[0] || null;
+      selectedTeamId = teamList[0] || null;
     }
 
     return {
