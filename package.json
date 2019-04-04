@@ -5,6 +5,7 @@
   "scripts": {
     "start": "DEV_SERVER_HOST=localhost rq start --dev --platform=osx",
     "start_ios": "DEV_SERVER_HOST=localhost rq start --dev --platform=ios",
+    "start_all": "DEV_SERVER_HOST=localhost rq start --dev --platform=all",
     "build": "NODE_ENV=production rq bundle --platform=osx",
     "build_ios": "NODE_ENV=production rq bundle --platform=ios",
     "remotedev": "remotedev --host=0.0.0.0 --port=8000"

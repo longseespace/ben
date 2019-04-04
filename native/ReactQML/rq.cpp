@@ -2,7 +2,10 @@
 
 #include <QtCore>
 #include <QtDebug>
+
+#ifdef Q_OS_MACOS
 #include <QtMac>
+#endif
 
 QObject *RQ::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine) {
   Q_UNUSED(scriptEngine)

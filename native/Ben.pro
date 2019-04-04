@@ -2,7 +2,7 @@
 include(ReactQML/qtkeychain/qt5keychain.pri)
 
 # mac
-QT += macextras
+macx: QT += macextras
 QTPLUGIN += qsqlite
 
 QT += qml quick quickcontrols2 websockets svg network sql
