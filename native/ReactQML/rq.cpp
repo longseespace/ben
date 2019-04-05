@@ -1,4 +1,5 @@
 #include "rq.h"
+#include "rqhelper.h"
 
 #include <QtCore>
 #include <QtDebug>
@@ -65,6 +66,8 @@ void RQ::setBadgeLabelText(const QString &text) {
   QtMac::setBadgeLabelText(text);
 #endif
 }
+
+void RQ::hideTitleBar(QQuickWindow *window) { RQHelper::hideTitlebar(window); }
 
 void RQ::onQmlWarnings(const QList<QQmlError> &warnings) {
   QVariantList list;

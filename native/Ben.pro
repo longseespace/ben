@@ -2,7 +2,10 @@
 include(ReactQML/qtkeychain/qt5keychain.pri)
 
 # mac
-macx: QT += macextras
+macx: {
+  QT += macextras
+  LIBS += -framework Cocoa
+}
 QTPLUGIN += qsqlite
 
 QT += qml quick quickcontrols2 websockets svg network sql
@@ -28,13 +31,22 @@ HEADERS += \
   qtquickcontrolsapplication.h \
   ReactQML/rq.h \
   ReactQML/rqnetworkaccessmanagerfactory.h \
-    ReactQML/rqkeychain.h
+    ReactQML/rqkeychain.h \
+    ReactQML/rqhelper.h
 
 
 SOURCES += main.cpp \
   ReactQML/rq.cpp \
   ReactQML/rqnetworkaccessmanagerfactory.cpp \
-    ReactQML/rqkeychain.cpp
+  ReactQML/rqkeychain.cpp
+
+win32 {
+  ReactQML/rqhelper.cpp
+}
+
+macx {
+  OBJECTIVE_SOURCES += ReactQML/rqhelper.mm
+}
 
 RESOURCES += main.qrc
 

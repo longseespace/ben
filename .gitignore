@@ -112,3 +112,5 @@ lib*.a
 
 # qt test project
 /native/dist
+
+.vscode

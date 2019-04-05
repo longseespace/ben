@@ -1,8 +1,11 @@
+import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
+
 declare namespace ReactQML {
   // global RQ object
   export interface RQ {
     keychain(): RQKeychain;
     setBadgeLabelText(text: string): void;
+    hideTitleBar(window?: QQuickWindow): void;
   }
 
   // RQKeychain
