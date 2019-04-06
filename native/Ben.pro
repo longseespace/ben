@@ -30,21 +30,12 @@ TARGET = Ben
 HEADERS += \
   qtquickcontrolsapplication.h \
   ReactQML/rq.h \
-  ReactQML/rqnetworkaccessmanagerfactory.h \
-  ReactQML/rqhelper.h
+  ReactQML/rqnetworkaccessmanagerfactory.h
 
 
 SOURCES += main.cpp \
   ReactQML/rq.cpp \
   ReactQML/rqnetworkaccessmanagerfactory.cpp
-
-win32 {
-  ReactQML/rqhelper.cpp
-}
-
-macx {
-  OBJECTIVE_SOURCES += ReactQML/rqhelper.mm
-}
 
 RESOURCES += main.qrc
 
