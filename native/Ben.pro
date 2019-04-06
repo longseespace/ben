@@ -1,6 +1,3 @@
-# qtkeychain
-include(ReactQML/qtkeychain/qt5keychain.pri)
-
 # qpm
 include(vendor/vendor.pri)
 
@@ -34,14 +31,12 @@ HEADERS += \
   qtquickcontrolsapplication.h \
   ReactQML/rq.h \
   ReactQML/rqnetworkaccessmanagerfactory.h \
-    ReactQML/rqkeychain.h \
-    ReactQML/rqhelper.h
+  ReactQML/rqhelper.h
 
 
 SOURCES += main.cpp \
   ReactQML/rq.cpp \
-  ReactQML/rqnetworkaccessmanagerfactory.cpp \
-  ReactQML/rqkeychain.cpp
+  ReactQML/rqnetworkaccessmanagerfactory.cpp
 
 win32 {
   ReactQML/rqhelper.cpp

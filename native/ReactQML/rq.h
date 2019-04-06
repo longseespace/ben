@@ -1,7 +1,6 @@
 #ifndef RQ_H
 #define RQ_H
 
-#include "rqkeychain.h"
 #include "rqnetworkaccessmanagerfactory.h"
 
 #include <QObject>
@@ -21,7 +20,6 @@ public:
   Q_INVOKABLE void clearCache();
   Q_INVOKABLE QObject *createTimer();
   Q_INVOKABLE QObject *createWebSocket();
-  Q_INVOKABLE RQKeychain *keychain();
   Q_INVOKABLE void setBadgeLabelText(const QString &text);
   Q_INVOKABLE void hideTitleBar(QQuickWindow *window);
 
@@ -42,7 +40,6 @@ private:
   QQmlComponent *m_ws_component;
 
   RQNetworkAccessManagerFactory *m_nam;
-  RQKeychain *m_keychain;
 };
 
 #endif // RQ_H

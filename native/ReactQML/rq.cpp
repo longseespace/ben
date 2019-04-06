@@ -16,8 +16,7 @@ QObject *RQ::qmlInstance(QQmlEngine *engine, QJSEngine *scriptEngine) {
 }
 
 RQ::RQ(QQmlEngine *engine)
-    : m_engine(engine), m_nam(new RQNetworkAccessManagerFactory()),
-      m_keychain(new RQKeychain()) {
+    : m_engine(engine), m_nam(new RQNetworkAccessManagerFactory()) {
   // timer context
   m_timer_context = new QQmlContext(m_engine->rootContext());
   m_timer_component = new QQmlComponent(m_engine);
@@ -42,7 +41,6 @@ RQ::~RQ() {
   delete m_ws_component;
 
   delete m_nam;
-  delete m_keychain;
 }
 
 void RQ::clearCache() { m_engine->trimComponentCache(); }
@@ -58,8 +56,6 @@ QObject *RQ::createWebSocket() {
   QQmlEngine::setObjectOwnership(ws, QQmlEngine::JavaScriptOwnership);
   return ws;
 }
-
-RQKeychain *RQ::keychain() { return m_keychain; }
 
 void RQ::setBadgeLabelText(const QString &text) {
 #ifdef Q_OS_MACX

@@ -1,5 +1,4 @@
-// TODO: move this to `react-qml`
-const Keychain = RQ.keychain();
+import Keychain from '@react-qml/keychain';
 
 class SecureStorage {
   private serviceName: string;

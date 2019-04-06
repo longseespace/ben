@@ -1,5 +1,6 @@
 {
   "dependencies": [
-    "de.skycoder42.qsingleinstance@1.2.2"
+    "de.skycoder42.qsingleinstance@1.2.2",
+    "com.react-qml.keychain@0.0.3"
   ]
 }

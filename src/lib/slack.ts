@@ -1,7 +1,6 @@
+import Keychain from '@react-qml/keychain';
 import qs from 'qs';
 import { StringMap } from '../constants';
-
-const Keychain = RQ.keychain();
 
 export function apiCall(method: string, data: object) {
   const url = `https://slack.com/api/${method}`;
