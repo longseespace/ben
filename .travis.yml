@@ -26,7 +26,7 @@ install:
 
 before_script:
   - yarn build
-  - qpm install
+  - cd native && qpm install
   - export QMAKESPEC=macx-clang
   - mkdir -p "$TRAVIS_BUILD_DIR-build"
   - qmake -v
