@@ -20,12 +20,13 @@ before_cache:
 
 install:
   - yarn
-  # - brew tap longseespace/tap
   - brew install https://raw.githubusercontent.com/longseespace/homebrew-tap/master/qt.rb
   - brew link --force qt
+  - brew install qpm
 
 before_script:
   - yarn build
+  - qpm install
   - export QMAKESPEC=macx-clang
   - mkdir -p "$TRAVIS_BUILD_DIR-build"
   - qmake -v

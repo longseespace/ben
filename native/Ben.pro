@@ -1,6 +1,9 @@
 # qtkeychain
 include(ReactQML/qtkeychain/qt5keychain.pri)
 
+# qpm
+include(vendor/vendor.pri)
+
 # mac
 macx: {
   QT += macextras

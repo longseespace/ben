@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <qsingleinstance.h>
 
 #ifdef PRODUCTION
 #define PRODUCTION_BUILD true
@@ -57,5 +58,7 @@ int main(int argc, char *argv[]) {
 
   engine.load(QUrl(QLatin1String("qrc:/react-qml/main.qml")));
 
-  return app.exec();
+  // This allow only 1 instance of the app
+  QSingleInstance instance;
+  return instance.singleExec();
 }

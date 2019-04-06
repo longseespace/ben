@@ -1,3 +1,5 @@
+.vscode
+
 # C++ objects and libs
 
 *.slo
@@ -110,7 +112,8 @@ Makefile
 qrc_bundle.*
 lib*.a
 
-# qt test project
+# qt output
 /native/dist
 
-.vscode
+# qpm
+/native/vendor
