@@ -36,7 +36,7 @@ script:
   - make -C "$TRAVIS_BUILD_DIR-build" -j2 all
   - make -C "$TRAVIS_BUILD_DIR-build" -j2 check
   - macdeployqt "$TRAVIS_BUILD_DIR-build/Ben.app" -dmg -qmldir="$TRAVIS_BUILD_DIR/native/dist"
-  - yarn sentry-cli upload-dif -t dsym .
+  - yarn sentry-cli upload-dif -t dsym "$TRAVIS_BUILD_DIR-build"
 
 deploy:
   provider: releases
