@@ -15,7 +15,7 @@ CrashHandler.init({
   companyName: 'Podzim',
   submitURL:
     'https://sentry.io/api/1433538/minidump/?sentry_key=c621e085d91f467fa0d9629ba4375508',
-  uploadToServer: true,
+  uploadToServer: process.env.NODE_ENV !== 'production',
   extra: {
     sentry: {
       release: pkg.version,
