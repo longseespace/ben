@@ -1,3 +1,4 @@
+import CrashHandler from '@react-qml/breakpad';
 import { QtLabsPlatform, StandardKey } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
@@ -80,6 +81,11 @@ class AppMenu extends React.Component<Props> {
         <Menu title="Ben">
           <MenuItem text="About" role="AboutRole" />
           <MenuItem text="Preferences" role="PreferencesRole" />
+          <MenuItem
+            text="Crash!"
+            role="ApplicationSpecificRole"
+            onTriggered={CrashHandler.crash}
+          />
           <MenuItem
             text="Collect Garbage"
             role="ApplicationSpecificRole"
