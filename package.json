@@ -1,6 +1,6 @@
 {
   "name": "tey",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "DEV_SERVER_HOST=localhost rq start --dev --platform=osx",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@callstack/react-theme-provider": "^1.0.7",
+    "@react-qml/breakpad": "^0.1.0",
     "@react-qml/keychain": "^0.0.3",
     "connected-react-router": "^4.3.0",
     "emoji-js": "^3.4.1",
@@ -36,6 +37,8 @@
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.7.1",
     "@react-qml/cli": "^0.1.6",
+    "@sentry/cli": "^1.40.0",
+    "@sentry/webpack-plugin": "^1.6.2",
     "@types/history": "^4.7.2",
     "@types/lodash": "^4.14.122",
     "@types/node": "^11.10.5",

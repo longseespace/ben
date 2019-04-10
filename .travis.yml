@@ -27,16 +27,16 @@ install:
 before_script:
   - yarn build
   - cd native && qpm install
-  - export QMAKESPEC=macx-clang
   - mkdir -p "$TRAVIS_BUILD_DIR-build"
   - qmake -v
-  - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=release CONFIG+=static PRODUCTION=true "$TRAVIS_BUILD_DIR/native"
+  - qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser -spec macx-clang CONFIG+=release \
+    CONFIG+=force_debug_info CONFIG+=separate_debug_info PRODUCTION=true "$TRAVIS_BUILD_DIR/native"
 
 script:
   - make -C "$TRAVIS_BUILD_DIR-build" -j2 all
   - make -C "$TRAVIS_BUILD_DIR-build" -j2 check
   - macdeployqt "$TRAVIS_BUILD_DIR-build/Ben.app" -dmg -qmldir="$TRAVIS_BUILD_DIR/native/dist"
-  # - '[ "$TRAVIS_OS_NAME" != osx ] || make -C "$TRAVIS_BUILD_DIR-build/pkg/osx" dmg'
+  - yarn sentry-cli upload-dif -t dsym .
 
 deploy:
   provider: releases
