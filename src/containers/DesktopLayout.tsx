@@ -47,11 +47,7 @@ class DesktopLayout extends React.PureComponent<Props> {
           }}
           color="#323E4C"
         >
-          {workspaceInitStatus === 'started' ? (
-            <ChannelLoadingView />
-          ) : (
-            workspaceInitStatus === 'success' && <ChannelList />
-          )}
+          <ChannelList />
         </Rectangle>
         <Rectangle
           Layout={{

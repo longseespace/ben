@@ -4,13 +4,16 @@ import { StringMap } from '../constants';
 
 export function apiCall(method: string, data: object) {
   const url = `https://slack.com/api/${method}`;
+  console.log('Slack::apiCall', method, url);
   return fetch(url, {
     method: 'post',
     headers: new Headers({
       'Content-Type': 'application/x-www-form-urlencoded',
     }),
     body: qs.stringify(data),
-  }).then(resp => resp.json());
+  })
+    .then(resp => resp.json())
+    .then(json => (json.ok ? json : Promise.reject(json)));
 }
 
 export async function signInWithPassword(

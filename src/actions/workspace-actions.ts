@@ -11,6 +11,7 @@ import { SimpleThunkAction } from '../constants';
 import { RootState } from '../reducers';
 import TimelinesActions, { Timeline } from './timelines-actions';
 import { connectToWorkspace } from '../store/rtmMiddleware/actions';
+import { inspect } from 'util';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
@@ -120,6 +121,8 @@ export const initWorkspace = (
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {
     console.log('workspaceInitFailure', error);
-    dispatch(workspaceInitFailure(teamId, 'Unknown error'));
+    console.log(inspect(error));
+    const message = error.message || 'Unknown error';
+    dispatch(workspaceInitFailure(teamId, message));
   }
 };

@@ -12,6 +12,7 @@ import {
   QQuickScreenAttached,
 } from 'react-qml/dist/components/QtQuickWindow';
 import {
+  getSortedTeamIds,
   getAccounts,
   getMainWindowSettings,
   getSelectedTeamId,
@@ -34,6 +35,7 @@ const connectToRedux = connect(
     accounts: getAccounts(state),
     selectedTeamId: getSelectedTeamId(state),
     settings: getMainWindowSettings(state),
+    sortedTeamIds: getSortedTeamIds(state),
   }),
   {
     initWorkspace,
@@ -57,6 +59,7 @@ const styles = {
 type Props = {
   accounts: AccountsState;
   selectedTeamId: string | null | undefined;
+  sortedTeamIds: Array<string>;
   settings: SingleWindowState;
   initWorkspace: Function;
   closeMainWindow: Function;
@@ -114,8 +117,10 @@ class MainWindow extends React.Component<Props> {
       }
     }
 
+    const { sortedTeamIds } = this.props;
+
     setTimeout(() => {
-      Object.keys(this.props.accounts).forEach(id => {
+      sortedTeamIds.forEach(id => {
         if (this.props.selectedTeamId !== id && this.props.accounts[id]) {
           const account = this.props.accounts[id];
           this.props.initWorkspace(account.teamId, account.token, false);

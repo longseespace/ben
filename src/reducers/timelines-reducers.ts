@@ -63,7 +63,9 @@ function setInitialTimeline(
 
 function handleMessageReceived(state: TimelinesState, payload: any) {
   const channel = payload.channel;
-  const oldMessages = state[channel].messages || [];
+  const timeline = state[channel] || {};
+
+  const messages = timeline.messages || [];
 
   const message: Message = {
     client_msg_id: payload.client_msg_id,
@@ -72,14 +74,14 @@ function handleMessageReceived(state: TimelinesState, payload: any) {
     user: payload.user,
     ts: payload.ts,
   };
-  const messages = [...oldMessages, message];
+  const nextMessages = [...messages, message];
 
-  const timeline = {
+  const nextTimeline = {
     ...state[channel],
-    messages,
+    messages: nextMessages,
   };
 
-  return { ...state, [channel]: timeline };
+  return { ...state, [channel]: nextTimeline };
 }
 
 export default reducer;
