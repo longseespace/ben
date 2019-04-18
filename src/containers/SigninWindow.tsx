@@ -61,6 +61,7 @@ type Props = {
 type State = {
   signinError: string;
   isProcessing: boolean;
+  pinRequired: boolean;
 };
 
 class SigninWindow extends React.Component<Props, State> {
@@ -68,22 +69,37 @@ class SigninWindow extends React.Component<Props, State> {
 
   state: State = {
     signinError: '',
+    pinRequired: false,
     isProcessing: false,
   };
 
   onClosing = (ev: QQuickCloseEvent) => {
     ev.accepted = true;
+    // reset state
+    this.resetState();
+
+    // finally close
     this.props.closeSigninWindow();
+  };
+
+  resetState = () => {
+    this.setState({ signinError: '', pinRequired: false, isProcessing: false });
   };
 
   handleLogin = async (formData: SigninFormData) => {
     // reset error
     this.setState({ signinError: '', isProcessing: true });
 
-    const { domain, email, password } = formData;
-    const resp = await signInWithPassword(domain, email, password);
+    const { domain, email, password, pin } = formData;
+    const resp = await signInWithPassword(domain, email, password, pin);
     if (!resp.ok) {
-      this.setState({ signinError: resp.error, isProcessing: false });
+      const signinError = resp.error;
+      this.setState({
+        signinError,
+        isProcessing: false,
+        pinRequired:
+          signinError === 'missing_pin' || signinError === 'invalid_pin',
+      });
     } else {
       const { team, token } = resp;
       // first, add account to our secure storage
@@ -94,7 +110,7 @@ class SigninWindow extends React.Component<Props, State> {
       this.props.initWorkspace(team, token, selectNewlyAddedTeam);
 
       // reset error
-      this.setState({ signinError: '', isProcessing: false });
+      this.resetState();
 
       // close this window
       this.props.closeSigninWindow();
@@ -118,7 +134,7 @@ class SigninWindow extends React.Component<Props, State> {
   }
 
   render() {
-    const { signinError, isProcessing } = this.state;
+    const { signinError, isProcessing, pinRequired } = this.state;
     const { visible = false } = this.props.settings;
 
     return (
@@ -147,6 +163,7 @@ class SigninWindow extends React.Component<Props, State> {
               onSubmit={this.handleLogin}
               submissionError={signinError}
               isProcessing={isProcessing}
+              pinRequired={pinRequired}
             />
           )}
         </ErrorBoundary>

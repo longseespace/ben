@@ -18,11 +18,13 @@ export type SigninFormData = {
   domain: string;
   email: string;
   password: string;
+  pin?: string;
 };
 
 type Props = {
   submissionError?: string;
   isProcessing?: boolean;
+  pinRequired?: boolean;
   onSubmit?: (formData: SigninFormData) => void;
 };
 
@@ -38,13 +40,15 @@ class LoginForm extends React.Component<Props, State> {
   private domainRef = React.createRef<TextField>();
   private emailRef = React.createRef<TextField>();
   private passwordRef = React.createRef<TextField>();
+  private pinRef = React.createRef<TextField>();
 
   submit = () => {
     const $domainInput = this.domainRef.current;
     const $emailInput = this.emailRef.current;
     const $passwordInput = this.passwordRef.current;
+    const $pinInput = this.pinRef.current;
 
-    if (!$domainInput || !$emailInput || !$passwordInput) {
+    if (!$domainInput || !$emailInput || !$passwordInput || !$pinInput) {
       // weird
       return false;
     }
@@ -52,10 +56,18 @@ class LoginForm extends React.Component<Props, State> {
     const domain = $domainInput.value;
     const email = $emailInput.value;
     const password = $passwordInput.value;
+    const pin = $pinInput.value;
 
     if (!domain || !email || !password) {
       this.setState({
         validationErrorMessage: 'All fields are required',
+      });
+      return false;
+    }
+
+    if (this.props.pinRequired && !pin) {
+      this.setState({
+        validationErrorMessage: 'Authentication Code is required',
       });
       return false;
     }
@@ -73,16 +85,23 @@ class LoginForm extends React.Component<Props, State> {
 
     if (this.props.onSubmit) {
       console.log('onSubmit');
-      this.props.onSubmit({ domain, email, password });
+      this.props.onSubmit({ domain, email, password, pin });
     }
   };
 
   render() {
-    const { submissionError = '', isProcessing = false } = this.props;
+    const {
+      submissionError = '',
+      isProcessing = false,
+      pinRequired,
+    } = this.props;
     const { validationErrorMessage = '' } = this.state;
 
+    const missingPin = submissionError === 'missing_pin';
+
     const hasValidationError = validationErrorMessage.length > 0;
-    const hasSubmissionError = submissionError.length > 0;
+    const hasSubmissionError = submissionError.length > 0 && !missingPin;
+
     return (
       <ColumnLayout anchors={{ fill: 'parent' }}>
         <ColumnLayout
@@ -130,6 +149,7 @@ class LoginForm extends React.Component<Props, State> {
             verticalAlignment="AlignVCenter"
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
+            visible={!pinRequired}
           />
           <TextField
             placeholderText={qsTr('Email')}
@@ -144,6 +164,7 @@ class LoginForm extends React.Component<Props, State> {
             verticalAlignment="AlignVCenter"
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
+            visible={!pinRequired}
           />
           <TextField
             placeholderText={qsTr('Password')}
@@ -154,6 +175,17 @@ class LoginForm extends React.Component<Props, State> {
             echoMode="Password"
             onSubmitEditing={this.submit}
             readOnly={isProcessing}
+            visible={!pinRequired}
+          />
+          <TextField
+            placeholderText={qsTr('Authentication Code')}
+            ref={this.pinRef}
+            font={{ family: 'Lato' }}
+            verticalAlignment="AlignVCenter"
+            Layout={{ fillWidth: true, row: 6 }}
+            onSubmitEditing={this.submit}
+            readOnly={isProcessing}
+            visible={pinRequired}
           />
           <Text
             text={qsTr('Ben does not store your password')}

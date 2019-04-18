@@ -1,6 +1,7 @@
 import Keychain from '@react-qml/keychain';
 import qs from 'qs';
 import { StringMap } from '../constants';
+import { inspect } from 'util';
 
 export function apiCall(method: string, data: object) {
   const url = `https://slack.com/api/${method}`;
@@ -19,7 +20,8 @@ export function apiCall(method: string, data: object) {
 export async function signInWithPassword(
   domain: string,
   email: string,
-  password: string
+  password: string,
+  pin?: string
 ) {
   try {
     const teamJson = await apiCall('auth.findTeam', { domain });
@@ -31,11 +33,13 @@ export async function signInWithPassword(
       team: teamJson.team_id,
       email,
       password,
+      pin,
     });
 
     return json;
   } catch (error) {
-    console.log('signInWithPassword', error);
+    console.log('signInWithPassword');
+    console.log(inspect(error));
     return error;
   }
 }
