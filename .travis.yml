@@ -43,6 +43,8 @@ deploy:
   api_key: $RELEASES_API_KEY
   file: "$TRAVIS_BUILD_DIR-build/Ben.dmg"
   skip_cleanup: true
-  draft: true
+  name: "Latest Development Build"
+  overwrite: true
+  prerelease: true
   on:
     branch: develop
