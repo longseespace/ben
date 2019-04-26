@@ -3,7 +3,7 @@ import { QtLabsPlatform, StandardKey } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { fetchTokensFromSlack } from '../../lib/slack';
+import slack from '../../lib/slack';
 import {
   openSigninWindow,
   closeMainWindow,
@@ -55,7 +55,7 @@ class AppMenu extends React.Component<Props> {
     // ideally this should be within a dialog / custom view
     // so we can show progress / error
     try {
-      const tokens = await fetchTokensFromSlack();
+      const tokens = await slack.fetchTokensFromSlack();
       console.log('tokens');
       console.log(require('util').inspect(tokens, { depth: 1 }));
 

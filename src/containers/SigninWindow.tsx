@@ -2,7 +2,7 @@ import { Window, QtQuickControls2 } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { signInWithPassword } from '../lib/slack';
+import slack from '../lib/slack';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoginForm, { SigninFormData } from '../components/LoginForm';
 import { getSigninWindowSettings } from '../reducers/selectors';
@@ -91,7 +91,7 @@ class SigninWindow extends React.Component<Props, State> {
     this.setState({ signinError: '', isProcessing: true });
 
     const { domain, email, password, pin } = formData;
-    const resp = await signInWithPassword(domain, email, password, pin);
+    const resp = await slack.signInWithPassword(domain, email, password, pin);
     if (!resp.ok) {
       const signinError = resp.error;
       this.setState({
