@@ -172,27 +172,5 @@ export const getTeamsBadgeCounts = createSelector(
   }
 );
 
-// Timelines
-export const getAllTimelines = (state: RootState) => state.timelines;
-export const getMessageList = createSelector(
-  getAllTimelines,
-  getSelectedConversationId,
-  (allTimelines, selectedConversationId) => {
-    if (!selectedConversationId) {
-      return [];
-    }
-
-    return allTimelines[selectedConversationId]
-      ? allTimelines[selectedConversationId].messages
-      : [];
-  }
-);
-
-export const getLatestMessage = createSelector(
-  getMessageList,
-  messageList =>
-    messageList.length > 0 ? messageList[messageList.length - 1] : null
-);
-
 // Presences
 export const getAllUserPresences = (state: RootState) => state.presences;

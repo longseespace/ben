@@ -4732,27 +4732,6 @@ redbox-react@^1.3.6:
     prop-types "^15.5.4"
     sourcemapped-stacktrace "^1.1.6"
 
-redux-api-call-adapter-dedupe@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/redux-api-call-adapter-dedupe/-/redux-api-call-adapter-dedupe-1.0.0.tgz#e9f0cf304969d7ba22ab56b32872a4c9e04b5057"
-
-redux-api-call-adapter-fetch@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/redux-api-call-adapter-fetch/-/redux-api-call-adapter-fetch-1.0.0.tgz#94dd01a1a831cc638dcb1371195b65058a4d2946"
-
-redux-api-call-adapter-json@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/redux-api-call-adapter-json/-/redux-api-call-adapter-json-1.0.0.tgz#f91ade4f46b7cc711954da7601277eb2fd70b52f"
-
-redux-api-call@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/redux-api-call/-/redux-api-call-1.0.9.tgz#f14d5013a250b6708e48870ad6a27a96fa759d09"
-  integrity sha512-hWE5D40/BZHmj574TenVIyLdc2srFEcviuqs6l7HdyINjoFMMp5L/4AxWYXH7oxruZX7ElKNM0MOw+KsWYZngQ==
-  dependencies:
-    redux-api-call-adapter-dedupe "^1.0.0"
-    redux-api-call-adapter-fetch "^1.0.0"
-    redux-api-call-adapter-json "^1.0.0"
-
 redux-devtools-core@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/redux-devtools-core/-/redux-devtools-core-0.2.1.tgz#4e43cbe590a1f18c13ee165d2d42e0bc77a164d8"

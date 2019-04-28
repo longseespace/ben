@@ -10,7 +10,6 @@ import windowsReducer from './windows-reducers';
 import teamsReducer from './teams-reducers';
 import workspacesReducer from './workspaces-reducers';
 import conversationsReducer from './conversations-reducers';
-import timelinesReducer from './timelines-reducers';
 import presencesReducer from './presences-reducers';
 
 import SecureStorage from '../lib/SecureStorage';
@@ -37,7 +36,6 @@ const reducers = combineReducers({
   teams: teamsReducer,
   workspaces: workspacesReducer,
   conversations: conversationsReducer,
-  timelines: timelinesReducer,
   presences: presencesReducer,
 });
 

@@ -3,13 +3,9 @@ import slack from '../lib/slack';
 import { Team, addTeam } from './team-actions';
 import { selectTeam } from './app-teams-actions';
 import { setConversationList } from './conversations-actions';
-import {
-  getConversationListFromUserCountsAPI,
-  standardizeMessage,
-} from './helpers';
+import { getConversationListFromUserCountsAPI } from './helpers';
 import { SimpleThunkAction } from '../constants';
 import { RootState } from '../reducers';
-import TimelinesActions, { Timeline } from './timelines-actions';
 import { connectToWorkspace } from '../store/rtmMiddleware/actions';
 import { inspect } from 'util';
 
@@ -65,24 +61,10 @@ export const initWorkspace = (
     _x_mode: 'online',
   });
 
-  // fetch messages if needed
-  const selectedConversationId = state.appTeams.selectedConversations
-    ? state.appTeams.selectedConversations[teamId]
-    : null;
-
-  let initTimeline = Promise.resolve(null as any);
-  if (selectedConversationId) {
-    initTimeline = slack.apiCall('conversations.history', {
-      token,
-      channel: selectedConversationId,
-    });
-  }
-
   try {
-    const [clientJson, userCountJson, timelineJson] = await Promise.all([
+    const [clientJson, userCountJson] = await Promise.all([
       initClient,
       initUser,
-      initTimeline,
     ]);
 
     dispatch(connectToWorkspace(teamId, token));
@@ -101,22 +83,6 @@ export const initWorkspace = (
       userCountJson
     );
     dispatch(setConversationList(team.id, conversationsList));
-
-    if (selectedConversationId && timelineJson) {
-      const messages = timelineJson.messages
-        ? timelineJson.messages.reverse().map(standardizeMessage)
-        : [];
-      const timeline: Timeline = {
-        messages,
-        query: {},
-        hasMore: timelineJson.has_more,
-        pinCount: timelineJson.pin_count,
-        initialized: true,
-      };
-      dispatch(
-        TimelinesActions.setInitialTimeline(selectedConversationId, timeline)
-      );
-    }
 
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {

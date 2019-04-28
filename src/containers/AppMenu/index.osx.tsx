@@ -15,7 +15,6 @@ import { addAccount } from '../../actions/account-actions';
 import { RootState } from '../../reducers';
 import { getMainWindowSettings } from '../../reducers/selectors';
 import { SingleWindowState } from '../../reducers/windows-reducers';
-import TimelinesActions from '../../actions/timelines-actions';
 
 const { MenuBar, Menu, MenuItem, MenuSeparator } = QtLabsPlatform;
 
@@ -34,7 +33,6 @@ const connectToRedux = connect(
     closeMainWindow,
     minimizeMainWindow: () => minimizeWindow('main'),
     toggleMaximizeMainWindow: () => toggleMaximize('main'),
-    markAsRead: TimelinesActions.markAsRead,
   }
 );
 
@@ -46,7 +44,6 @@ type Props = {
   closeMainWindow: Function;
   minimizeMainWindow: Function;
   toggleMaximizeMainWindow: Function;
-  markAsRead: Function;
 };
 
 class AppMenu extends React.Component<Props> {
@@ -121,9 +118,6 @@ class AppMenu extends React.Component<Props> {
         <Menu title="&History">
           <MenuItem text="Back" shortcut={StandardKey.Back} />
           <MenuItem text="Forward" shortcut={StandardKey.Forward} />
-        </Menu>
-        <Menu title="&Conversation">
-          <MenuItem text="Mark as Read" onTriggered={this.props.markAsRead} />
         </Menu>
         <Menu title="&Window">
           <MenuItem
