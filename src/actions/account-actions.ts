@@ -7,12 +7,19 @@ export type AccountBase = {
 
 export type Account = Readonly<AccountBase>;
 
-export const addAccount = (account: AccountBase) => ({
+const addAccount = (account: AccountBase) => ({
   type: ACCOUNTS.ADD_ACCOUNT,
   payload: account,
 });
 
-export const removeAccount = (teamId: string) => ({
+const removeAccount = (teamId: string) => ({
   type: ACCOUNTS.REMOVE_ACCOUNT,
   payload: teamId,
 });
+
+const AccountActions = {
+  addAccount,
+  removeAccount,
+};
+
+export default AccountActions;

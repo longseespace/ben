@@ -19,12 +19,8 @@ import {
 } from '../reducers/selectors';
 import { AccountsState } from '../reducers/accounts-reducer';
 import { RootState } from '../reducers';
-import { initWorkspace } from '../actions/workspace-actions';
-import {
-  closeMainWindow,
-  openMainWindow,
-  setWindowVisibility,
-} from '../actions/window-actions';
+import WorkspaceActions from '../actions/workspace-actions';
+import WindowActions from '../actions/window-actions';
 import { SingleWindowState } from '../reducers/windows-reducers';
 import { isDesktopOS, isTablet, isPhone } from '../helpers';
 import DesktopLayout from './DesktopLayout';
@@ -38,10 +34,10 @@ const connectToRedux = connect(
     sortedTeamIds: getSortedTeamIds(state),
   }),
   {
-    initWorkspace,
-    closeMainWindow,
-    openMainWindow,
-    setWindowVisibility,
+    initWorkspace: WorkspaceActions.initWorkspace,
+    closeMainWindow: WindowActions.closeMainWindow,
+    openMainWindow: WindowActions.openMainWindow,
+    setWindowVisibility: WindowActions.setWindowVisibility,
   }
 );
 

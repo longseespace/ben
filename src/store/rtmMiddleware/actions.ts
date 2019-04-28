@@ -1,8 +1,10 @@
 import { RTM } from './constants';
+import { FluxStandardAction } from 'flux-standard-action';
 
 export type RTMActionMeta = { teamId: string };
+export type RTMActionType = FluxStandardAction<any, RTMActionMeta>;
 
-export const connectToWorkspace = (teamId: string, token: string) => ({
+const connectToWorkspace = (teamId: string, token: string) => ({
   type: RTM.RTM_CONNECT,
   payload: {
     teamId,
@@ -13,7 +15,7 @@ export const connectToWorkspace = (teamId: string, token: string) => ({
   },
 });
 
-export const connectSuccess = (teamId: string) => ({
+const connectSuccess = (teamId: string) => ({
   type: RTM.RTM_CONNECT_SUCCESS,
   payload: teamId,
   meta: {
@@ -21,7 +23,7 @@ export const connectSuccess = (teamId: string) => ({
   },
 });
 
-export const connectFailure = (teamId: string, error: any) => ({
+const connectFailure = (teamId: string, error: any) => ({
   type: RTM.RTM_CONNECT_FAILURE,
   payload: {
     teamId,
@@ -32,10 +34,19 @@ export const connectFailure = (teamId: string, error: any) => ({
   },
 });
 
-export const rtmSend = (teamId: string, payload: object) => ({
+const send = (teamId: string, payload: object) => ({
   type: RTM.RTM_SEND,
   payload,
   meta: {
     teamId,
   },
 });
+
+const Actions = {
+  connectToWorkspace,
+  connectSuccess,
+  connectFailure,
+  send,
+};
+
+export default Actions;

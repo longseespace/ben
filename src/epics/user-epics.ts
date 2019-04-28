@@ -3,10 +3,9 @@ import { AnyAction } from 'redux';
 import { Epic, ActionsObservable } from 'redux-observable';
 import { filter, take, mergeMap } from 'rxjs/operators';
 import { CONVERSATIONS } from '../actions';
-import { TeamConversationListPayload } from '../actions/conversations-actions';
-import { rtmSend } from '../store/rtmMiddleware/actions';
+import { TeamConversationListPayload } from '../actions/conversation-actions';
 import { RTM } from '../store/rtmMiddleware/constants';
-import { RTMAction } from '../store/rtmMiddleware';
+import RTMActions, { RTMActionType } from '../store/rtmMiddleware/actions';
 
 export const userPresenceSubEpic: Epic<AnyAction, AnyAction, RootState> = (
   action$: ActionsObservable<AnyAction>
@@ -20,7 +19,7 @@ export const userPresenceSubEpic: Epic<AnyAction, AnyAction, RootState> = (
   const project = (convoListAction: AnyAction) =>
     action$.pipe(
       filter(
-        (action: RTMAction) =>
+        (action: RTMActionType) =>
           action.type === RTM.RTM_EVENT &&
           action.payload.type === 'hello' &&
           !!action.meta &&
@@ -38,7 +37,7 @@ export const userPresenceSubEpic: Epic<AnyAction, AnyAction, RootState> = (
       type: 'presence_sub',
       ids: userIds,
     };
-    return rtmSend(payload.teamId, command);
+    return RTMActions.send(payload.teamId, command);
   };
 
   return setConvoListAction$.pipe(mergeMap(project, resultSelector));

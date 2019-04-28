@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import React from 'react';
 import { RootState } from '../reducers';
 import { getSelectedConversation } from '../reducers/selectors';
-import { Conversation } from '../actions/conversations-actions';
+import { Conversation } from '../actions/conversation-actions';
 import { QQuickTextArea } from 'react-qml/dist/components/QtQuickControls2';
 
 const connectToRedux = connect(

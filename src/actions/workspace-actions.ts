@@ -1,13 +1,13 @@
 import { WORKSPACE } from '.';
 import slack from '../lib/slack';
-import { Team, addTeam } from './team-actions';
-import { selectTeam } from './app-teams-actions';
-import { setConversationList } from './conversations-actions';
+import AppTeamsActions from './app-teams-actions';
+import ConversationActions from './conversation-actions';
 import { getConversationListFromUserCountsAPI } from './helpers';
 import { SimpleThunkAction } from '../constants';
 import { RootState } from '../reducers';
-import { connectToWorkspace } from '../store/rtmMiddleware/actions';
+import RTMActions from '../store/rtmMiddleware/actions';
 import { inspect } from 'util';
+import TeamActions, { Team } from './team-actions';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
@@ -27,7 +27,7 @@ const workspaceInitSuccess = (teamId: string) => ({
   payload: teamId,
 });
 
-export const initWorkspace = (
+const initWorkspace = (
   teamId: string,
   token: string,
   selectTeamAfterSuccess: boolean = false
@@ -67,22 +67,24 @@ export const initWorkspace = (
       initUser,
     ]);
 
-    dispatch(connectToWorkspace(teamId, token));
+    dispatch(RTMActions.connectToWorkspace(teamId, token));
 
     const team = {
       ...(clientJson.team as Team),
       user: clientJson.self,
     };
-    dispatch(addTeam(team));
+    dispatch(TeamActions.addTeam(team));
 
     if (selectTeamAfterSuccess) {
-      dispatch(selectTeam(team.id));
+      dispatch(AppTeamsActions.selectTeam(team.id));
     }
 
     const conversationsList = getConversationListFromUserCountsAPI(
       userCountJson
     );
-    dispatch(setConversationList(team.id, conversationsList));
+    dispatch(
+      ConversationActions.setConversationList(team.id, conversationsList)
+    );
 
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {
@@ -92,3 +94,10 @@ export const initWorkspace = (
     dispatch(workspaceInitFailure(teamId, message));
   }
 };
+
+// exports
+const WorkspaceActions = {
+  initWorkspace,
+};
+
+export default WorkspaceActions;

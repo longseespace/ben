@@ -5,7 +5,7 @@ import React from 'react';
 import FontAwesome from '../components/FontAwesome';
 import { getSelectedConversation } from '../reducers/selectors';
 import { RootState } from '../reducers';
-import { Conversation } from '../actions/conversations-actions';
+import { Conversation } from '../actions/conversation-actions';
 
 const connectToRedux = connect(
   (state: RootState) => ({

@@ -6,8 +6,8 @@ import * as React from 'react';
 
 import AddAccountButton from '../components/AddAccountButton.qml';
 import TeamListItem from '../components/TeamListItem';
-import { openSigninWindow } from '../actions/window-actions';
-import { selectTeam, setTeamSorted } from '../actions/app-teams-actions';
+import WindowActions from '../actions/window-actions';
+import AppTeamsActions from '../actions/app-teams-actions';
 import {
   getSelectedTeamId,
   getSortedTeams,
@@ -16,9 +16,9 @@ import {
   getTeamsBadgeCounts,
 } from '../reducers/selectors';
 import { RootState } from '../reducers';
-import { Team, removeTeam } from '../actions/team-actions';
+import TeamActions, { Team } from '../actions/team-actions';
 import { StringMap } from '../constants';
-import { removeAccount } from '../actions/account-actions';
+import AccountActions from '../actions/account-actions';
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -29,11 +29,11 @@ const connectToRedux = connect(
     teamsBadgeCounts: getTeamsBadgeCounts(state),
   }),
   {
-    onAddAccount: openSigninWindow,
-    onTeamSelected: selectTeam,
-    setTeamSorted,
-    removeAccount,
-    removeTeam,
+    onAddAccount: WindowActions.openSigninWindow,
+    onTeamSelected: AppTeamsActions.selectTeam,
+    setTeamSorted: AppTeamsActions.setTeamSorted,
+    removeAccount: AccountActions.removeAccount,
+    removeTeam: TeamActions.removeTeam,
   }
 );
 

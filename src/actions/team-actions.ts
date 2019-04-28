@@ -77,12 +77,19 @@ export interface TeamBase {
 
 export type Team = Readonly<TeamBase>;
 
-export const addTeam = (team: Team) => ({
+const addTeam = (team: Team) => ({
   type: TEAMS.ADD_TEAM,
   payload: team,
 });
 
-export const removeTeam = (teamId: string) => ({
+const removeTeam = (teamId: string) => ({
   type: TEAMS.REMOVE_TEAM,
   payload: teamId,
 });
+
+const TeamActions = {
+  addTeam,
+  removeTeam,
+};
+
+export default TeamActions;

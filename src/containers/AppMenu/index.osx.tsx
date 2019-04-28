@@ -4,14 +4,9 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import slack from '../../lib/slack';
-import {
-  openSigninWindow,
-  closeMainWindow,
-  minimizeWindow,
-  toggleMaximize,
-} from '../../actions/window-actions';
-import { initWorkspace } from '../../actions/workspace-actions';
-import { addAccount } from '../../actions/account-actions';
+import WindowActions from '../../actions/window-actions';
+import WorkspaceActions from '../../actions/workspace-actions';
+import AccountActions from '../../actions/account-actions';
 import { RootState } from '../../reducers';
 import { getMainWindowSettings } from '../../reducers/selectors';
 import { SingleWindowState } from '../../reducers/windows-reducers';
@@ -27,12 +22,12 @@ const connectToRedux = connect(
     mainWindowSettings: getMainWindowSettings(state),
   }),
   {
-    onSigninClicked: openSigninWindow,
-    initWorkspace,
-    addAccount,
-    closeMainWindow,
-    minimizeMainWindow: () => minimizeWindow('main'),
-    toggleMaximizeMainWindow: () => toggleMaximize('main'),
+    onSigninClicked: WindowActions.openSigninWindow,
+    initWorkspace: WorkspaceActions.initWorkspace,
+    addAccount: AccountActions.addAccount,
+    closeMainWindow: WindowActions.closeMainWindow,
+    minimizeMainWindow: () => WindowActions.minimizeWindow('main'),
+    toggleMaximizeMainWindow: () => WindowActions.toggleMaximize('main'),
   }
 );
 

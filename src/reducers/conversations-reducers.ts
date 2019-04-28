@@ -4,7 +4,7 @@ import { StringMap } from '../constants';
 import {
   Conversation,
   TeamConversationListPayload,
-} from '../actions/conversations-actions';
+} from '../actions/conversation-actions';
 
 export type ConversationsState = StringMap<Array<Conversation>>;
 

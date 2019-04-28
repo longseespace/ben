@@ -6,13 +6,13 @@ import slack from '../lib/slack';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoginForm, { SigninFormData } from '../components/LoginForm';
 import { getSigninWindowSettings } from '../reducers/selectors';
-import { selectTeam } from '../actions/app-teams-actions';
-import { closeSigninWindow } from '../actions/window-actions';
+import AppTeamsActions from '../actions/app-teams-actions';
+import WindowActions from '../actions/window-actions';
 import { RootState } from '../reducers';
 import { SingleWindowState } from '../reducers/windows-reducers';
 import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
-import { initWorkspace } from '../actions/workspace-actions';
-import { addAccount } from '../actions/account-actions';
+import WorkspaceActions from '../actions/workspace-actions';
+import AccountActions from '../actions/account-actions';
 import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
 import { isMobileOS } from '../helpers';
 const { RoundButton } = QtQuickControls2;
@@ -22,10 +22,10 @@ const connectToRedux = connect(
     settings: getSigninWindowSettings(state),
   }),
   {
-    closeSigninWindow,
-    selectTeam,
-    initWorkspace,
-    addAccount,
+    closeSigninWindow: WindowActions.closeSigninWindow,
+    selectTeam: AppTeamsActions.selectTeam,
+    initWorkspace: WorkspaceActions.initWorkspace,
+    addAccount: AccountActions.addAccount,
   }
 );
 

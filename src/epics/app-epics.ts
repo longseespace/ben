@@ -3,12 +3,12 @@ import { AnyAction } from 'redux';
 import { Epic, ActionsObservable, StateObservable } from 'redux-observable';
 import { filter, mapTo, map } from 'rxjs/operators';
 import { APP_TEAMS } from '../actions';
-import { setWindowTitle } from '../actions/window-actions';
+import WindowActions from '../actions/window-actions';
 import { getAllTeams } from '../reducers/selectors';
 import { RTM } from '../store/rtmMiddleware/constants';
 import NotificationActions from '../store/notificationMiddleware/actions';
 import EmojiConvertor from 'emoji-js';
-import { selectTeam, selectConversation } from '../actions/app-teams-actions';
+import AppTeamsActions from '../actions/app-teams-actions';
 
 const emoji = new EmojiConvertor();
 emoji.init_env();
@@ -36,7 +36,7 @@ export const setWindowTitleWhenSelectTeamEpic: Epic<
     map(action => {
       const allTeams = getAllTeams(state$.value);
       const teamName = allTeams[action.payload].name;
-      return setWindowTitle('main', `Ben — ${teamName}`);
+      return WindowActions.setWindowTitle('main', `Ben — ${teamName}`);
     })
   );
 /**
@@ -79,8 +79,8 @@ export const showNotificationEpic: Epic<AnyAction, AnyAction, RootState> = (
         title: emoji.replace_colons(action.payload.subtitle),
         message: emoji.replace_colons(action.payload.content),
         clickActions: [
-          selectTeam(action.meta.teamId),
-          selectConversation(action.payload.channel),
+          AppTeamsActions.selectTeam(action.meta.teamId),
+          AppTeamsActions.selectConversation(action.payload.channel),
         ],
       })
     )

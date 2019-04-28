@@ -8,9 +8,9 @@ import {
   getAllUserPresences,
   getConversationSectionList,
 } from '../reducers/selectors';
-import { selectConversation } from '../actions/app-teams-actions';
+import AppTeamsActions from '../actions/app-teams-actions';
 import { RootState } from '../reducers';
-import { Conversation } from '../actions/conversations-actions';
+import { Conversation } from '../actions/conversation-actions';
 import ChannelListItem from '../components/ChannelListItem';
 import { PresencesState } from '../reducers/presences-reducers';
 import SectionList, { Section } from '../components/SectionList';
@@ -23,7 +23,7 @@ const connectToRedux = connect(
     allUserPresences: getAllUserPresences(state),
   }),
   {
-    selectConversation,
+    selectConversation: AppTeamsActions.selectConversation,
   }
 );
 
