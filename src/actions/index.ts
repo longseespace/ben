@@ -64,3 +64,15 @@ export type conversationsType = 'SET_CONVERSATION_LIST';
 export const CONVERSATIONS = {
   SET_CONVERSATION_LIST: 'SET_CONVERSATION_LIST' as conversationsType,
 };
+
+// MESSAGES
+export type messagesType =
+  | 'INIT_MESSAGES_START'
+  | 'INIT_MESSAGES_SUCCESS'
+  | 'INIT_MESSAGES_FAILURE';
+
+export const MESSAGES = {
+  INIT_MESSAGES_START: 'INIT_MESSAGES_START' as messagesType,
+  INIT_MESSAGES_SUCCESS: 'INIT_MESSAGES_SUCCESS' as messagesType,
+  INIT_MESSAGES_FAILURE: 'INIT_MESSAGES_FAILURE' as messagesType,
+};

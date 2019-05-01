@@ -174,3 +174,18 @@ export const getTeamsBadgeCounts = createSelector(
 
 // Presences
 export const getAllUserPresences = (state: RootState) => state.presences;
+
+// Messages
+export const getAllMessageStates = (state: RootState) => state.messages;
+
+export const getCurrentMessageState = createSelector(
+  getAllMessageStates,
+  getSelectedConversationId,
+  (allMessageStates, selectedConversationId) => {
+    if (!selectedConversationId || !allMessageStates[selectedConversationId]) {
+      return {};
+    }
+
+    return allMessageStates[selectedConversationId];
+  }
+);

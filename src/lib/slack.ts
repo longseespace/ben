@@ -6,6 +6,7 @@ import { inspect } from 'util';
 function apiCall(method: string, data: object) {
   const url = `https://slack.com/api/${method}`;
   console.log('Slack::apiCall', method, url);
+
   return fetch(url, {
     method: 'post',
     headers: new Headers({
