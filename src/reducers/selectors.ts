@@ -183,7 +183,7 @@ export const getCurrentMessageState = createSelector(
   getSelectedConversationId,
   (allMessageStates, selectedConversationId) => {
     if (!selectedConversationId || !allMessageStates[selectedConversationId]) {
-      return {};
+      return;
     }
 
     return allMessageStates[selectedConversationId];

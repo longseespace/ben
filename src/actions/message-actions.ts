@@ -1,8 +1,4 @@
 import { MESSAGES } from '.';
-import { SimpleThunkAction } from '../constants';
-import { inspect } from 'util';
-import slack from '../lib/slack';
-import { RootState } from '../reducers';
 
 export type Message = {
   client_msg_id: string;

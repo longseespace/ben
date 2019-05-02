@@ -109,7 +109,7 @@ class MainWindow extends React.Component<Props> {
     if (this.props.selectedTeamId) {
       const account = this.props.accounts[this.props.selectedTeamId];
       if (account) {
-        this.props.initWorkspace(account.teamId, account.token, false);
+        this.props.initWorkspace(account.teamId, account.token, true);
       }
     }
 

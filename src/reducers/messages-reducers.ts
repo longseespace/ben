@@ -28,8 +28,9 @@ export function reducer(
 
 function initMessageView(state: MessagesState, payload: any) {
   const { conversationId, data } = payload;
+  const messages = (data.messages || []).reverse();
   const viewState: MessageViewState = {
-    messages: data.messages,
+    messages: messages,
     hasMore: data.has_more,
     pinCount: data.pin_count,
     initialized: true,

@@ -1,21 +1,31 @@
 import { RootState } from '../reducers';
 import { AnyAction } from 'redux';
 import { Epic, ActionsObservable, StateObservable } from 'redux-observable';
-import { filter, mergeMap } from 'rxjs/operators';
-import { APP_TEAMS } from '../actions';
+import { filter, mergeMap, map } from 'rxjs/operators';
+import { MESSAGES, APP_TEAMS } from '../actions';
 import { getAccounts, getSelectedTeamId } from '../reducers/selectors';
 import MessageActions from '../actions/message-actions';
 import slack from '../lib/slack';
 import { inspect } from 'util';
+
+export const initMessageViewWhenSelectConversationEpic: Epic<
+  AnyAction,
+  AnyAction,
+  RootState
+> = (action$: ActionsObservable<AnyAction>) =>
+  action$.pipe(
+    filter(
+      (action: AnyAction) => action.type === APP_TEAMS.SELECT_CONVERSATION
+    ),
+    map((action: AnyAction) => MessageActions.initStart(action.payload))
+  );
 
 export const initMessageViewEpic: Epic<AnyAction, AnyAction, RootState> = (
   action$: ActionsObservable<AnyAction>,
   state$: StateObservable<RootState>
 ) =>
   action$.pipe(
-    filter(
-      (action: AnyAction) => action.type === APP_TEAMS.SELECT_CONVERSATION
-    ),
+    filter((action: AnyAction) => action.type === MESSAGES.INIT_MESSAGES_START),
     mergeMap(async action => {
       const conversationId = action.payload;
 

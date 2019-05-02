@@ -8,6 +8,7 @@ import { RootState } from '../reducers';
 import RTMActions from '../store/rtmMiddleware/actions';
 import { inspect } from 'util';
 import TeamActions, { Team } from './team-actions';
+import MessageActions from './message-actions';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
@@ -37,6 +38,7 @@ const initWorkspace = (
   }
 
   const state = getState() as RootState;
+  const selectedConversationId = state.appTeams.selectedConversations[teamId];
 
   // init start
   dispatch(workspaceInitStart(teamId));
@@ -77,6 +79,11 @@ const initWorkspace = (
 
     if (selectTeamAfterSuccess) {
       dispatch(AppTeamsActions.selectTeam(team.id));
+
+      // init message view
+      if (selectedConversationId) {
+        dispatch(MessageActions.initStart(selectedConversationId));
+      }
     }
 
     const conversationsList = getConversationListFromUserCountsAPI(
