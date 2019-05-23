@@ -56,6 +56,6 @@
     "eslint-plugin-react": "^7.5.1",
     "remotedev-server": "^0.2.4",
     "typescript": "^3.3.3333",
-    "webpack-bundle-analyzer": "^2.13.1"
+    "webpack-bundle-analyzer": "^3.3.2"
   }
 }
