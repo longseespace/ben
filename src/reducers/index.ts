@@ -12,6 +12,7 @@ import workspacesReducer from './workspaces-reducers';
 import conversationsReducer from './conversations-reducers';
 import presencesReducer from './presences-reducers';
 import messagesReducer from './messages-reducers';
+import usersReducer from './users-reducers';
 
 import SecureStorage from '../lib/SecureStorage';
 const secureStorage = new SecureStorage(KEYCHAIN_SERVICE_NAME);
@@ -39,6 +40,7 @@ const reducers = combineReducers({
   conversations: conversationsReducer,
   presences: presencesReducer,
   messages: messagesReducer,
+  users: usersReducer,
 });
 
 const rootReducer = persistReducer(rootPersistConfig, reducers);

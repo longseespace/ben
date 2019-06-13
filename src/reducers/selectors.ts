@@ -189,3 +189,6 @@ export const getCurrentMessageState = createSelector(
     return allMessageStates[selectedConversationId];
   }
 );
+
+// Users
+export const getAllUsers = (state: RootState) => state.users;
