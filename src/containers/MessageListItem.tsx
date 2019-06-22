@@ -1,17 +1,6 @@
 import React from 'react';
-import { Text, Rectangle, Column, RowLayout, Item, Image } from 'react-qml';
-import { connect } from 'react-redux';
-import { RootState } from '../reducers';
-import { getSelectedTeamToken } from '../reducers/selectors';
-import slack from '../lib/slack';
-import { inspect } from 'util';
-
-const connectToRedux = connect(
-  (state: RootState) => ({
-    token: getSelectedTeamToken(state),
-  }),
-  {}
-);
+import { Text, Column, RowLayout, Item, Image } from 'react-qml';
+import { User } from '../actions/team-actions';
 
 const styles = {
   user: {
@@ -49,66 +38,57 @@ const fullWidth = {
   right: 'parent.right',
 };
 
+type AllUsersType = {
+  [key: string]: User;
+};
+
 type Props = {
-  token: string;
   userId: string;
+  user?: User;
   message: string;
-  avatar?: string;
   ts: string | number;
+  allUsers?: AllUsersType;
+  fetchUser?: Function;
 };
 
-type State = {
-  loaded: boolean;
-  displayName?: string;
-  avatar?: string;
-};
-
-class MessageListItem extends React.Component<Props, State> {
-  state: State = {
-    loaded: false,
-  };
-
+class MessageListItem extends React.Component<Props> {
   componentDidMount() {
-    const { token, userId } = this.props;
-    if (token) {
-      slack
-        .apiCall('users.profile.get', {
-          token,
-          user: userId,
-        })
-        .then((data: any) => {
-          this.setState({
-            loaded: true,
-            displayName: data.profile.display_name,
-            avatar: data.profile.image_72,
-          });
-        });
+    const { allUsers, userId, fetchUser } = this.props;
+    if (allUsers && fetchUser) {
+      const user = allUsers[userId] as User;
+      if (!user) {
+        fetchUser(userId);
+      }
     }
   }
 
   render() {
-    const { message, userId } = this.props;
-    const { loaded, avatar, displayName } = this.state;
+    const { message, allUsers, userId } = this.props;
+
+    const user = allUsers && (allUsers[userId] as User);
 
     return (
-      loaded && (
-        <RowLayout spacing={0} anchors={fullWidth}>
-          <Item Layout={styles.avatarColumn} color="#eee">
-            {avatar && <Image source={avatar} style={styles.avatar} />}
-          </Item>
-          <Column Layout={styles.messageColumn} color="#333">
-            <Text text={displayName} style={styles.user} />
-            <Text
-              text={message}
-              anchors={fullWidth}
-              wrapMode="WordWrap"
-              style={styles.message}
-            />
-          </Column>
-        </RowLayout>
-      )
+      <RowLayout spacing={0} anchors={fullWidth}>
+        <Item Layout={styles.avatarColumn} color="#eee">
+          {user && (
+            <Image source={user.profile.image_72} style={styles.avatar} />
+          )}
+        </Item>
+        <Column Layout={styles.messageColumn} color="#333">
+          <Text
+            text={user ? user.profile.display_name : ''}
+            style={styles.user}
+          />
+          <Text
+            text={message}
+            anchors={fullWidth}
+            wrapMode="WordWrap"
+            style={styles.message}
+          />
+        </Column>
+      </RowLayout>
     );
   }
 }
 
-export default connectToRedux(MessageListItem);
+export default MessageListItem;
