@@ -16,6 +16,7 @@ import {
   QQuickScrollBar,
   QQuickScrollBarAttached,
 } from 'react-qml/dist/components/QtQuickControls2';
+import FlatListContent from './FlatListContent';
 
 type Props = {
   data: Array<any>;
@@ -68,6 +69,16 @@ class FlatList extends React.PureComponent<Props> {
     return item.hasOwnProperty('key') ? item.key : index;
   };
 
+  renderInner = () => {
+    const { data, renderItem } = this.props;
+
+    return (
+      <React.Suspense fallback={null}>
+        <FlatListContent data={data} renderItem={renderItem} />
+      </React.Suspense>
+    );
+  };
+
   render() {
     const {
       data,
@@ -86,7 +97,7 @@ class FlatList extends React.PureComponent<Props> {
         highlightMoveVelocity={highlightMoveVelocity}
         {...otherProps}
       >
-        <ObjectModel ref={this.modelRef}>{data.map(renderItem)}</ObjectModel>
+        <ObjectModel ref={this.modelRef}>{this.renderInner()}</ObjectModel>
         <ScrollBar ref={this.vScrollBarRef} />
         <ScrollBar ref={this.hScrollBarRef} />
       </NativeListView>
