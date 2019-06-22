@@ -47,7 +47,7 @@ class DesktopLayout extends React.PureComponent<Props> {
           }}
           color="#323E4C"
         >
-          <ChannelList />
+          {workspaceInitStatus !== 'idle' && <ChannelList />}
         </Rectangle>
         <Rectangle
           Layout={{
@@ -56,11 +56,8 @@ class DesktopLayout extends React.PureComponent<Props> {
           }}
           color="#FFFFFF"
         >
-          {workspaceInitStatus === 'started' ? (
-            <MessageLoadingView />
-          ) : (
-            workspaceInitStatus === 'success' && <MessageList />
-          )}
+          {workspaceInitStatus === 'started' && <MessageLoadingView />}
+          {workspaceInitStatus === 'success' && <MessageList />}
         </Rectangle>
       </RowLayout>
     );
