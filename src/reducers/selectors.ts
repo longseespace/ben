@@ -172,27 +172,23 @@ export const getTeamsBadgeCounts = createSelector(
   }
 );
 
-// Timelines
-export const getAllTimelines = (state: RootState) => state.timelines;
-export const getMessageList = createSelector(
-  getAllTimelines,
+// Presences
+export const getAllUserPresences = (state: RootState) => state.presences;
+
+// Messages
+export const getAllMessageStates = (state: RootState) => state.messages;
+
+export const getCurrentMessageState = createSelector(
+  getAllMessageStates,
   getSelectedConversationId,
-  (allTimelines, selectedConversationId) => {
-    if (!selectedConversationId) {
-      return [];
+  (allMessageStates, selectedConversationId) => {
+    if (!selectedConversationId || !allMessageStates[selectedConversationId]) {
+      return;
     }
 
-    return allTimelines[selectedConversationId]
-      ? allTimelines[selectedConversationId].messages
-      : [];
+    return allMessageStates[selectedConversationId];
   }
 );
 
-export const getLatestMessage = createSelector(
-  getMessageList,
-  messageList =>
-    messageList.length > 0 ? messageList[messageList.length - 1] : null
-);
-
-// Presences
-export const getAllUserPresences = (state: RootState) => state.presences;
+// Users
+export const getAllUsers = (state: RootState) => state.users;

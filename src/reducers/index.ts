@@ -10,8 +10,9 @@ import windowsReducer from './windows-reducers';
 import teamsReducer from './teams-reducers';
 import workspacesReducer from './workspaces-reducers';
 import conversationsReducer from './conversations-reducers';
-import timelinesReducer from './timelines-reducers';
 import presencesReducer from './presences-reducers';
+import messagesReducer from './messages-reducers';
+import usersReducer from './users-reducers';
 
 import SecureStorage from '../lib/SecureStorage';
 const secureStorage = new SecureStorage(KEYCHAIN_SERVICE_NAME);
@@ -21,7 +22,7 @@ const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
   blacklist: ['accounts', 'workspacesReducer'],
-  whitelist: ['appTeams', 'teams'],
+  whitelist: ['appTeams', 'teams', 'conversations'],
 };
 
 // secure storage
@@ -37,8 +38,9 @@ const reducers = combineReducers({
   teams: teamsReducer,
   workspaces: workspacesReducer,
   conversations: conversationsReducer,
-  timelines: timelinesReducer,
   presences: presencesReducer,
+  messages: messagesReducer,
+  users: usersReducer,
 });
 
 const rootReducer = persistReducer(rootPersistConfig, reducers);

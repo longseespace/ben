@@ -8,7 +8,6 @@ import { persistStore } from 'redux-persist';
 import createHistory from 'history/createMemoryHistory';
 import reduxThunk from 'redux-thunk';
 
-import apiMiddleware from './apiMiddleware';
 import rtmMiddleware from './rtmMiddleware';
 import notificationMiddleware from './notificationMiddleware';
 import rootReducer, { RootState } from '../reducers';
@@ -51,7 +50,6 @@ const enhancers = composeEnhancers(
     notificationMiddleware,
     rtmMiddleware,
     reduxThunk,
-    apiMiddleware,
     epicMiddleware,
     routerMiddleware
   )

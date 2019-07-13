@@ -3,19 +3,13 @@ import { QtLabsPlatform, StandardKey } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { fetchTokensFromSlack } from '../../lib/slack';
-import {
-  openSigninWindow,
-  closeMainWindow,
-  minimizeWindow,
-  toggleMaximize,
-} from '../../actions/window-actions';
-import { initWorkspace } from '../../actions/workspace-actions';
-import { addAccount } from '../../actions/account-actions';
+import slack from '../../lib/slack';
+import WindowActions from '../../actions/window-actions';
+import WorkspaceActions from '../../actions/workspace-actions';
+import AccountActions from '../../actions/account-actions';
 import { RootState } from '../../reducers';
 import { getMainWindowSettings } from '../../reducers/selectors';
 import { SingleWindowState } from '../../reducers/windows-reducers';
-import TimelinesActions from '../../actions/timelines-actions';
 
 const { MenuBar, Menu, MenuItem, MenuSeparator } = QtLabsPlatform;
 
@@ -28,13 +22,12 @@ const connectToRedux = connect(
     mainWindowSettings: getMainWindowSettings(state),
   }),
   {
-    onSigninClicked: openSigninWindow,
-    initWorkspace,
-    addAccount,
-    closeMainWindow,
-    minimizeMainWindow: () => minimizeWindow('main'),
-    toggleMaximizeMainWindow: () => toggleMaximize('main'),
-    markAsRead: TimelinesActions.markAsRead,
+    onSigninClicked: WindowActions.openSigninWindow,
+    initWorkspace: WorkspaceActions.initWorkspace,
+    addAccount: AccountActions.addAccount,
+    closeMainWindow: WindowActions.closeMainWindow,
+    minimizeMainWindow: () => WindowActions.minimizeWindow('main'),
+    toggleMaximizeMainWindow: () => WindowActions.toggleMaximize('main'),
   }
 );
 
@@ -46,7 +39,6 @@ type Props = {
   closeMainWindow: Function;
   minimizeMainWindow: Function;
   toggleMaximizeMainWindow: Function;
-  markAsRead: Function;
 };
 
 class AppMenu extends React.Component<Props> {
@@ -55,7 +47,7 @@ class AppMenu extends React.Component<Props> {
     // ideally this should be within a dialog / custom view
     // so we can show progress / error
     try {
-      const tokens = await fetchTokensFromSlack();
+      const tokens = await slack.fetchTokensFromSlack();
       console.log('tokens');
       console.log(require('util').inspect(tokens, { depth: 1 }));
 
@@ -121,9 +113,6 @@ class AppMenu extends React.Component<Props> {
         <Menu title="&History">
           <MenuItem text="Back" shortcut={StandardKey.Back} />
           <MenuItem text="Forward" shortcut={StandardKey.Forward} />
-        </Menu>
-        <Menu title="&Conversation">
-          <MenuItem text="Mark as Read" onTriggered={this.props.markAsRead} />
         </Menu>
         <Menu title="&Window">
           <MenuItem

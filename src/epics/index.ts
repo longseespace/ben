@@ -4,13 +4,18 @@ import {
   setWindowTitleWhenSelectTeamEpic,
   showNotificationEpic,
 } from './app-epics';
-import { userPresenceSubEpic } from './user-epics';
-import { fetchTimelineIfNeededEpic } from './conversation-epics';
+import { userPresenceSubEpic, fetchUserEpic } from './user-epics';
+import {
+  initMessageViewEpic,
+  initMessageViewWhenSelectConversationEpic,
+} from './message-epics';
 
 export default combineEpics(
   pingEpic,
   userPresenceSubEpic,
+  fetchUserEpic,
   setWindowTitleWhenSelectTeamEpic,
   showNotificationEpic,
-  fetchTimelineIfNeededEpic
+  initMessageViewWhenSelectConversationEpic,
+  initMessageViewEpic
 );

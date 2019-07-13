@@ -1,16 +1,14 @@
 import { WORKSPACE } from '.';
 import slack from '../lib/slack';
-import { Team, addTeam } from './team-actions';
-import { selectTeam } from './app-teams-actions';
-import { setConversationList } from './conversations-actions';
-import {
-  getConversationListFromUserCountsAPI,
-  standardizeMessage,
-} from './helpers';
+import AppTeamsActions from './app-teams-actions';
+import ConversationActions from './conversation-actions';
+import { getConversationListFromUserCountsAPI } from './helpers';
 import { SimpleThunkAction } from '../constants';
 import { RootState } from '../reducers';
-import TimelinesActions, { Timeline } from './timelines-actions';
-import { connectToWorkspace } from '../store/rtmMiddleware/actions';
+import RTMActions from '../store/rtmMiddleware/actions';
+import { inspect } from 'util';
+import TeamActions, { Team } from './team-actions';
+import MessageActions from './message-actions';
 
 const workspaceInitStart = (teamId: string) => ({
   type: WORKSPACE.INIT_WORKSPACE_START,
@@ -30,7 +28,7 @@ const workspaceInitSuccess = (teamId: string) => ({
   payload: teamId,
 });
 
-export const initWorkspace = (
+const initWorkspace = (
   teamId: string,
   token: string,
   selectTeamAfterSuccess: boolean = false
@@ -40,6 +38,7 @@ export const initWorkspace = (
   }
 
   const state = getState() as RootState;
+  const selectedConversationId = state.appTeams.selectedConversations[teamId];
 
   // init start
   dispatch(workspaceInitStart(teamId));
@@ -64,62 +63,48 @@ export const initWorkspace = (
     _x_mode: 'online',
   });
 
-  // fetch messages if needed
-  const selectedConversationId = state.appTeams.selectedConversations
-    ? state.appTeams.selectedConversations[teamId]
-    : null;
-
-  let initTimeline = Promise.resolve(null as any);
-  if (selectedConversationId) {
-    initTimeline = slack.apiCall('conversations.history', {
-      token,
-      channel: selectedConversationId,
-    });
-  }
-
   try {
-    const [clientJson, userCountJson, timelineJson] = await Promise.all([
+    const [clientJson, userCountJson] = await Promise.all([
       initClient,
       initUser,
-      initTimeline,
     ]);
 
-    dispatch(connectToWorkspace(teamId, token));
+    dispatch(RTMActions.connectToWorkspace(teamId, token));
 
     const team = {
       ...(clientJson.team as Team),
       user: clientJson.self,
     };
-    dispatch(addTeam(team));
+    dispatch(TeamActions.addTeam(team));
 
     if (selectTeamAfterSuccess) {
-      dispatch(selectTeam(team.id));
+      dispatch(AppTeamsActions.selectTeam(team.id));
+
+      // init message view
+      if (selectedConversationId) {
+        dispatch(MessageActions.initStart(selectedConversationId));
+      }
     }
 
     const conversationsList = getConversationListFromUserCountsAPI(
       userCountJson
     );
-    dispatch(setConversationList(team.id, conversationsList));
-
-    if (selectedConversationId && timelineJson) {
-      const messages = timelineJson.messages
-        ? timelineJson.messages.reverse().map(standardizeMessage)
-        : [];
-      const timeline: Timeline = {
-        messages,
-        query: {},
-        hasMore: timelineJson.has_more,
-        pinCount: timelineJson.pin_count,
-        initialized: true,
-      };
-      dispatch(
-        TimelinesActions.setInitialTimeline(selectedConversationId, timeline)
-      );
-    }
+    dispatch(
+      ConversationActions.setConversationList(team.id, conversationsList)
+    );
 
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {
     console.log('workspaceInitFailure', error);
-    dispatch(workspaceInitFailure(teamId, 'Unknown error'));
+    console.log(inspect(error));
+    const message = error.message || 'Unknown error';
+    dispatch(workspaceInitFailure(teamId, message));
   }
 };
+
+// exports
+const WorkspaceActions = {
+  initWorkspace,
+};
+
+export default WorkspaceActions;

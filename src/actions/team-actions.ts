@@ -40,6 +40,13 @@ export interface UserProfile {
   last_name: string;
   status_text_canonical: string;
   team: string;
+  image_24: string;
+  image_32: string;
+  image_48: string;
+  image_72: string;
+  image_192: string;
+  image_512: string;
+  image_original: string;
 }
 
 export interface User {
@@ -77,12 +84,19 @@ export interface TeamBase {
 
 export type Team = Readonly<TeamBase>;
 
-export const addTeam = (team: Team) => ({
+const addTeam = (team: Team) => ({
   type: TEAMS.ADD_TEAM,
   payload: team,
 });
 
-export const removeTeam = (teamId: string) => ({
+const removeTeam = (teamId: string) => ({
   type: TEAMS.REMOVE_TEAM,
   payload: teamId,
 });
+
+const TeamActions = {
+  addTeam,
+  removeTeam,
+};
+
+export default TeamActions;

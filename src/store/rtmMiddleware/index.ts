@@ -1,10 +1,7 @@
-import { FluxStandardAction } from 'flux-standard-action';
 import slack from '../../lib/slack';
 import { RTM } from './constants';
-import { connectSuccess, connectFailure, RTMActionMeta } from './actions';
+import RTMActions, { RTMActionType } from './actions';
 import { MiddlewareAPI, Dispatch } from 'redux';
-
-export type RTMAction = FluxStandardAction<any, RTMActionMeta>;
 
 const socketMap = new Map<string, WebSocket>();
 
@@ -23,13 +20,13 @@ const rtmEvent = (teamId: string, payload: any) => ({
 
 // middleware
 const middleware = (api: MiddlewareAPI) => (next: Dispatch) => async (
-  action: RTMAction
+  action: RTMActionType
 ) => {
   if (action.type === RTM.RTM_CONNECT) {
     const { teamId, token } = action.payload;
     const currentWs = socketMap.get(teamId);
     if (currentWs) {
-      api.dispatch(connectSuccess(teamId));
+      api.dispatch(RTMActions.connectSuccess(teamId));
     } else {
       try {
         const ws = await slack.rtmConnect(token);
@@ -54,9 +51,9 @@ const middleware = (api: MiddlewareAPI) => (next: Dispatch) => async (
           socketMap.delete(teamId);
         };
 
-        api.dispatch(connectSuccess(teamId));
+        api.dispatch(RTMActions.connectSuccess(teamId));
       } catch (error) {
-        api.dispatch(connectFailure(teamId, error));
+        api.dispatch(RTMActions.connectFailure(teamId, error));
       }
     }
   }

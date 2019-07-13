@@ -2,17 +2,17 @@ import { Window, QtQuickControls2 } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { signInWithPassword } from '../lib/slack';
+import slack from '../lib/slack';
 import ErrorBoundary from '../components/ErrorBoundary';
 import LoginForm, { SigninFormData } from '../components/LoginForm';
 import { getSigninWindowSettings } from '../reducers/selectors';
-import { selectTeam } from '../actions/app-teams-actions';
-import { closeSigninWindow } from '../actions/window-actions';
+import AppTeamsActions from '../actions/app-teams-actions';
+import WindowActions from '../actions/window-actions';
 import { RootState } from '../reducers';
 import { SingleWindowState } from '../reducers/windows-reducers';
 import { QQuickWindow } from 'react-qml/dist/components/QtQuickWindow';
-import { initWorkspace } from '../actions/workspace-actions';
-import { addAccount } from '../actions/account-actions';
+import WorkspaceActions from '../actions/workspace-actions';
+import AccountActions from '../actions/account-actions';
 import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
 import { isMobileOS } from '../helpers';
 const { RoundButton } = QtQuickControls2;
@@ -22,10 +22,10 @@ const connectToRedux = connect(
     settings: getSigninWindowSettings(state),
   }),
   {
-    closeSigninWindow,
-    selectTeam,
-    initWorkspace,
-    addAccount,
+    closeSigninWindow: WindowActions.closeSigninWindow,
+    selectTeam: AppTeamsActions.selectTeam,
+    initWorkspace: WorkspaceActions.initWorkspace,
+    addAccount: AccountActions.addAccount,
   }
 );
 
@@ -61,6 +61,7 @@ type Props = {
 type State = {
   signinError: string;
   isProcessing: boolean;
+  pinRequired: boolean;
 };
 
 class SigninWindow extends React.Component<Props, State> {
@@ -68,22 +69,37 @@ class SigninWindow extends React.Component<Props, State> {
 
   state: State = {
     signinError: '',
+    pinRequired: false,
     isProcessing: false,
   };
 
   onClosing = (ev: QQuickCloseEvent) => {
     ev.accepted = true;
+    // reset state
+    this.resetState();
+
+    // finally close
     this.props.closeSigninWindow();
+  };
+
+  resetState = () => {
+    this.setState({ signinError: '', pinRequired: false, isProcessing: false });
   };
 
   handleLogin = async (formData: SigninFormData) => {
     // reset error
     this.setState({ signinError: '', isProcessing: true });
 
-    const { domain, email, password } = formData;
-    const resp = await signInWithPassword(domain, email, password);
+    const { domain, email, password, pin } = formData;
+    const resp = await slack.signInWithPassword(domain, email, password, pin);
     if (!resp.ok) {
-      this.setState({ signinError: resp.error, isProcessing: false });
+      const signinError = resp.error;
+      this.setState({
+        signinError,
+        isProcessing: false,
+        pinRequired:
+          signinError === 'missing_pin' || signinError === 'invalid_pin',
+      });
     } else {
       const { team, token } = resp;
       // first, add account to our secure storage
@@ -94,7 +110,7 @@ class SigninWindow extends React.Component<Props, State> {
       this.props.initWorkspace(team, token, selectNewlyAddedTeam);
 
       // reset error
-      this.setState({ signinError: '', isProcessing: false });
+      this.resetState();
 
       // close this window
       this.props.closeSigninWindow();
@@ -118,7 +134,7 @@ class SigninWindow extends React.Component<Props, State> {
   }
 
   render() {
-    const { signinError, isProcessing } = this.state;
+    const { signinError, isProcessing, pinRequired } = this.state;
     const { visible = false } = this.props.settings;
 
     return (
@@ -147,6 +163,7 @@ class SigninWindow extends React.Component<Props, State> {
               onSubmit={this.handleLogin}
               submissionError={signinError}
               isProcessing={isProcessing}
+              pinRequired={pinRequired}
             />
           )}
         </ErrorBoundary>

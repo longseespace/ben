@@ -1,7 +1,7 @@
 import React from 'react';
 import Badge from './Badge.qml';
 import { RowLayout, Text, Rectangle, MouseArea } from 'react-qml';
-import { Conversation } from '../actions/conversations-actions';
+import { Conversation } from '../actions/conversation-actions';
 import FontAwesome from './FontAwesome';
 import { isDesktopOS } from '../helpers';
 

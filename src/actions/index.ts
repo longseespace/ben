@@ -65,14 +65,26 @@ export const CONVERSATIONS = {
   SET_CONVERSATION_LIST: 'SET_CONVERSATION_LIST' as conversationsType,
 };
 
-// TIMELINES
-export type timelinesType =
-  | 'FETCH_MESSAGES'
-  | 'SET_INITIAL_TIMELINE'
-  | 'IM_MARK';
+// MESSAGES
+export type messagesType =
+  | 'INIT_MESSAGES_START'
+  | 'INIT_MESSAGES_SUCCESS'
+  | 'INIT_MESSAGES_FAILURE';
 
-export const TIMELINES = {
-  FETCH_MESSAGES: 'FETCH_MESSAGES' as timelinesType,
-  SET_INITIAL_TIMELINE: 'SET_INITIAL_TIMELINE' as timelinesType,
-  IM_MARK: 'IM_MARK' as timelinesType,
+export const MESSAGES = {
+  INIT_MESSAGES_START: 'INIT_MESSAGES_START' as messagesType,
+  INIT_MESSAGES_SUCCESS: 'INIT_MESSAGES_SUCCESS' as messagesType,
+  INIT_MESSAGES_FAILURE: 'INIT_MESSAGES_FAILURE' as messagesType,
+};
+
+// USERS
+export type usersType =
+  | 'FETCH_USERS_START'
+  | 'FETCH_USERS_SUCCESS'
+  | 'FETCH_USERS_FAILURE';
+
+export const USERS = {
+  FETCH_USERS_START: 'FETCH_USERS_START' as usersType,
+  FETCH_USERS_SUCCESS: 'FETCH_USERS_SUCCESS' as usersType,
+  FETCH_USERS_FAILURE: 'FETCH_USERS_FAILURE' as usersType,
 };

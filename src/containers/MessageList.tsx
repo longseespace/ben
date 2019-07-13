@@ -3,18 +3,24 @@ import React from 'react';
 
 import MessageListFooter from './MessageListFooter';
 import MessageListHeader from './MessageListHeader';
-import { Message } from '../actions/timelines-actions';
-import ListView from '../components/ListView';
-import MessageDelegate from '../components/MessageDelegate.qml';
 import { connect } from 'react-redux';
 import { RootState } from '../reducers';
-import { getMessageList } from '../reducers/selectors';
+import FlatList from '../components/FlatList';
+import { Message } from '../actions/message-actions';
+import { MessageViewState } from '../reducers/messages-reducers';
+import { getCurrentMessageState, getAllUsers } from '../reducers/selectors';
+import MessageListItem from './MessageListItem';
+import UserActions from '../actions/user-actions';
+import { UsersState } from '../reducers/users-reducers';
 
 const connectToRedux = connect(
   (state: RootState) => ({
-    messageList: getMessageList(state),
+    allUsers: getAllUsers(state),
+    messageViewState: getCurrentMessageState(state),
   }),
-  {}
+  {
+    fetchUser: UserActions.fetchStart,
+  }
 );
 
 const fillParent = { fill: 'parent' };
@@ -30,26 +36,39 @@ const styles = {
 };
 
 type Props = {
-  messageList: Array<Message>;
+  messageViewState: MessageViewState | undefined | null;
+  allUsers: UsersState;
+  fetchUser: Function;
 };
 
 class MessageList extends React.PureComponent<Props> {
-  keyExtractor = (item: Message) => item.client_msg_id;
+  keyExtractor = (item: Message) => item.ts;
+
+  renderItem = (item: Message) => (
+    <MessageListItem
+      userId={item.user}
+      allUsers={this.props.allUsers}
+      fetchUser={this.props.fetchUser}
+      message={item.text}
+      ts={item.ts}
+      key={item.ts}
+    />
+  );
 
   render() {
+    const { messageViewState, allUsers } = this.props;
+    const messageList = messageViewState ? messageViewState.messages : [];
+    const extraData = allUsers;
+
     return (
       <ColumnLayout anchors={fillParent} style={styles.container}>
         <MessageListHeader />
-        <ListView
-          data={this.props.messageList}
+        <FlatList
+          data={messageList}
+          extraData={extraData}
           keyExtractor={this.keyExtractor}
-          DelegateComponent={MessageDelegate}
+          renderItem={this.renderItem}
           style={styles.listLayout}
-          initialViewAt="end"
-          boundsBehavior={ListView.StopAtBounds}
-          boundsMovement={ListView.StopAtBounds}
-          focus
-          keyNavigationEnabled={false}
         />
         <MessageListFooter />
       </ColumnLayout>

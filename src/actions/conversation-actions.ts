@@ -22,7 +22,7 @@ export type TeamConversationListPayload = {
   conversations: Array<Conversation>;
 };
 
-export const setConversationList = (
+const setConversationList = (
   teamId: string,
   conversations: Array<Conversation>
 ) => ({
@@ -32,3 +32,9 @@ export const setConversationList = (
     conversations,
   } as TeamConversationListPayload,
 });
+
+const ConversationActions = {
+  setConversationList,
+};
+
+export default ConversationActions;

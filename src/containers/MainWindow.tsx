@@ -12,18 +12,15 @@ import {
   QQuickScreenAttached,
 } from 'react-qml/dist/components/QtQuickWindow';
 import {
+  getSortedTeamIds,
   getAccounts,
   getMainWindowSettings,
   getSelectedTeamId,
 } from '../reducers/selectors';
 import { AccountsState } from '../reducers/accounts-reducer';
 import { RootState } from '../reducers';
-import { initWorkspace } from '../actions/workspace-actions';
-import {
-  closeMainWindow,
-  openMainWindow,
-  setWindowVisibility,
-} from '../actions/window-actions';
+import WorkspaceActions from '../actions/workspace-actions';
+import WindowActions from '../actions/window-actions';
 import { SingleWindowState } from '../reducers/windows-reducers';
 import { isDesktopOS, isTablet, isPhone } from '../helpers';
 import DesktopLayout from './DesktopLayout';
@@ -34,12 +31,13 @@ const connectToRedux = connect(
     accounts: getAccounts(state),
     selectedTeamId: getSelectedTeamId(state),
     settings: getMainWindowSettings(state),
+    sortedTeamIds: getSortedTeamIds(state),
   }),
   {
-    initWorkspace,
-    closeMainWindow,
-    openMainWindow,
-    setWindowVisibility,
+    initWorkspace: WorkspaceActions.initWorkspace,
+    closeMainWindow: WindowActions.closeMainWindow,
+    openMainWindow: WindowActions.openMainWindow,
+    setWindowVisibility: WindowActions.setWindowVisibility,
   }
 );
 
@@ -57,6 +55,7 @@ const styles = {
 type Props = {
   accounts: AccountsState;
   selectedTeamId: string | null | undefined;
+  sortedTeamIds: Array<string>;
   settings: SingleWindowState;
   initWorkspace: Function;
   closeMainWindow: Function;
@@ -110,12 +109,14 @@ class MainWindow extends React.Component<Props> {
     if (this.props.selectedTeamId) {
       const account = this.props.accounts[this.props.selectedTeamId];
       if (account) {
-        this.props.initWorkspace(account.teamId, account.token, false);
+        this.props.initWorkspace(account.teamId, account.token, true);
       }
     }
 
+    const { sortedTeamIds } = this.props;
+
     setTimeout(() => {
-      Object.keys(this.props.accounts).forEach(id => {
+      sortedTeamIds.forEach(id => {
         if (this.props.selectedTeamId !== id && this.props.accounts[id]) {
           const account = this.props.accounts[id];
           this.props.initWorkspace(account.teamId, account.token, false);

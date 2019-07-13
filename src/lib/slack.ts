@@ -1,22 +1,28 @@
 import Keychain from '@react-qml/keychain';
 import qs from 'qs';
 import { StringMap } from '../constants';
+import { inspect } from 'util';
 
-export function apiCall(method: string, data: object) {
+function apiCall(method: string, data: object) {
   const url = `https://slack.com/api/${method}`;
+  console.log('Slack::apiCall', method, url);
+
   return fetch(url, {
     method: 'post',
     headers: new Headers({
       'Content-Type': 'application/x-www-form-urlencoded',
     }),
     body: qs.stringify(data),
-  }).then(resp => resp.json());
+  })
+    .then(resp => resp.json())
+    .then(json => (json.ok ? json : Promise.reject(json)));
 }
 
-export async function signInWithPassword(
+async function signInWithPassword(
   domain: string,
   email: string,
-  password: string
+  password: string,
+  pin?: string
 ) {
   try {
     const teamJson = await apiCall('auth.findTeam', { domain });
@@ -28,16 +34,18 @@ export async function signInWithPassword(
       team: teamJson.team_id,
       email,
       password,
+      pin,
     });
 
     return json;
   } catch (error) {
-    console.log('signInWithPassword', error);
+    console.log('signInWithPassword');
+    console.log(inspect(error));
     return error;
   }
 }
 
-export async function rtmConnect(token: string) {
+async function rtmConnect(token: string) {
   const connectJson = await apiCall('rtm.connect', {
     token,
     batch_presence_aware: 1,
@@ -57,7 +65,7 @@ type TokenEntry = {
 
 export type TokenPairs = StringMap<TokenEntry>;
 
-export const fetchTokensFromSlack = () =>
+const fetchTokensFromSlack = () =>
   new Promise<TokenPairs>((resolve, reject) => {
     Keychain.readPassword('Slack', 'tokens', (error, result) => {
       if (error) {

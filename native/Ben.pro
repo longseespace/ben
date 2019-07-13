@@ -2,7 +2,7 @@
 include(vendor/vendor.pri)
 
 # mac
-macx: {
+macx {
   QT += macextras
   LIBS += -framework Cocoa
 }

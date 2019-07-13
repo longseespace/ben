@@ -3,7 +3,7 @@ import { StringMap } from '../constants';
 import { RTM } from '../store/rtmMiddleware/constants';
 import { TEAMS } from '../actions';
 import { Team } from '../actions/team-actions';
-import { RTMAction } from '../store/rtmMiddleware';
+import { RTMActionType } from '../store/rtmMiddleware/actions';
 
 export type PresencesState = StringMap<string>;
 
@@ -28,7 +28,7 @@ function handleAddTeam(state: PresencesState, team: Team) {
   return { ...state, [user.id]: user.manual_presence };
 }
 
-function handleRtmEvent(state: PresencesState, action: RTMAction) {
+function handleRtmEvent(state: PresencesState, action: RTMActionType) {
   const payload = action.payload;
   if (payload.type === 'presence_change') {
     if (payload.users) {
