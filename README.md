@@ -6,7 +6,8 @@ Fast, _native*_, cross-platform Slack client, develop with [React QML][react-qml
 _*native in the sense that it's not another Electron app, nor using a webview_
 
 ## Features
-- Fast: well, at least it's faster than the Electron Slack client
+🚧 **NOTE:** This is a work-in-progress and definitely not feature-complete! 🚧
+
 - Cross-platform: one codebase, deploy everywhere
 - Hackable: the app is mainly in TypeScript, using front-end technologies (redux, react-redux, redux-persist etc.)
 - Better developer experience: supports Hot Module Replacement, React Devtool, Redux Devtool
