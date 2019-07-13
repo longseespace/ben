@@ -114,6 +114,7 @@ lib*.a
 
 # qt output
 /native/dist
+/native/output
 
 # qpm
 /native/vendor
