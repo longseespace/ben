@@ -7,6 +7,7 @@ export type Message = {
   text: string;
   user: string;
   ts: string | number;
+  shouldRenderUserInfo?: boolean;
 };
 
 export type FetchMessagesQuery = {

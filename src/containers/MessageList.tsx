@@ -52,6 +52,7 @@ class MessageList extends React.PureComponent<Props> {
       message={item.text}
       ts={item.ts}
       key={item.ts}
+      shouldRenderUserInfo={item.shouldRenderUserInfo}
     />
   );
 

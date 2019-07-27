@@ -26,9 +26,25 @@ export function reducer(
   }
 }
 
+const groupMultipleMessagesByAuthor = (messages: Array<Message>) => {
+  return messages.map((message, index) => {
+    let shouldRenderUserInfo = true;
+    if (index > 0) {
+      const prevMsg = messages[index - 1];
+      shouldRenderUserInfo = prevMsg.user !== message.user;
+    }
+    return {
+      ...message,
+      shouldRenderUserInfo,
+    };
+  });
+};
+
 function initMessageView(state: MessagesState, payload: any) {
   const { conversationId, data } = payload;
-  const messages = (data.messages || []).reverse();
+  const messages = groupMultipleMessagesByAuthor(
+    (data.messages || []).reverse()
+  );
   const viewState: MessageViewState = {
     messages: messages,
     hasMore: data.has_more,

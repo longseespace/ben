@@ -52,6 +52,7 @@ export const initMessageViewEpic: Epic<AnyAction, AnyAction, RootState> = (
         const resp = await slack.apiCall('conversations.history', {
           token: account.token,
           channel: conversationId,
+          limit: 60,
         });
 
         return MessageActions.initSuccess(conversationId, resp);

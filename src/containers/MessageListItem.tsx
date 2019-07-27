@@ -31,6 +31,13 @@ const styles = {
     rightMargin: 16,
     alignment: Qt.AlignTop | Qt.AlignLeft,
   },
+  singleMessage: {
+    fillWidth: true,
+    alignment: Qt.AlignTop | Qt.AlignLeft,
+    topMargin: 6,
+    leftMargin: 68,
+    rightMargin: 16,
+  },
 };
 
 const fullWidth = {
@@ -49,12 +56,13 @@ type Props = {
   ts: string | number;
   allUsers?: AllUsersType;
   fetchUser?: Function;
+  shouldRenderUserInfo?: boolean;
 };
 
 class MessageListItem extends React.Component<Props> {
   componentDidMount() {
-    const { allUsers, userId, fetchUser } = this.props;
-    if (allUsers && fetchUser) {
+    const { allUsers, userId, fetchUser, shouldRenderUserInfo } = this.props;
+    if (allUsers && fetchUser && shouldRenderUserInfo) {
       const user = allUsers[userId] as User;
       if (!user) {
         fetchUser(userId);
@@ -62,14 +70,12 @@ class MessageListItem extends React.Component<Props> {
     }
   }
 
-  render() {
+  renderWithUserInfo = () => {
     const { message, allUsers, userId } = this.props;
-
     const user = allUsers && (allUsers[userId] as User);
-
     return (
-      <RowLayout spacing={0} anchors={fullWidth}>
-        <Item Layout={styles.avatarColumn} color="#eee">
+      <React.Fragment>
+        <Item Layout={styles.avatarColumn}>
           {user && (
             <Image source={user.profile.image_72} style={styles.avatar} />
           )}
@@ -86,6 +92,30 @@ class MessageListItem extends React.Component<Props> {
             style={styles.message}
           />
         </Column>
+      </React.Fragment>
+    );
+  };
+
+  renderNoUserInfo = () => {
+    const { message } = this.props;
+    return (
+      <Text
+        text={message}
+        wrapMode="WordWrap"
+        style={styles.message}
+        Layout={styles.singleMessage}
+      />
+    );
+  };
+
+  render() {
+    const { shouldRenderUserInfo } = this.props;
+
+    return (
+      <RowLayout spacing={0} anchors={fullWidth}>
+        {shouldRenderUserInfo
+          ? this.renderWithUserInfo()
+          : this.renderNoUserInfo()}
       </RowLayout>
     );
   }
