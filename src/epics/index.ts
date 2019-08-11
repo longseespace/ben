@@ -8,6 +8,7 @@ import { userPresenceSubEpic, fetchUserEpic } from './user-epics';
 import {
   initMessageViewEpic,
   initMessageViewWhenSelectConversationEpic,
+  initMessageViewWhenSelectTeamEpic,
 } from './message-epics';
 
 export default combineEpics(
@@ -17,5 +18,6 @@ export default combineEpics(
   setWindowTitleWhenSelectTeamEpic,
   showNotificationEpic,
   initMessageViewWhenSelectConversationEpic,
+  initMessageViewWhenSelectTeamEpic,
   initMessageViewEpic
 );
