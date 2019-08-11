@@ -116,5 +116,7 @@ lib*.a
 /native/dist
 /native/output
 
+/release/
+
 # qpm
 /native/vendor

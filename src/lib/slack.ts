@@ -13,9 +13,7 @@ function apiCall(method: string, data: object) {
       'Content-Type': 'application/x-www-form-urlencoded',
     }),
     body: qs.stringify(data),
-  })
-    .then(resp => resp.json())
-    .then(json => (json.ok ? json : Promise.reject(json)));
+  }).then(resp => resp.json());
 }
 
 async function signInWithPassword(

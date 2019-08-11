@@ -22,7 +22,7 @@ const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
   blacklist: ['accounts', 'workspacesReducer'],
-  whitelist: ['appTeams', 'teams', 'conversations'],
+  whitelist: ['appTeams', 'teams', 'conversations', 'users'],
 };
 
 // secure storage

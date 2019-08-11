@@ -69,6 +69,10 @@ const initWorkspace = (
       initUser,
     ]);
 
+    if (!clientJson.ok || !userCountJson.ok) {
+      throw new Error('Unable to initialize workspace');
+    }
+
     dispatch(RTMActions.connectToWorkspace(teamId, token));
 
     const team = {
@@ -96,7 +100,6 @@ const initWorkspace = (
     dispatch(workspaceInitSuccess(teamId));
   } catch (error) {
     console.log('workspaceInitFailure', error);
-    console.log(inspect(error));
     const message = error.message || 'Unknown error';
     dispatch(workspaceInitFailure(teamId, message));
   }

@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore, AnyAction } from 'redux';
+import { applyMiddleware, createStore, AnyAction, compose } from 'redux';
 import { composeWithDevTools } from 'remote-redux-devtools';
 import {
   connectRouter,
@@ -34,11 +34,14 @@ const hotReloadingEpic = (...args: any[]) =>
 // });
 
 // for local remote-dev server, use below config
-const composeEnhancers = composeWithDevTools({
-  hostname: process.env.DEV_SERVER_HOST || 'localhost',
-  port: 8000,
-  realtime: process.env.NODE_ENV !== 'production',
-});
+const composeEnhancers =
+  process.env.NODE_ENV === 'production'
+    ? compose
+    : composeWithDevTools({
+        hostname: process.env.DEV_SERVER_HOST || 'localhost',
+        port: 8000,
+        realtime: true,
+      });
 
 // then router
 const connectRouterHistory = connectRouter(history);

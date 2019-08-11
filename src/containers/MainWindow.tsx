@@ -1,4 +1,4 @@
-import { Window } from 'react-qml';
+import { MainWindow } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
@@ -42,13 +42,7 @@ const connectToRedux = connect(
 );
 
 const styles = {
-  desktop: {
-    // use localStorage since its API is sync
-    x: localStorage.getItem('windowX') || 100,
-    y: localStorage.getItem('windowY') || 100,
-    width: localStorage.getItem('windowWidth') || 100,
-    height: localStorage.getItem('windowHeight') || 100,
-  },
+  desktop: {},
   mobile: {},
 };
 
@@ -67,23 +61,10 @@ type WithScreen = {
   Screen: QQuickScreenAttached;
 };
 
-class MainWindow extends React.Component<Props> {
+class AppWindow extends React.Component<Props> {
   private windowRef = React.createRef<QQuickWindow & WithScreen>();
 
   onClosing = (ev: QQuickCloseEvent) => {
-    // persist window's geometry
-    const { settings } = this.props;
-    const isInNormalForm =
-      settings.visibility === 'Windowed' || settings.visibility === 2;
-
-    const $window = this.windowRef.current;
-    if ($window && isInNormalForm) {
-      localStorage.setItem('windowX', String($window.x));
-      localStorage.setItem('windowY', String($window.y));
-      localStorage.setItem('windowWidth', String($window.width));
-      localStorage.setItem('windowHeight', String($window.height));
-    }
-
     ev.accepted = true;
     this.props.closeMainWindow();
   };
@@ -134,7 +115,7 @@ class MainWindow extends React.Component<Props> {
   render() {
     const { settings } = this.props;
     return (
-      <Window
+      <MainWindow
         objectName="MainWindow"
         visible={settings.visible}
         visibility={settings.visibility}
@@ -152,9 +133,9 @@ class MainWindow extends React.Component<Props> {
           {(isDesktopOS || isTablet) && <DesktopLayout />}
           {isPhone && <MobileLayout />}
         </ErrorBoundary>
-      </Window>
+      </MainWindow>
     );
   }
 }
 
-export default connectToRedux(MainWindow);
+export default connectToRedux(AppWindow);

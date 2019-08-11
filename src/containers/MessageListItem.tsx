@@ -59,6 +59,9 @@ type Props = {
   shouldRenderUserInfo?: boolean;
 };
 
+const getUserName = (user: User) =>
+  user.profile.display_name ? user.profile.display_name : user.name;
+
 class MessageListItem extends React.Component<Props> {
   componentDidMount() {
     const { allUsers, userId, fetchUser, shouldRenderUserInfo } = this.props;
@@ -80,11 +83,8 @@ class MessageListItem extends React.Component<Props> {
             <Image source={user.profile.image_72} style={styles.avatar} />
           )}
         </Item>
-        <Column Layout={styles.messageColumn} color="#333">
-          <Text
-            text={user ? user.profile.display_name : ''}
-            style={styles.user}
-          />
+        <Column Layout={styles.messageColumn}>
+          <Text text={user ? getUserName(user) : ''} style={styles.user} />
           <Text
             text={message}
             anchors={fullWidth}

@@ -115,10 +115,10 @@
   resolved "https://registry.yarnpkg.com/@react-qml/breakpad/-/breakpad-0.1.0.tgz#19248ae0dffc105d54ec56a5b75a3e958cce6490"
   integrity sha512-D+xQnwqy48wnclWdSQcsQH0YF81L3xIr6+yvxc1LOO0jQYhc8AQwbzNQ3LX9NgvG59hXjRLPsQEGuBqZxp5RDg==
 
-"@react-qml/cli@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@react-qml/cli/-/cli-0.1.6.tgz#279e5c6f2e0dcf382aa5c5e8da9c1d60214f8a43"
-  integrity sha512-oLPvBhGkqLkZWI9YR5y4YagPy3rEE7l4t/9UpVaK3JkbJ+aO9v1fUHHqKAiQHVypkki/uDFGG7pQl6wdlXCicA==
+"@react-qml/cli@^0.1.7":
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/@react-qml/cli/-/cli-0.1.7.tgz#1b84e17fbaa18af1b425d1b782712cc45cd137a4"
+  integrity sha512-oTh5v/6FQn+zYtwiphFxcYsZTiTRLgIfL9K7YYRE5L9ZWa38EG3R06hfUR+79N/HBPVoCCFdQVjCCQBOgRP5wg==
   dependencies:
     "@zamotany/react-proxy" "3.0.0-alpha.4"
     babel-core "^6.24.0"
@@ -4645,10 +4645,10 @@ react-proxy@^3.0.0-alpha.0:
   dependencies:
     lodash "^4.6.1"
 
-react-qml@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/react-qml/-/react-qml-0.4.5.tgz#2f947562f3e1d8376718dcbac5d37c0a944b730f"
-  integrity sha512-qFV3hckWRFAl7q4yWYp06i4Fh2GQI+/wepGzhLDmvN/gYmlGsCpNSms72cPSa6ems8v9WGNeSt7FgezwpgtlCw==
+react-qml@^0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/react-qml/-/react-qml-0.4.6.tgz#0b01c1dc026e6942e7d0405093a828795fc4043d"
+  integrity sha512-7Ak/z07J1OLRHyWTgiSsUzeRd99+tO/cNLl1O35YpuUazc3YwGxZVz9K9pMEiySqx6e+keuKxoh1JlmRNO3GWg==
   dependencies:
     invariant "^2.2.4"
     react-reconciler "^0.20.3"

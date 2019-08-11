@@ -21,7 +21,7 @@
     "lodash": "^4.17.11",
     "qs": "^6.6.0",
     "react": "^16.8.1",
-    "react-qml": "^0.4.5",
+    "react-qml": "^0.4.6",
     "react-redux": "5.0.6",
     "react-router": "^4.3.1",
     "redux": "^4",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.7.1",
-    "@react-qml/cli": "^0.1.6",
+    "@react-qml/cli": "^0.1.7",
     "@sentry/cli": "^1.40.0",
     "@sentry/webpack-plugin": "^1.6.2",
     "@types/history": "^4.7.2",

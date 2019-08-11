@@ -61,10 +61,13 @@ type Props = {
   allUserPresences: PresencesState;
 };
 
+const getUserName = (user: User) =>
+  user.profile.display_name ? user.profile.display_name : user.name;
+
 class ChannelListHeader extends React.Component<Props> {
   render() {
     const { teamName, user, allUserPresences } = this.props;
-    const userName = user ? user.name : '';
+    const userName = user ? getUserName(user) : '';
     const userActive = Boolean(user && allUserPresences[user.id] === 'active');
 
     return (

@@ -1,11 +1,18 @@
 set -e
 
-yarn build
+# yarn build
 export QMAKESPEC=macx-clang
 export TRAVIS_BUILD_DIR=$PWD
 
-mkdir -p "$TRAVIS_BUILD_DIR-build"
-qmake -v
-qmake -o "$TRAVIS_BUILD_DIR-build" -r -Wall -Wlogic -Wparser CONFIG+=release PRODUCTION=true "$TRAVIS_BUILD_DIR/native"
-make -C "$TRAVIS_BUILD_DIR-build" -j8 all
-macdeployqt "$TRAVIS_BUILD_DIR-build/Ben.app" -dmg -qmldir="$TRAVIS_BUILD_DIR/native/dist"
+QMAKE=/Users/long/Qt5.13.0/5.13.0/clang_64/bin/qmake
+MACDEPLOYQT=/Users/long/Qt5.13.0/5.13.0/clang_64/bin/macdeployqt
+
+# first, clean
+rm -rf "$TRAVIS_BUILD_DIR/release"
+
+# then, build
+mkdir -p "$TRAVIS_BUILD_DIR/release"
+$QMAKE -v
+$QMAKE -o "$TRAVIS_BUILD_DIR/release" -r -Wall -Wlogic -Wparser CONFIG+=qtquickcompiler CONFIG+=release "$TRAVIS_BUILD_DIR/native"
+make -C "$TRAVIS_BUILD_DIR/release" -j8 all
+$MACDEPLOYQT "$TRAVIS_BUILD_DIR/release/Ben.app" -dmg -qmldir="$TRAVIS_BUILD_DIR/native/dist"
