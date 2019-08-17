@@ -1,4 +1,4 @@
-import '@react-qml/cli/hot';
+// import '@react-qml/cli/hot';
 
 import CrashHandler from '@react-qml/breakpad';
 import { render } from 'react-qml';

@@ -3,10 +3,10 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "start": "DEV_SERVER_HOST=localhost rq start --dev --platform=osx",
+    "start": "DEV_SERVER_HOST=localhost webpack-dev-server --platform=osx",
     "start_ios": "DEV_SERVER_HOST=localhost rq start --dev --platform=ios",
     "start_all": "DEV_SERVER_HOST=localhost rq start --dev --platform=all",
-    "build": "NODE_ENV=production rq bundle --platform=osx",
+    "build": "NODE_ENV=production webpack --mode=development --platform=osx",
     "build_ios": "NODE_ENV=production rq bundle --platform=ios",
     "remotedev": "remotedev --host=0.0.0.0 --port=8000"
   },
@@ -34,8 +34,15 @@
     "validator": "^10.11.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-numeric-separator": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
     "@fortawesome/fontawesome-free": "^5.7.1",
-    "@react-qml/cli": "^0.1.7",
     "@sentry/cli": "^1.40.0",
     "@sentry/webpack-plugin": "^1.6.2",
     "@types/history": "^4.7.2",
@@ -49,12 +56,15 @@
     "@types/webpack": "^4.4.25",
     "@types/webpack-env": "^1.13.8",
     "@types/websql": "^0.0.27",
-    "babel-eslint": "^8.0.3",
+    "babel-loader": "^8.0.6",
     "babel-plugin-lodash": "^3.3.4",
-    "eslint": "^4.13.1",
-    "eslint-plugin-react": "^7.5.1",
+    "file-loader": "^4.2.0",
+    "loader-utils": "^1.2.3",
     "remotedev-server": "^0.2.4",
-    "typescript": "^3.3.3333",
-    "webpack-bundle-analyzer": "^2.13.1"
+    "string-replace-webpack-plugin": "^0.1.3",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0"
   }
 }

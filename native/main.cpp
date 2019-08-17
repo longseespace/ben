@@ -1,4 +1,5 @@
 #include "qtquickcontrolsapplication.h"
+#include <QFile>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
@@ -54,6 +55,16 @@ int main(int argc, char *argv[]) {
   engine.rootContext()->setContextProperty("SUPPORT_HMR", !PRODUCTION_BUILD);
 
   engine.load(QUrl(QLatin1String("qrc:/react-qml/main.qml")));
+
+  //  QFile file("/Users/long/Desktop/osx.bundle.js");
+  //  file.open(QFile::ReadOnly);
+  //  QString content = file.readAll();
+  //  QJSValue val = engine.evaluate(content);
+
+  //  if (val.isError()) {
+  //    qDebug() << "Uncaught exception at line"
+  //             << val.property("lineNumber").toInt() << ":" << val.toString();
+  //  }
 
   // This allow only 1 instance of the app
   QSingleInstance instance;
