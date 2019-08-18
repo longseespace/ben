@@ -16,8 +16,8 @@ _*native in the sense that it's not another Electron app, nor using a webview_
 
 0. Setup environment:
 - Install XCode 10 (with updated Command Line Tool `xcode-select --install`)
-- Install Qt 5.10.1
-  - **Note**: must be version 5.10.1
+- Install Qt 5.10
+  - **Note**: must be version 5.10.0 or 5.10.1
   - Install any additional Kits you wish to use (iOS, iOS Simulator, Android etc.)
 - Install [qpm][qpm]
 - Install NodeJS & yarn
@@ -42,7 +42,7 @@ qpm install
 
 # generate Makefile
 mkdir -p output
-qmake -o "output/" -spec macx-clang CONFIG+=x86_64 CONFIG+=release PRODUCTION=true "Ben.pro"
+qmake -o "output/" -spec macx-clang -r -Wall -Wlogic -Wparser CONFIG+=qtquickcompiler CONFIG+=release PRODUCTION=true "Ben.pro"
 
 # build
 make -C "output/" -j7 all
