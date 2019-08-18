@@ -5,8 +5,9 @@ import { connect } from 'react-redux';
 import trayIconPNG from '../../assets/tray_icon.png';
 
 import NotificationActions from '../../store/notificationMiddleware/actions';
-import { inspect } from 'util';
 const { SystemTrayIcon } = QtLabsPlatform;
+
+declare const __DEV__: boolean;
 
 const connectToRedux = connect(
   null,
@@ -27,8 +28,14 @@ class AppTrayIcon extends React.Component<Props> {
   componentDidMount() {
     const $trayIcon = this.trayIconRef.current;
     if ($trayIcon && $trayIcon.available) {
-      $trayIcon.show();
       this.props.registerSender($trayIcon);
+      if (__DEV__) {
+        setTimeout(() => {
+          $trayIcon.show();
+        }, 5000);
+      } else {
+        $trayIcon.show();
+      }
     }
   }
 

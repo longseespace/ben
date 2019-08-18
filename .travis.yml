@@ -20,9 +20,10 @@ before_cache:
 
 install:
   - yarn
-  - brew install https://raw.githubusercontent.com/longseespace/homebrew-tap/master/qt.rb
+  - brew install qt
   - brew link --force qt
   - brew install qpm
+  - ./patches/patch.sh
 
 before_script:
   - yarn build
