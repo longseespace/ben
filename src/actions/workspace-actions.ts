@@ -70,6 +70,8 @@ const initWorkspace = (
     ]);
 
     if (!clientJson.ok || !userCountJson.ok) {
+      console.error(inspect(clientJson));
+      console.error(inspect(userCountJson));
       throw new Error('Unable to initialize workspace');
     }
 

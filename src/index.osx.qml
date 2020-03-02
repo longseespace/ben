@@ -4,8 +4,7 @@ import QtQuick.Layouts 1.0
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.1
 
-// this is to avoid exposing WebSocket QML object to JS environment
-import QtWebSockets 1.0 as QtWS
+import QtWebSockets 1.0
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.0
 import QtQuick.LocalStorage 2.0

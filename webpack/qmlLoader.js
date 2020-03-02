@@ -51,8 +51,8 @@ module.exports = function loader(content) {
 
   const output = `
 var React = require('react');
-var ReactQML = require('react-qml');
-var Component = ReactQML.createQmlComponent(${String(publicPath)}, '${String(
+var createQmlComponent = require('react-qml/dist/renderer/createQmlComponent').default;
+var Component = createQmlComponent(${String(publicPath)}, '${String(
     fileName
   )}');
 

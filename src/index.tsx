@@ -27,17 +27,17 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // setup HMR in development
-if (process.env.NODE_ENV !== 'production') {
-  const ws = new WebSocket('ws://localhost:8081/hot');
+// if (process.env.NODE_ENV !== 'production') {
+//   const ws = new WebSocket('ws://localhost:8081/hot');
 
-  ws.onopen = () => {
-    console.log('[HMR] Client connected');
-  };
+//   ws.onopen = () => {
+//     console.log('[HMR] Client connected');
+//   };
 
-  ws.onerror = error => {
-    console.error(`[HMR] Client could not connect to the server`, error);
-  };
-}
+//   ws.onerror = error => {
+//     console.error(`[HMR] Client could not connect to the server`, error);
+//   };
+// }
 
 export default (root: any) => {
   render(<App store={store} persistor={persistor} />, root);

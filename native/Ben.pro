@@ -16,7 +16,7 @@ CONFIG(debug, debug|release) {
   DEFINES += DEBUG
 }
 
-isEqual(PRODUCTION, "true") {
+CONFIG(release, debug|release) {
   message("Production Build")
   DEFINES += PRODUCTION
   RESOURCES += dist/bundle.qrc

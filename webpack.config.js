@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
+const createQrc = require('./webpack/createQrc');
 
 const assetsPattern = /\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/;
 
@@ -26,33 +28,33 @@ const generatorFunctionConstructorPatcher = StringReplacePlugin.replace({
   ],
 });
 
-const rxjsConstructorPatcher = StringReplacePlugin.replace({
-  replacements: [
-    {
-      pattern: /this\.constructor = d;/gi,
-      replacement: () => {
-        return `Object.defineProperty(this, 'constructor', { value: d });`;
-      },
-    },
-  ],
-});
+// const rxjsConstructorPatcher = StringReplacePlugin.replace({
+//   replacements: [
+//     {
+//       pattern: /this\.constructor = d;/gi,
+//       replacement: () => {
+//         return `Object.defineProperty(this, 'constructor', { value: d });`;
+//       },
+//     },
+//   ],
+// });
 
-const errorNamePatcher = StringReplacePlugin.replace({
-  replacements: [
-    {
-      pattern: /error\.name = 'Invariant Violation';/gi,
-      replacement: () => {
-        return `Object.defineProperty(error, 'name', { value: 'Invariant Violation' });`;
-      },
-    },
-    {
-      pattern: /err\.name = 'Invariant Violation';/gi,
-      replacement: () => {
-        return `Object.defineProperty(err, 'name', { value: 'Invariant Violation' });`;
-      },
-    },
-  ],
-});
+// const errorNamePatcher = StringReplacePlugin.replace({
+//   replacements: [
+//     {
+//       pattern: /error\.name = 'Invariant Violation';/gi,
+//       replacement: () => {
+//         return `Object.defineProperty(error, 'name', { value: 'Invariant Violation' });`;
+//       },
+//     },
+//     {
+//       pattern: /err\.name = 'Invariant Violation';/gi,
+//       replacement: () => {
+//         return `Object.defineProperty(err, 'name', { value: 'Invariant Violation' });`;
+//       },
+//     },
+//   ],
+// });
 
 function injectPolyfillIntoEntry(userEntry, polyfillPath) {
   if (typeof userEntry === 'string') {
@@ -91,6 +93,7 @@ module.exports = (env, argv) => {
     `./index.${platform}.qml`,
     `./index.tsx`,
   ];
+
   const polyfillPath = require.resolve('./webpack/polyfillEnvironment.js');
 
   return {
@@ -102,6 +105,8 @@ module.exports = (env, argv) => {
       library: 'Bundle',
     },
 
+    mode,
+
     node: {
       setImmediate: false,
       global: true,
@@ -110,7 +115,7 @@ module.exports = (env, argv) => {
     devtool: false,
 
     devServer: {
-      contentBase: path.join(__dirname, 'native/dist'),
+      // contentBase: path.join(__dirname, 'native/dist'),
       compress: true,
       port: port,
     },
@@ -157,18 +162,18 @@ module.exports = (env, argv) => {
             },
           ],
         },
-        {
-          test: /runtime\.js$/,
-          loader: generatorFunctionConstructorPatcher,
-        },
-        {
-          test: /rxjs(\/|\\).*\.js$/,
-          loader: rxjsConstructorPatcher,
-        },
-        {
-          test: /.js$/,
-          loader: errorNamePatcher,
-        },
+        // {
+        //   test: /runtime\.js$/,
+        //   loader: generatorFunctionConstructorPatcher,
+        // },
+        // {
+        //   test: /rxjs(\/|\\).*\.js$/,
+        //   loader: rxjsConstructorPatcher,
+        // },
+        // {
+        //   test: /.js$/,
+        //   loader: errorNamePatcher,
+        // },
         {
           test: /connected-react-router.*\.js$/,
           loader: rewireModuleIdPatcher,
@@ -194,7 +199,23 @@ module.exports = (env, argv) => {
           process.env.__REACT_DEVTOOLS_PORT__,
         __DEV__: dev,
       }),
-    ],
+      new GenerateAssetPlugin({
+        filename: 'bundle.qrc',
+        fn: (compilation, cb) => {
+          cb(null, createQrc(compilation));
+        },
+      }),
+    ].concat(
+      dev
+        ? [
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.BannerPlugin({
+              banner: 'if (this && !this.self) { this.self = this; };',
+              raw: true,
+            }),
+          ]
+        : []
+    ),
 
     resolve: {
       mainFields: ['browser', 'main'],
@@ -215,6 +236,8 @@ module.exports = (env, argv) => {
       namedModules: true,
       concatenateModules: true,
     },
+
+    performance: { hints: false },
 
     target: 'webworker',
   };

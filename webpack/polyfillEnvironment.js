@@ -1,28 +1,6 @@
-/**
- * Copyright 2017-present, Callstack.
- * All rights reserved.
- *
- * polyfillEnvironment.js
- *
- * This file is loaded as a part of user bundle
- */
-// import { NativeModules } from 'react-native';
-
-/* eslint-disable import/no-extraneous-dependencies */
-
-// HACK:
-//   This is horrible.  I know.  But this hack seems to be needed due to the way
-//   React Native lazy evaluates `fetch` within `InitializeCore`.  This was fixed
-//   in 34-ish, but seems to be back again.  I hope I'm wrong because I lost sleep
-//   on this one.
-//
-//   Without this in place, global.fetch will be undefined and cause the symbolicate
-//   check to fail.  This must be something that the packager is doing that haul isn't.
-//   I also so people complaining about this in Jest as well.
-//
-if (!global.self) {
-  global.self = global; /* eslint-disable-line */
-}
+// if (!global.self) {
+//   global.self = global; /* eslint-disable-line */
+// }
 
 if (!global.window) {
   global.window = global;
@@ -44,17 +22,21 @@ if (!inQmlContext) {
   };
 }
 
-if (!global.Map) {
-  try {
-    global.Map = Map;
-    global.Set = Set;
-    global.Symbol = Symbol;
-    global.WeakMap = WeakMap;
-    global.Object = Object;
-  } catch (e) {
-    console.warn('Unable to polyfill Map/Set/Symbol/WeakMap');
-  }
-}
+// if (!global.Map) {
+//   try {
+//     global.Map = Map;
+//     global.Set = Set;
+//     global.Symbol = Symbol;
+//     global.WeakMap = WeakMap;
+//     global.Object = Object;
+//   } catch (e) {
+//     console.warn('Unable to polyfill Map/Set/Symbol/WeakMap');
+//   }
+// }
+
+require('./polyfills/timer')(global);
+require('./polyfills/websocket')(global);
+require('./polyfills/fetch')(global);
 
 // require('../../vendor/polyfills/console.js')(global);
 // require('../../vendor/polyfills/timer.js')(global);
