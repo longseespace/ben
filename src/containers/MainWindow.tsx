@@ -1,4 +1,4 @@
-import { MainWindow } from 'react-qml';
+import { MainWindow, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
@@ -115,25 +115,25 @@ class AppWindow extends React.Component<Props> {
   render() {
     const { settings } = this.props;
     return (
-      <MainWindow
-        objectName="MainWindow"
-        visible={settings.visible}
-        visibility={settings.visibility}
-        onVisibilityChanged={this.onVisibilityChanged}
-        onClosing={this.onClosing}
-        style={isDesktopOS ? styles.desktop : styles.mobile}
-        title={settings.title}
-        flags={Qt.Window | Qt.WindowFullscreenButtonHint}
-        ref={this.windowRef}
-      >
-        <ErrorBoundary>
-          <AppMenu />
+      <ErrorBoundary>
+        <MainWindow
+          objectName="MainWindow"
+          visible={settings.visible}
+          visibility={settings.visibility}
+          onVisibilityChanged={this.onVisibilityChanged}
+          onClosing={this.onClosing}
+          style={isDesktopOS ? styles.desktop : styles.mobile}
+          title={settings.title}
+          flags={Qt.Window | Qt.WindowFullscreenButtonHint}
+          ref={this.windowRef}
+        >
+          {/* <AppMenu /> */}
           <AppTrayIcon />
           <SigninWindow />
           {(isDesktopOS || isTablet) && <DesktopLayout />}
           {isPhone && <MobileLayout />}
-        </ErrorBoundary>
-      </MainWindow>
+        </MainWindow>
+      </ErrorBoundary>
     );
   }
 }

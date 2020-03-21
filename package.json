@@ -22,8 +22,8 @@
     "history": "^4.7.2",
     "lodash": "^4.17.11",
     "qs": "^6.6.0",
-    "react": "^16.8.1",
-    "react-qml": "^0.4.8",
+    "react": "^16.13.0",
+    "react-qml": "^0.4.11",
     "react-redux": "5.0.6",
     "react-router": "^4.3.1",
     "redux": "^4",
@@ -32,7 +32,8 @@
     "redux-thunk": "^2.3.0",
     "remote-redux-devtools": "^0.5.15",
     "reselect": "^4.0.0",
-    "rxjs": "6",
+    "rxjs": "^6.5.4",
+    "rxjs-compat": "^6.5.4",
     "validator": "^10.11.0"
   },
   "devDependencies": {
@@ -69,6 +70,8 @@
     "typescript": "^3.5.3",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
-    "webpack-dev-middleware": "^3.7.2"
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0",
+    "ws": "^7.2.1"
   }
 }
