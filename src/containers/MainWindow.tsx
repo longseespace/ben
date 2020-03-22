@@ -1,12 +1,13 @@
 import { MainWindow, Window } from 'react-qml';
 import { connect } from 'react-redux';
-import * as React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import AppMenu from './AppMenu';
+
 import AppTrayIcon from './AppTrayIcon';
 import ErrorBoundary from '../components/ErrorBoundary';
 import SigninWindow from './SigninWindow';
-import { QQuickCloseEvent } from 'react-qml/dist/components/QtQuick';
+import { QQuickCloseEvent } from 'react-qml/QtQuick';
 import {
   QQuickWindow,
   QQuickScreenAttached,
@@ -25,6 +26,7 @@ import { SingleWindowState } from '../reducers/windows-reducers';
 import { isDesktopOS, isTablet, isPhone } from '../helpers';
 import DesktopLayout from './DesktopLayout';
 import MobileLayout from './MobileLayout';
+import { inspect } from 'util';
 
 const connectToRedux = connect(
   (state: RootState) => ({
@@ -61,81 +63,85 @@ type WithScreen = {
   Screen: QQuickScreenAttached;
 };
 
-class AppWindow extends React.Component<Props> {
-  private windowRef = React.createRef<QQuickWindow & WithScreen>();
+function AppWindow(props: Props) {
+  const { settings } = props;
 
-  onClosing = (ev: QQuickCloseEvent) => {
-    ev.accepted = true;
-    this.props.closeMainWindow();
-  };
-
-  onVisibilityChanged = (visibility: any) => {
-    const { settings } = this.props;
+  // handle window state
+  const { setWindowVisibility } = props;
+  const handleVisibilityChanged = (visibility: any) => {
     if (settings.visibility !== visibility) {
-      this.props.setWindowVisibility('main', visibility);
+      setWindowVisibility('main', visibility);
     }
   };
 
-  onAppStateChanged = (state: any) => {
+  const { closeMainWindow } = props;
+  const handleClosing = (ev: QQuickCloseEvent) => {
+    ev.accepted = true;
+    closeMainWindow();
+  };
+
+  // window ref
+  const windowRef = useRef<QQuickWindow & WithScreen>(null);
+
+  // handle app state
+  const { openMainWindow } = props;
+  const handleAppStateChanged = (state: any) => {
     // on app activate, show the window (if already closed)
-    const $window = this.windowRef.current;
+    const $window = windowRef.current;
     if ($window && !$window.visible && state === Qt.ApplicationActive) {
       // open
-      this.props.openMainWindow();
+      openMainWindow();
     }
   };
 
-  componentDidMount() {
+  useEffect(() => {
+    Qt.application.stateChanged.connect(handleAppStateChanged);
+    return () => {
+      Qt.application.stateChanged.disconnect(handleAppStateChanged);
+    };
+  }, [windowRef.current]);
+
+  // load teams
+  const { selectedTeamId, sortedTeamIds, accounts, initWorkspace } = props;
+  useEffect(() => {
     // TODO: change this to epic instead
-    if (this.props.selectedTeamId) {
-      const account = this.props.accounts[this.props.selectedTeamId];
+    if (selectedTeamId) {
+      const account = accounts[selectedTeamId];
       if (account) {
-        this.props.initWorkspace(account.teamId, account.token, true);
+        initWorkspace(account.teamId, account.token, true);
       }
     }
 
-    const { sortedTeamIds } = this.props;
-
     setTimeout(() => {
       sortedTeamIds.forEach(id => {
-        if (this.props.selectedTeamId !== id && this.props.accounts[id]) {
-          const account = this.props.accounts[id];
-          this.props.initWorkspace(account.teamId, account.token, false);
+        if (selectedTeamId !== id && accounts[id]) {
+          const account = accounts[id];
+          initWorkspace(account.teamId, account.token, false);
         }
       });
     }, 1000);
+  }, []);
 
-    Qt.application.stateChanged.connect(this.onAppStateChanged);
-  }
-
-  componentWillUnmount() {
-    Qt.application.stateChanged.disconnect(this.onAppStateChanged);
-  }
-
-  render() {
-    const { settings } = this.props;
-    return (
+  return (
+    <MainWindow
+      visible={settings.visible}
+      visibility={settings.visibility}
+      // onVisibilityChanged={handleVisibilityChanged}
+      onClosing={handleClosing}
+      style={isDesktopOS ? styles.desktop : styles.mobile}
+      title={settings.title}
+      flags={Qt.Window | Qt.WindowFullscreenButtonHint}
+      ref={windowRef}
+    >
       <ErrorBoundary>
-        <MainWindow
-          objectName="MainWindow"
-          visible={settings.visible}
-          visibility={settings.visibility}
-          onVisibilityChanged={this.onVisibilityChanged}
-          onClosing={this.onClosing}
-          style={isDesktopOS ? styles.desktop : styles.mobile}
-          title={settings.title}
-          flags={Qt.Window | Qt.WindowFullscreenButtonHint}
-          ref={this.windowRef}
-        >
-          {/* <AppMenu /> */}
-          <AppTrayIcon />
-          <SigninWindow />
-          {(isDesktopOS || isTablet) && <DesktopLayout />}
-          {isPhone && <MobileLayout />}
-        </MainWindow>
+        <AppMenu />
+        <AppTrayIcon />
+        <SigninWindow />
+        {(isDesktopOS || isTablet) && <DesktopLayout />}
+        {isPhone && <MobileLayout />}
       </ErrorBoundary>
-    );
-  }
+    </MainWindow>
+  );
 }
 
 export default connectToRedux(AppWindow);

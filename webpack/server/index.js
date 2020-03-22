@@ -17,6 +17,7 @@ const webpackMiddleware = webpackDevMiddleware(compiler, {
   publicPath: config.output.publicPath,
   hot: true,
   noInfo: true,
+  stats: 'errors-only',
 });
 
 const httpServer = http.createServer(app);
@@ -26,7 +27,8 @@ hotMiddleware(compiler, createWebsocketProxy(webSocketServer, '/hot'));
 
 app.use(webpackMiddleware);
 
-// Serve the files on port 8081.
-httpServer.listen(8081, function() {
-  console.log('Development server ready on port 8081\n');
+const port = config.devServer.port || 8081;
+
+httpServer.listen(port, function() {
+  // console.log('Development server ready on port 8081\n');
 });

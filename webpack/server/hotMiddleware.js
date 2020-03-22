@@ -87,7 +87,7 @@ function createConnectionStream(wsProxy, id) {
 
 function createCompilerEventStream(compiler) {
   return Observable.create(observer => {
-    compiler.plugin('invalid', () => {
+    compiler.hooks.invalid.tap('HotMiddleware', () => {
       observer.next({
         target: 'haul',
         platform: 'all',
@@ -103,7 +103,7 @@ function createCompilerEventStream(compiler) {
         },
       });
     });
-    compiler.plugin('done', stats => {
+    compiler.hooks.done.tap('HotMiddleware', stats => {
       observer.next({
         target: 'haul',
         platform: 'all',

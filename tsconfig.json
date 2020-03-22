@@ -39,8 +39,24 @@
 
     /* Module Resolution Options */
     // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-    // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
-    // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
+    "paths": {
+      "react-qml/QtAudioEngine": ["node_modules/react-qml/dist/components/QtAudioEngine"],
+      "react-qml/QtLabsCalendar": ["node_modules/react-qml/dist/components/QtLabsCalendar"],
+      "react-qml/QtLabsPlatform": ["node_modules/react-qml/dist/components/QtLabsPlatform"],
+      "react-qml/QtLabsSettings": ["node_modules/react-qml/dist/components/QtLabsSettings"],
+      "react-qml/QtMultimedia": ["node_modules/react-qml/dist/components/QtMultimedia"],
+      "react-qml/QtQml": ["node_modules/react-qml/dist/components/QtQml"],
+      "react-qml/QtQmlModels": ["node_modules/react-qml/dist/components/QtQmlModels"],
+      "react-qml/QtQuick": ["node_modules/react-qml/dist/components/QtQuick"],
+      "react-qml/QtQuickControls2": ["node_modules/react-qml/dist/components/QtQuickControls2"],
+      "react-qml/QtQuickLayouts": ["node_modules/react-qml/dist/components/QtQuickLayouts"],
+      "react-qml/QtQuickLocalStorage": ["node_modules/react-qml/dist/components/QtQuickLocalStorage"],
+      "react-qml/QtQuickParticles": ["node_modules/react-qml/dist/components/QtQuickParticles"],
+      "react-qml/QtQuickShapes": ["node_modules/react-qml/dist/components/QtQuickShapes"],
+      "react-qml/QtQuickWindow": ["node_modules/react-qml/dist/components/QtQuickWindow"],
+      "react-qml/QtTest": ["node_modules/react-qml/dist/components/QtTest"]
+    },                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     // "types": [],                           /* Type declaration files to be included in compilation. */

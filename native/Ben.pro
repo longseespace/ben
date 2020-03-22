@@ -28,14 +28,18 @@ QMAKE_TARGET_COPYRIGHT = Copyright 2019 Podzim. All rights reserved.
 TARGET = Ben
 
 HEADERS += \
+  ReactQML/OSXHideTitleBar.h \
   qtquickcontrolsapplication.h \
   ReactQML/rq.h \
   ReactQML/rqnetworkaccessmanagerfactory.h
 
 
 SOURCES += main.cpp \
+  ReactQML/OSXHideTitleBar.mm \
   ReactQML/rq.cpp \
   ReactQML/rqnetworkaccessmanagerfactory.cpp
+
+OBJECTIVE_SOURCES += \
 
 RESOURCES += main.qrc
 

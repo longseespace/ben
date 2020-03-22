@@ -9,13 +9,10 @@ const { SystemTrayIcon } = QtLabsPlatform;
 
 declare const __DEV__: boolean;
 
-const connectToRedux = connect(
-  null,
-  {
-    registerSender: NotificationActions.registerSender,
-    deregisterSender: NotificationActions.deregisterSender,
-  }
-);
+const connectToRedux = connect(null, {
+  registerSender: NotificationActions.registerSender,
+  deregisterSender: NotificationActions.deregisterSender,
+});
 
 type Props = {
   registerSender: Function;

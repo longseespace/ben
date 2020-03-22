@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const StringReplacePlugin = require('string-replace-webpack-plugin');
-const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
+const GenerateAssetPlugin = require('./webpack/GenerateAssetPlugin');
 const createQrc = require('./webpack/createQrc');
 
 const assetsPattern = /\.(aac|aiff|bmp|caf|gif|html|jpeg|jpg|m4a|m4v|mov|mp3|mp4|mpeg|mpg|obj|otf|pdf|png|psd|svg|ttf|wav|webm|webp)$/;
@@ -80,6 +80,8 @@ function injectPolyfillIntoEntry(userEntry, polyfillPath) {
   }
   return userEntry;
 }
+
+process.traceDeprecation = true;
 
 module.exports = (env, argv) => {
   const { platform = 'osx', port = 8081, mode } = argv;
@@ -213,6 +215,7 @@ module.exports = (env, argv) => {
               banner: 'if (this && !this.self) { this.self = this; };',
               raw: true,
             }),
+            new webpack.ProgressPlugin(),
           ]
         : []
     ),
@@ -229,6 +232,26 @@ module.exports = (env, argv) => {
         '.jsx',
         '.tsx',
       ],
+      alias: {
+        'react-qml/QtAudioEngine': 'react-qml/dist/components/QtAudioEngine',
+        'react-qml/QtLabsCalendar': 'react-qml/dist/components/QtLabsCalendar',
+        'react-qml/QtLabsPlatform': 'react-qml/dist/components/QtLabsPlatform',
+        'react-qml/QtLabsSettings': 'react-qml/dist/components/QtLabsSettings',
+        'react-qml/QtMultimedia': 'react-qml/dist/components/QtMultimedia',
+        'react-qml/QtQml': 'react-qml/dist/components/QtQml',
+        'react-qml/QtQmlModels': 'react-qml/dist/components/QtQmlModels',
+        'react-qml/QtQuick': 'react-qml/dist/components/QtQuick',
+        'react-qml/QtQuickControls2':
+          'react-qml/dist/components/QtQuickControls2',
+        'react-qml/QtQuickLayouts': 'react-qml/dist/components/QtQuickLayouts',
+        'react-qml/QtQuickLocalStorage':
+          'react-qml/dist/components/QtQuickLocalStorage',
+        'react-qml/QtQuickParticles':
+          'react-qml/dist/components/QtQuickParticles',
+        'react-qml/QtQuickShapes': 'react-qml/dist/components/QtQuickShapes',
+        'react-qml/QtQuickWindow': 'react-qml/dist/components/QtQuickWindow',
+        'react-qml/QtTest': 'react-qml/dist/components/QtTest',
+      },
     },
 
     optimization: {
