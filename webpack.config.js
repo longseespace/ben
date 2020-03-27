@@ -124,7 +124,7 @@ module.exports = (env, argv) => {
 
     module: {
       rules: [
-        { parser: { requireEnsure: false } },
+        // { parser: { requireEnsure: false } },
         {
           test: /\.(ts|js)x?$/,
           loader: require.resolve('babel-loader'),
@@ -256,8 +256,8 @@ module.exports = (env, argv) => {
 
     optimization: {
       minimize: !dev,
-      namedModules: true,
-      concatenateModules: true,
+      // namedModules: true,
+      // concatenateModules: true,
     },
 
     performance: { hints: false },

@@ -1,6 +1,3 @@
-declare module 'redux-api-call';
-declare module 'redux-api-call-adapter-fetch';
-declare module 'redux-api-call-adapter-json';
 declare module 'emoji-js';
 
 // qml

@@ -9,10 +9,12 @@
     "start_all": "DEV_SERVER_HOST=localhost rq start --dev --platform=all",
     "build": "NODE_ENV=production webpack --mode=production --platform=osx",
     "build_ios": "NODE_ENV=production rq bundle --platform=ios",
-    "remotedev": "remotedev --host=0.0.0.0 --port=8000"
+    "remotedev": "remotedev --host=0.0.0.0 --port=8000",
+    "test_cli": "jest ./webpack"
   },
   "dependencies": {
     "@callstack/react-theme-provider": "^1.0.7",
+    "@icon/feathericon": "^1.0.2-alpha.3",
     "@react-qml/breakpad": "^0.1.0",
     "@react-qml/keychain": "^0.0.3",
     "connected-react-router": "^4.3.0",
@@ -63,6 +65,7 @@
     "babel-plugin-lodash": "^3.3.4",
     "express": "^4.17.1",
     "file-loader": "^4.2.0",
+    "jest": "^25.1.0",
     "loader-utils": "^1.2.3",
     "remotedev-server": "^0.2.4",
     "string-replace-webpack-plugin": "^0.1.3",

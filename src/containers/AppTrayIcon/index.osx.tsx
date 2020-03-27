@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, FC, useEffect } from 'react';
 import { QtLabsPlatform } from 'react-qml';
 import { QQuickPlatformSystemTrayIcon } from 'react-qml/dist/components/QtLabsPlatform';
 import { connect } from 'react-redux';
@@ -19,30 +19,58 @@ type Props = {
   deregisterSender: Function;
 };
 
-class AppTrayIcon extends React.Component<Props> {
-  private trayIconRef = React.createRef<QQuickPlatformSystemTrayIcon>();
+function AppTrayIcon(props: Props) {
+  const trayIconRef = useRef<QQuickPlatformSystemTrayIcon>(null);
 
-  componentDidMount() {
-    const $trayIcon = this.trayIconRef.current;
+  const { registerSender, deregisterSender } = props;
+
+  useEffect(() => {
+    const $trayIcon = trayIconRef.current;
+
     if ($trayIcon && $trayIcon.available) {
-      this.props.registerSender($trayIcon);
-      if (__DEV__) {
-        setTimeout(() => {
-          $trayIcon.show();
-        }, 5000);
-      } else {
-        $trayIcon.show();
-      }
+      registerSender($trayIcon);
+      $trayIcon.show();
+      // if (__DEV__) {
+      //   setTimeout(() => {
+      //     $trayIcon.show();
+      //   }, 5000);
+      // } else {
+      //   $trayIcon.show();
+      // }
+
+      return () => {
+        deregisterSender();
+      };
     }
-  }
+  }, []);
 
-  componentWillUnmount() {
-    this.props.deregisterSender();
-  }
-
-  render() {
-    return <SystemTrayIcon ref={this.trayIconRef} iconSource={trayIconPNG} />;
-  }
+  return <SystemTrayIcon ref={trayIconRef} iconSource={trayIconPNG} />;
 }
+
+// class AppTrayIcon extends React.Component<Props> {
+//   private trayIconRef = React.createRef<QQuickPlatformSystemTrayIcon>();
+
+//   componentDidMount() {
+//     const $trayIcon = this.trayIconRef.current;
+//     if ($trayIcon && $trayIcon.available) {
+//       this.props.registerSender($trayIcon);
+//       if (__DEV__) {
+//         setTimeout(() => {
+//           $trayIcon.show();
+//         }, 5000);
+//       } else {
+//         $trayIcon.show();
+//       }
+//     }
+//   }
+
+//   componentWillUnmount() {
+//     this.props.deregisterSender();
+//   }
+
+//   render() {
+//     return <SystemTrayIcon ref={this.trayIconRef} iconSource={trayIconPNG} />;
+//   }
+// }
 
 export default connectToRedux(AppTrayIcon);
