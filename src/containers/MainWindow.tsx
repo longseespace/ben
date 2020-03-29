@@ -1,9 +1,8 @@
-import { MainWindow, Window } from 'react-qml';
 import { connect } from 'react-redux';
 import React, { useRef, useEffect } from 'react';
 
-import AppMenu from './AppMenu';
-
+import Window from '../uikit/Window';
+// import { Window } from 'react-qml';
 import AppTrayIcon from './AppTrayIcon';
 import ErrorBoundary from '../components/ErrorBoundary';
 import SigninWindow from './SigninWindow';
@@ -123,24 +122,14 @@ function AppWindow(props: Props) {
   }, []);
 
   return (
-    <MainWindow
-      visible={settings.visible}
-      visibility={settings.visibility}
-      // onVisibilityChanged={handleVisibilityChanged}
-      onClosing={handleClosing}
-      style={isDesktopOS ? styles.desktop : styles.mobile}
-      title={settings.title}
-      flags={Qt.Window | Qt.WindowFullscreenButtonHint}
-      ref={windowRef}
-    >
+    <Window name="MainWindow">
       <ErrorBoundary>
-        <AppMenu />
         <AppTrayIcon />
         <SigninWindow />
         {(isDesktopOS || isTablet) && <DesktopLayout />}
         {isPhone && <MobileLayout />}
       </ErrorBoundary>
-    </MainWindow>
+    </Window>
   );
 }
 

@@ -11,42 +11,33 @@ import QtQml.Models 2.2
 import ReactQML 1.0
 
 ApplicationWindow {
-  id: __mainWindow
+  id: __devWindow
 
-  visible: true
-
-  flags: Qt.Window
-
-  Settings {
-    property alias windowX: __mainWindow.x
-    property alias windowY: __mainWindow.y
-    property alias windowWidth: __mainWindow.width
-    property alias windowHeight: __mainWindow.height
-  }
+  visible: false
 
   // placeholder layout
-  RowLayout {
-    anchors.fill: parent
-    spacing: 0
+//  RowLayout {
+//    anchors.fill: parent
+//    spacing: 0
 
-    Rectangle {
-      Layout.fillHeight: true
-      Layout.preferredWidth: 68
-      color: "#191F26"
-    }
+//    Rectangle {
+//      Layout.fillHeight: true
+//      Layout.preferredWidth: 68
+//      color: "#191F26"
+//    }
 
-    Rectangle {
-      Layout.fillHeight: true
-      Layout.preferredWidth: 220
-      color: "#323E4C"
-    }
+//    Rectangle {
+//      Layout.fillHeight: true
+//      Layout.preferredWidth: 220
+//      color: "#323E4C"
+//    }
 
-    Rectangle {
-      Layout.fillHeight: true
-      Layout.fillWidth: true
-      color: "#FFFFFF"
-    }
-  }
+//    Rectangle {
+//      Layout.fillHeight: true
+//      Layout.fillWidth: true
+//      color: "#FFFFFF"
+//    }
+//  }
 
   Loader {
     id: __appLoader
